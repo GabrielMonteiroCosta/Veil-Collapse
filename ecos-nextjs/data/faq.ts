@@ -11,7 +11,7 @@ export const faqs: FaqItem[] = [
     id: 1,
     questionPt: 'Quando o jogo será lançado?',
     questionEn: 'When will the game be released?',
-    answerPt: 'O lançamento está previsto para 2028. Acompanhe a linha do tempo na seção de Apoio para ver o progresso atual — cada cidade concluída é um passo mais perto do fim.',
+    answerPt: 'O lançamento está previsto para 2030. Acompanhe a linha do tempo na seção de Apoio para ver o progresso atual — cada cidade concluída é um passo mais perto do fim.',
     answerEn: 'The launch is planned for 2028. Check the timeline in the Support section to see current progress — each completed city is one step closer to the end.',
   },
   {
