@@ -84,7 +84,10 @@ export default function SupportersRanking() {
                       <div className={styles.podiumGlow} />
                       <span className={styles.podiumMedal}>{MEDALS[i]}</span>
                       <span className={styles.podiumRank} style={{ color: td.accent }}>#{s.rank}</span>
-                      <span className={styles.podiumName}>{s.name}</span>
+                      <span className={styles.podiumName}
+                        style={{ color: td.accent, textShadow: `0 0 18px ${td.accentGlow}, 0 0 40px ${td.accentGlow}` }}>
+                        {s.name}
+                      </span>
                       <span className={styles.podiumTierBadge}
                         style={{ color: td.accent, borderColor: td.accent + '55', background: td.accentGlow }}>
                         {td.icon} {pt ? td.namePt : td.nameEn}
@@ -116,7 +119,10 @@ export default function SupportersRanking() {
                     <div key={s.rank} className={styles.listItem}
                       style={{ '--lc': td.accent } as React.CSSProperties}>
                       <span className={styles.listRank} style={{ color: td.accent }}>#{s.rank}</span>
-                      <span className={styles.listName}>{s.name}</span>
+                      <span className={styles.listName}
+                        style={{ color: td.accent, textShadow: `0 0 10px ${td.accentGlow}` }}>
+                        {s.name}
+                      </span>
                       <span className={styles.listTier}
                         style={{ color: td.accent, borderColor: td.accent + '44', background: td.accentGlow }}>
                         {td.icon} {pt ? td.namePt : td.nameEn}
