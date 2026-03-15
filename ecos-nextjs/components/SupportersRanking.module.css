@@ -141,8 +141,13 @@
 .podiumName {
   font-size: 1rem;
   font-weight: 700;
-  color: rgba(220, 235, 255, 0.95);
   word-break: break-word;
+  animation: nameGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes nameGlow {
+  0%, 100% { filter: brightness(1) }
+  50%       { filter: brightness(1.35) }
 }
 
 .podiumTierBadge {

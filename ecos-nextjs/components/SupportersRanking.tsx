@@ -85,7 +85,7 @@ export default function SupportersRanking() {
                       <span className={styles.podiumMedal}>{MEDALS[i]}</span>
                       <span className={styles.podiumRank} style={{ color: td.accent }}>#{s.rank}</span>
                       <span className={styles.podiumName}
-                        style={{ color: td.accent, textShadow: `0 0 18px ${td.accentGlow}, 0 0 40px ${td.accentGlow}` }}>
+                        style={{ color: td.accent, textShadow: `0 0 8px ${td.accent}, 0 0 24px ${td.accent}, 0 0 48px ${td.accent}, 0 0 80px ${td.accentGlow}` }}>
                         {s.name}
                       </span>
                       <span className={styles.podiumTierBadge}
