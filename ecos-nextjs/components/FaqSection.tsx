@@ -260,7 +260,6 @@ export default function FaqSection() {
                                   {replies.length > 0 && (
                                     <button
                                       className={styles.collapseBtn}
-                                      style={{ color: ac + 'bb' }}
                                       onClick={() => toggleCollapse(faq.id, c.id)}
                                     >
                                       {isCollapsed
@@ -321,6 +320,7 @@ export default function FaqSection() {
                                         <div key={r.id} className={styles.reply}>
                                           <div className={styles.commentHeader}>
                                             <span className={styles.commentUser} style={{ color: ac }}>
+                                              <span className={styles.replyArrow}>↳</span>
                                               ⚡ {r.username}
                                               <span className={styles.adminBadge}
                                                 style={{ background: ac, color: '#05091a' }}>Dev</span>
