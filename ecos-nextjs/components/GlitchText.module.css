@@ -1,0 +1,20 @@
+.glitch {
+  display: inline-block;
+  transition: color 0.05s;
+  white-space: pre-line;
+}
+
+.glitch.active {
+  color: var(--rift-bright);
+  text-shadow:
+    2px 0 var(--gold),
+    -2px 0 var(--rift);
+  animation: glitchShake 0.08s steps(2) infinite;
+}
+
+@keyframes glitchShake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-2px) skewX(-1deg); }
+  75%  { transform: translateX(2px) skewX(1deg); }
+  100% { transform: translateX(0); }
+}

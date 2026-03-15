@@ -1,0 +1,235 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6rem 1.5rem 3rem;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(139, 63, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(240, 192, 64, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.loadingDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--rift);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.backLink {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  transition: color 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.backLink:hover { color: var(--gold); }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(139, 63, 255, 0.2);
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rift), #5b21b6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(139, 63, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.username {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 20px var(--gold-glow);
+  margin: 0 0 0.3rem;
+}
+
+.emailDisplay {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .cards { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(139, 63, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.cardTitle {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.cardIcon {
+  font-size: 0.9rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.input {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212, 228, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 0.7rem 0.9rem;
+  color: var(--text);
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input::placeholder { color: var(--text-muted); }
+
+.input:focus {
+  border-color: var(--rift);
+  box-shadow: 0 0 10px var(--rift-glow);
+  background: rgba(139, 63, 255, 0.04);
+}
+
+.btn {
+  background: var(--rift);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 0.2s;
+  margin-top: 0.3rem;
+  box-shadow: 0 0 16px var(--rift-glow);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--rift-bright);
+  box-shadow: 0 0 28px var(--rift-glow);
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.msgSuccess {
+  font-size: 0.75rem;
+  color: #4ade80;
+  padding: 0.2rem 0;
+  margin: 0;
+}
+
+.msgError {
+  font-size: 0.75rem;
+  color: #f87171;
+  padding: 0.2rem 0;
+  margin: 0;
+}
+
+.danger {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.logoutBtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  background: transparent;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+  background: rgba(248, 113, 113, 0.08);
+  border-color: #f87171;
+  box-shadow: 0 0 12px rgba(248, 113, 113, 0.2);
+}

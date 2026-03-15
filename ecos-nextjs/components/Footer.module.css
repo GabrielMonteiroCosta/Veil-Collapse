@@ -1,0 +1,75 @@
+.footer {
+  position: relative;
+  z-index: 1;
+  background: #03050f;
+  border-top: 1px solid rgba(212, 228, 255, 0.05);
+  padding: 3.5rem 2rem;
+  text-align: center;
+}
+
+.inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+  text-shadow: 0 0 20px var(--gold-glow);
+}
+
+.tagline {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.link {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.link:hover { color: var(--gold); }
+
+.dot {
+  font-size: 0.5rem;
+  color: var(--gold-dim);
+}
+
+.riftDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.riftLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(139, 63, 255, 0.3), transparent);
+}
+
+.riftStar {
+  font-size: 0.8rem;
+  color: var(--gold-dim);
+}
+
+.copy {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

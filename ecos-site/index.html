@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecos de um Mundo Quebrado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo" data-i18n="nav-logo">✦ EMQM</div>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+  </nav>
+
+  <!-- STARFIELD -->
+  <canvas id="starCanvas"></canvas>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="moon"></div>
+    <div class="crack crack-1"></div>
+    <div class="crack crack-2"></div>
+    <div class="crack crack-3"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow" data-i18n="hero-eyebrow">Um jogo de aventura em pixel art</p>
+      <h1 class="hero-title">
+        <span class="title-line1">Ecos de um</span>
+        <span class="title-line2">Mundo Quebrado</span>
+      </h1>
+      <p class="hero-tagline" data-i18n="hero-tagline">Quando dois universos se sobrepõem, nenhum mundo permanece intacto.</p>
+      <div class="hero-btns">
+        <a href="#historia" class="btn btn-primary" data-i18n="btn-story">Descobrir a História</a>
+        <a href="#personagens" class="btn btn-secondary" data-i18n="btn-chars">Conhecer os Personagens</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span class="scroll-arrow">▼</span>
+    </div>
+  </section>
+
+  <!-- HISTÓRIA -->
+  <section class="section" id="historia">
+    <div class="section-inner">
+      <div class="section-tag" data-i18n="section-tag-story">✦ A História</div>
+      <h2 class="section-title" data-i18n="story-title">Um mundo em colapso</h2>
+      <div class="story-grid">
+        <div class="story-card">
+          <div class="story-icon">🌃</div>
+          <h3 data-i18n="story-card1-title">Cidade Estrela</h3>
+          <p data-i18n="story-card1-text">Em um vilarejo pacato banhado pela luz das estrelas, Lumi viveu uma vida simples ao lado de sua irmã Aya. Mas a paz tem um preço que nem sempre escolhemos pagar.</p>
+        </div>
+        <div class="story-card story-card--highlight">
+          <div class="story-icon">⚔️</div>
+          <h3 data-i18n="story-card2-title">O Rapto</h3>
+          <p data-i18n="story-card2-text">Quando forças sombrias capturam Aya, Lumi pega suas espadas e parte em uma jornada que vai além do que ele jamais imaginou. O que parecia um resgate simples revela segredos que abalaram a própria estrutura da realidade.</p>
+        </div>
+        <div class="story-card">
+          <div class="story-icon">🌌</div>
+          <h3 data-i18n="story-card3-title">O Anti-Universo</h3>
+          <p data-i18n="story-card3-text">Existe uma teoria proibida: um espelho da existência, um anti-universo escondido além do véu da realidade. Alguém quer alcançá-lo — e não importa o custo.</p>
+        </div>
+      </div>
+
+      <div class="lore-block">
+        <div class="lore-crack-visual">
+          <div class="lore-world lore-world--left">
+            <span data-i18n="lore-world-label">Nosso Universo</span>
+          </div>
+          <div class="lore-rift">
+            <div class="rift-line"></div>
+            <div class="rift-glow"></div>
+            <span class="rift-label" data-i18n="rift-label">Sobreposição</span>
+          </div>
+          <div class="lore-world lore-world--right">
+            <span data-i18n="lore-antiworld-label">Anti-Universo</span>
+          </div>
+        </div>
+        <p class="lore-text" data-i18n="lore-text">
+          Os experimentos foram longe demais. O véu entre os universos se rasgou — e agora cidades inteiras existem em dois lugares ao mesmo tempo, presas entre espaços-tempo sobrepostos. A realidade não é mais o que era.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONAGENS -->
+  <section class="section section--dark" id="personagens">
+    <div class="section-inner">
+      <div class="section-tag" data-i18n="section-tag-chars">✦ Personagens</div>
+      <h2 class="section-title" data-i18n="chars-title">Vozes de um mundo partido</h2>
+      <div class="chars-grid">
+
+        <div class="char-card">
+          <div class="char-sprite char-sprite--lumi">
+            <div class="pixel-char lumi-pixel"></div>
+          </div>
+          <div class="char-info">
+            <div class="char-name-tag" data-i18n="lumi-tag">Protagonista</div>
+            <h3 class="char-name">Lumi</h3>
+            <p class="char-desc" data-i18n="lumi-desc">Um jovem guerreiro de Cidade Estrela. Combatente de espadas habilidoso, mas ainda inexperiente diante do peso que o destino lhe impôs. Sua determinação em salvar Aya o levará a lugares além da compreensão.</p>
+            <div class="char-traits">
+              <span class="trait" data-i18n="trait-fighter">Lutador</span>
+              <span class="trait" data-i18n="trait-brave">Corajoso</span>
+              <span class="trait" data-i18n="trait-loyal">Leal</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="char-card char-card--right">
+          <div class="char-sprite char-sprite--aya">
+            <div class="pixel-char aya-pixel"></div>
+          </div>
+          <div class="char-info">
+            <div class="char-name-tag" data-i18n="aya-tag">Mistério</div>
+            <h3 class="char-name">Aya</h3>
+            <p class="char-desc" data-i18n="aya-desc">A irmã de Lumi. Sua captura foi o estopim de tudo — mas será que é apenas uma vítima? Sua conexão com os eventos do anti-universo pode ser mais profunda do que qualquer um imagina.</p>
+            <div class="char-traits">
+              <span class="trait trait--mystery" data-i18n="trait-mystery">?????</span>
+              <span class="trait trait--mystery" data-i18n="trait-captured">Capturada</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- O MUNDO -->
+  <section class="section" id="mundo">
+    <div class="section-inner">
+      <div class="section-tag" data-i18n="section-tag-world">✦ O Mundo</div>
+      <h2 class="section-title" data-i18n="world-title">Lugares que existem entre dois tempos</h2>
+      <div class="world-grid">
+        <div class="world-card">
+          <div class="world-icon">🌟</div>
+          <h3 data-i18n="world-place1">Cidade Estrela</h3>
+          <p data-i18n="world-place1-desc">O lar de Lumi e Aya. Um vilarejo tranquilo sob um céu eternamente estrelado — ou assim era, antes que a sobreposição chegasse.</p>
+          <span class="world-status world-status--safe" data-i18n="status-intact">Intacta</span>
+        </div>
+        <div class="world-card world-card--overlap">
+          <div class="world-icon">🌀</div>
+          <h3 data-i18n="world-place2">Zonas Sobrepostas</h3>
+          <p data-i18n="world-place2-desc">Cidades presas entre os dois universos. Nem aqui, nem lá. Habitadas por ecos de ambos os mundos — criaturas e fenômenos impossíveis.</p>
+          <span class="world-status world-status--danger" data-i18n="status-overlap">Sobreposta</span>
+        </div>
+        <div class="world-card world-card--unknown">
+          <div class="world-icon">🔮</div>
+          <h3 data-i18n="world-place3">O Anti-Universo</h3>
+          <p data-i18n="world-place3-desc">???</p>
+          <span class="world-status world-status--unknown" data-i18n="status-unknown">Desconhecido</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / NEWSLETTER -->
+  <section class="section section--cta" id="notificar">
+    <div class="section-inner section-inner--center">
+      <div class="moon moon--small"></div>
+      <div class="section-tag" data-i18n="section-tag-notify">✦ Em Desenvolvimento</div>
+      <h2 class="section-title" data-i18n="cta-title">O mundo ainda está sendo construído</h2>
+      <p class="cta-text" data-i18n="cta-text">Ecos de um Mundo Quebrado está em desenvolvimento. Deixe seu e-mail para ser notificado quando o jogo for lançado.</p>
+      <form class="notify-form" onsubmit="submitEmail(event)">
+        <input type="email" class="notify-input" id="emailInput" data-i18n-placeholder="email-placeholder" placeholder="seu@email.com" required />
+        <button type="submit" class="btn btn-primary" data-i18n="btn-notify">Me avise!</button>
+      </form>
+      <p class="notify-success" id="notifySuccess" data-i18n="notify-success">✦ Obrigado! Você será notificado quando o mundo renascer.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-title">Ecos de um Mundo Quebrado</p>
+      <p class="footer-sub" data-i18n="footer-sub">Um jogo independente em desenvolvimento</p>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Twitter / X</a>
+        <a href="#" class="footer-link">Instagram</a>
+        <a href="#" class="footer-link">Discord</a>
+      </div>
+      <p class="footer-copy" data-i18n="footer-copy">© 2025 · Feito com ✦ e muitas noites estreladas</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

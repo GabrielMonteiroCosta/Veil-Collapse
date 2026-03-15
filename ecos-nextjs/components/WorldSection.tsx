@@ -1,0 +1,55 @@
+'use client'
+
+import { useLanguage } from '@/context/LanguageContext'
+import styles from './WorldSection.module.css'
+
+export default function WorldSection() {
+  const { t } = useLanguage()
+
+  const places = [
+    {
+      icon: '🌟',
+      name: t('world.p1.name'),
+      desc: t('world.p1.desc'),
+      status: t('world.p1.status'),
+      statusClass: styles.statusSafe,
+      cardClass: '',
+    },
+    {
+      icon: '🌀',
+      name: t('world.p2.name'),
+      desc: t('world.p2.desc'),
+      status: t('world.p2.status'),
+      statusClass: styles.statusOverlap,
+      cardClass: styles.cardOverlap,
+    },
+    {
+      icon: '🔮',
+      name: t('world.p3.name'),
+      desc: t('world.p3.desc'),
+      status: t('world.p3.status'),
+      statusClass: styles.statusUnknown,
+      cardClass: styles.cardUnknown,
+    },
+  ]
+
+  return (
+    <section className="section" id="mundo">
+      <div className="section-inner">
+        <div className="section-tag">{t('world.tag')}</div>
+        <h2 className="section-title">{t('world.title')}</h2>
+
+        <div className={styles.grid}>
+          {places.map((p, i) => (
+            <div key={i} className={`${styles.card} ${p.cardClass}`}>
+              <div className={styles.cardIcon}>{p.icon}</div>
+              <h3 className={styles.cardName}>{p.name}</h3>
+              <p className={styles.cardDesc}>{p.desc}</p>
+              <span className={`${styles.status} ${p.statusClass}`}>{p.status}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

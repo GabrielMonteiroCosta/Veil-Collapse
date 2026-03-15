@@ -1,0 +1,80 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(212, 228, 255, 0.07);
+  border-radius: 10px;
+  padding: 2rem;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.card:hover { transform: translateY(-4px); border-color: rgba(240, 192, 64, 0.2); }
+
+.cardOverlap {
+  border-color: rgba(139, 63, 255, 0.2) !important;
+  background: rgba(139, 63, 255, 0.04) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glitch line for overlap zone */
+.cardOverlap::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--rift), transparent);
+  opacity: 0.4;
+  animation: scanLine 4s linear infinite;
+}
+
+@keyframes scanLine {
+  0% { transform: scaleY(0) translateX(-50%); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: scaleY(1) translateX(-50%); opacity: 0; }
+}
+
+.cardOverlap:hover { border-color: rgba(139, 63, 255, 0.4) !important; }
+
+.cardUnknown {
+  border-color: rgba(212, 228, 255, 0.03) !important;
+  background: rgba(5, 9, 26, 0.5) !important;
+  opacity: 0.65;
+}
+
+.cardUnknown:hover { opacity: 0.9; border-color: rgba(139, 63, 255, 0.2) !important; }
+
+.cardIcon { font-size: 2rem; margin-bottom: 1rem; }
+
+.cardName {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 0.8rem;
+}
+
+.cardDesc {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  min-height: 3rem;
+}
+
+.status {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius);
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.statusSafe    { background: rgba(64,200,120,0.12); color: #60d090; border: 1px solid rgba(64,200,120,0.3); }
+.statusOverlap { background: rgba(139,63,255,0.12); color: var(--rift-bright); border: 1px solid rgba(139,63,255,0.3); }
+.statusUnknown { background: rgba(100,100,120,0.08); color: var(--text-muted); border: 1px solid rgba(100,100,120,0.15); }

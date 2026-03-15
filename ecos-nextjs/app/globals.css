@@ -1,0 +1,129 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:           #05091a;
+  --bg2:          #080d28;
+  --bg3:          #0a1035;
+  --bg-anti:      #0d0520;
+  --gold:         #f0c040;
+  --gold-dim:     #8c6e20;
+  --gold-glow:    rgba(240, 192, 64, 0.3);
+  --moon:         #fff8e7;
+  --rift:         #8b3fff;
+  --rift-bright:  #b060ff;
+  --rift-glow:    rgba(139, 63, 255, 0.4);
+  --text:         #d4e4ff;
+  --text-dim:     #7890bb;
+  --text-muted:   #4a5a7a;
+  --radius:       4px;
+  --section-pad:  6rem 2rem;
+  --max-w:        1100px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--rift-glow);
+  color: var(--text);
+}
+
+/* Scroll bar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Shared utility */
+.section {
+  position: relative;
+  z-index: 1;
+  padding: var(--section-pad);
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+.section-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.section-tag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3rem;
+}
+
+.btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  padding: 1rem 1.6rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #080d28;
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+
+.btn-primary:hover {
+  background: #ffe070;
+  box-shadow: 0 0 35px rgba(240, 192, 64, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--text-muted);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text-dim);
+  background: rgba(212, 228, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Disable heavy animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

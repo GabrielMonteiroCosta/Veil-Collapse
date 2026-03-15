@@ -1,0 +1,63 @@
+import { NextRequest, NextResponse } from 'next/server'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import pool from '@/lib/db'
+import { RowDataPacket } from 'mysql2'
+
+export async function POST(req: NextRequest) {
+  let body: { email?: string; password?: string }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Requisição inválida' }, { status: 400 })
+  }
+
+  const email = body.email?.trim().toLowerCase()
+  const password = body.password
+
+  if (!email || !password) {
+    return NextResponse.json({ error: 'E-mail e senha são obrigatórios' }, { status: 400 })
+  }
+
+  const conn = await pool.getConnection()
+  try {
+    const [rows] = await conn.execute<RowDataPacket[]>(
+      'SELECT id, username, email, password_hash FROM users WHERE email = ?',
+      [email]
+    )
+
+    if (rows.length === 0) {
+      return NextResponse.json({ error: 'E-mail ou senha incorretos' }, { status: 401 })
+    }
+
+    const user = rows[0]
+    const passwordMatch = await bcrypt.compare(password, user.password_hash)
+
+    if (!passwordMatch) {
+      return NextResponse.json({ error: 'E-mail ou senha incorretos' }, { status: 401 })
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username, email: user.email },
+      process.env.JWT_SECRET || 'fallback_secret',
+      { expiresIn: '7d' }
+    )
+
+    const response = NextResponse.json({
+      success: true,
+      user: { id: user.id, username: user.username, email: user.email },
+    })
+
+    response.cookies.set('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 7, // 7 dias
+      path: '/',
+    })
+
+    return response
+  } finally {
+    conn.release()
+  }
+}

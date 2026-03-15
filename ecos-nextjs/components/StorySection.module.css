@@ -1,0 +1,162 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 228, 255, 0.08);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: transform 0.3s, border-color 0.3s;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.6s ease forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.25s; }
+.card:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card:hover {
+  border-color: rgba(240, 192, 64, 0.25);
+  background: rgba(240, 192, 64, 0.04);
+  transform: translateY(-4px);
+}
+
+.cardHighlight {
+  border-color: rgba(240, 192, 64, 0.2) !important;
+  background: rgba(240, 192, 64, 0.04) !important;
+}
+
+.cardIcon { font-size: 2rem; margin-bottom: 1rem; }
+
+.cardTitle {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+}
+
+.cardText { color: var(--text-dim); font-size: 0.95rem; }
+
+/* ── Rift visualizer ─────────────────── */
+.riftBlock {
+  background: rgba(139, 63, 255, 0.05);
+  border: 1px solid rgba(139, 63, 255, 0.2);
+  border-radius: 12px;
+  padding: 2.5rem;
+}
+
+.riftVisual {
+  display: flex;
+  align-items: stretch;
+  height: 100px;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.universe {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 1.5rem;
+  background: linear-gradient(to right, rgba(13, 27, 75, 0.9), rgba(13, 27, 75, 0.3));
+  border: 1px solid rgba(212, 228, 255, 0.08);
+  border-right: none;
+  gap: 0.6rem;
+}
+
+.universeAnti {
+  background: linear-gradient(to left, rgba(50, 10, 100, 0.9), rgba(50, 10, 100, 0.3));
+  border: 1px solid rgba(139, 63, 255, 0.15);
+  border-left: none;
+  align-items: flex-end;
+}
+
+.universeName {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.universeAnti .universeName { color: var(--rift); }
+
+.universeStars { display: flex; gap: 0.3rem; }
+
+.star {
+  font-size: 0.7rem;
+  color: var(--gold);
+  animation: starTwinkle 2s ease-in-out infinite;
+}
+
+.starAnti {
+  color: var(--rift-bright);
+  animation-name: starTwinkleAnti;
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes starTwinkleAnti {
+  0%, 100% { opacity: 0.2; text-shadow: none; }
+  50% { opacity: 1; text-shadow: 0 0 8px var(--rift-glow); }
+}
+
+.rift {
+  position: relative;
+  width: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.riftLine {
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--rift), var(--gold), var(--rift), transparent);
+  animation: riftPulse 3s ease-in-out infinite;
+}
+
+.riftGlow {
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(to right, transparent, var(--rift-glow), transparent);
+}
+
+.riftLabel {
+  position: absolute;
+  top: -26px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: var(--rift);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+@keyframes riftPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--rift-glow); }
+  50% { box-shadow: 0 0 20px rgba(139, 63, 255, 0.7); }
+}
+
+.riftText {
+  color: var(--text-dim);
+  text-align: center;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.8;
+}
