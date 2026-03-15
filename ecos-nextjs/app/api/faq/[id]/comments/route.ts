@@ -10,9 +10,7 @@ function getUser(req: NextRequest): JwtPayload | null {
     const token = req.cookies.get('auth_token')?.value
     if (!token) return null
     return jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as JwtPayload
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
@@ -22,7 +20,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   const conn = await pool.getConnection()
   try {
     const [rows] = await conn.execute<RowDataPacket[]>(
-      `SELECT fc.id, fc.content, fc.is_admin_reply, fc.created_at,
+      `SELECT fc.id, fc.parent_id, fc.content, fc.is_admin_reply, fc.created_at,
               u.username
        FROM faq_comments fc
        JOIN users u ON u.id = fc.user_id
@@ -43,34 +41,40 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const faqId = parseInt(params.id)
   if (isNaN(faqId)) return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
 
-  let body: { content?: string }
+  let body: { content?: string; parent_id?: number }
   try { body = await req.json() } catch {
     return NextResponse.json({ error: 'Requisição inválida' }, { status: 400 })
   }
 
+  // Only admin can reply to existing comments
+  if (body.parent_id && !user.is_admin) {
+    return NextResponse.json({ error: 'Sem permissão para responder' }, { status: 403 })
+  }
+
   const content = body.content?.trim()
-  if (!content || content.length < 2) {
+  if (!content || content.length < 2)
     return NextResponse.json({ error: 'Comentário muito curto' }, { status: 400 })
-  }
-  if (content.length > 600) {
+  if (content.length > 600)
     return NextResponse.json({ error: 'Comentário muito longo (máx 600 caracteres)' }, { status: 400 })
-  }
+
+  const parentId = body.parent_id ?? null
 
   const conn = await pool.getConnection()
   try {
     const [result] = await conn.execute(
-      `INSERT INTO faq_comments (faq_id, user_id, content, is_admin_reply)
-       VALUES (?, ?, ?, ?)`,
-      [faqId, user.id, content, user.is_admin ? 1 : 0]
+      `INSERT INTO faq_comments (faq_id, parent_id, user_id, content, is_admin_reply)
+       VALUES (?, ?, ?, ?, ?)`,
+      [faqId, parentId, user.id, content, user.is_admin ? 1 : 0]
     ) as any[]
 
     return NextResponse.json({
       comment: {
-        id: result.insertId,
+        id:             result.insertId,
+        parent_id:      parentId,
         content,
         is_admin_reply: user.is_admin ? 1 : 0,
-        username: user.username,
-        created_at: new Date().toISOString(),
+        username:       user.username,
+        created_at:     new Date().toISOString(),
       }
     })
   } finally {
@@ -82,7 +86,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   const user = getUser(req)
   if (!user?.is_admin) return NextResponse.json({ error: 'Sem permissão' }, { status: 403 })
 
-  const url  = new URL(req.url)
+  const url       = new URL(req.url)
   const commentId = parseInt(url.searchParams.get('commentId') || '')
   if (isNaN(commentId)) return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
 
