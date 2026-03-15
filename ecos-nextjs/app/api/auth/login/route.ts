@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const conn = await pool.getConnection()
   try {
     const [rows] = await conn.execute<RowDataPacket[]>(
-      'SELECT id, username, email, password_hash FROM users WHERE email = ?',
+      'SELECT id, username, email, password_hash, is_admin FROM users WHERE email = ?',
       [email]
     )
 
@@ -38,14 +38,14 @@ export async function POST(req: NextRequest) {
     }
 
     const token = jwt.sign(
-      { id: user.id, username: user.username, email: user.email },
+      { id: user.id, username: user.username, email: user.email, is_admin: user.is_admin },
       process.env.JWT_SECRET || 'fallback_secret',
       { expiresIn: '7d' }
     )
 
     const response = NextResponse.json({
       success: true,
-      user: { id: user.id, username: user.username, email: user.email },
+      user: { id: user.id, username: user.username, email: user.email, is_admin: user.is_admin },
     })
 
     response.cookies.set('auth_token', token, {

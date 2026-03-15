@@ -1,0 +1,262 @@
+/* ── Section ── */
+.section {
+  position: relative;
+}
+
+.intro {
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+  font-size: 0.92rem;
+  color: rgba(200, 220, 255, 0.55);
+  line-height: 1.7;
+}
+
+/* ── FAQ list ── */
+.list {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ── FAQ item ── */
+.item {
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  overflow: hidden;
+  transition: border-color 0.25s;
+}
+
+.itemOpen {
+  border-color: color-mix(in srgb, var(--faq-ac) 30%, transparent);
+  background: color-mix(in srgb, var(--faq-ac) 3%, transparent);
+}
+
+/* ── Question row ── */
+.question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+.question:hover { background: rgba(255,255,255,0.03) }
+
+.qNum {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.qText {
+  flex: 1;
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: rgba(220, 235, 255, 0.9);
+  line-height: 1.4;
+}
+
+.chevron {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.3);
+  flex-shrink: 0;
+  transition: transform 0.25s;
+  display: inline-block;
+}
+.chevronOpen { transform: rotate(180deg) }
+
+/* ── Body ── */
+.body {
+  padding: 0 1.25rem 1.25rem;
+  animation: expandIn 0.2s ease;
+}
+
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-6px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+
+.sep {
+  height: 1px;
+  margin-bottom: 1rem;
+  border-radius: 1px;
+}
+
+/* ── Answer ── */
+.answer {
+  font-size: 0.88rem;
+  color: rgba(200, 220, 255, 0.75);
+  line-height: 1.75;
+  margin: 0 0 1.25rem;
+}
+
+/* ── Comments ── */
+.commentsWrap {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 1rem;
+}
+
+.commentsTitle {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.75rem;
+}
+
+.loadingText {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+  margin: 0;
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Single comment ── */
+.comment {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+
+.commentAdmin {
+  border-width: 1px;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.commentUser {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(200, 220, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.adminBadge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+}
+
+.commentDate {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.25);
+  margin-left: auto;
+}
+
+.deleteBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255,80,80,0.4);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 0 0.2rem;
+  transition: color 0.2s;
+}
+.deleteBtn:hover { color: rgba(255,80,80,0.8) }
+
+.commentContent {
+  font-size: 0.84rem;
+  color: rgba(200, 220, 255, 0.75);
+  line-height: 1.55;
+  margin: 0;
+  word-break: break-word;
+}
+
+/* ── Comment form ── */
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.commentInput {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px;
+  color: rgba(220, 235, 255, 0.9);
+  font-size: 0.84rem;
+  padding: 0.6rem 0.8rem;
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+.commentInput:focus {
+  border-color: var(--faq-ac);
+}
+
+.commentError {
+  font-size: 0.78rem;
+  color: #f06070;
+  margin: 0;
+}
+
+.commentActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.charCount {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.2);
+}
+
+.sendBtn {
+  padding: 0.45rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s;
+  font-family: inherit;
+}
+.sendBtn:disabled { opacity: 0.4; cursor: not-allowed }
+.sendBtn:not(:disabled):hover { opacity: 0.85 }
+
+.loginPrompt {
+  font-size: 0.8rem;
+  color: rgba(200, 220, 255, 0.35);
+  text-align: center;
+  padding: 0.5rem 0;
+  margin: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .question  { padding: 0.9rem 1rem }
+  .body      { padding: 0 1rem 1rem }
+  .qText     { font-size: 0.86rem }
+}

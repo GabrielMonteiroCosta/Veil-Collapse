@@ -6,6 +6,7 @@ export interface AuthUser {
   id: number
   username: string
   email: string
+  is_admin: number
 }
 
 interface AuthCtx {
