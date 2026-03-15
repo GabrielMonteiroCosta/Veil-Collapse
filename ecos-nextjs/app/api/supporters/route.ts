@@ -8,21 +8,21 @@ export async function GET() {
   const conn = await pool.getConnection()
   try {
     const [rows] = await conn.execute<RowDataPacket[]>(
-      `SELECT name, tier, created_at
+      `SELECT name, tier, amount, created_at
        FROM donations
+       WHERE status = 'confirmed'
        ORDER BY
          FIELD(tier, 'lenda', 'criador', 'apoiador'),
          amount DESC,
          created_at ASC
-       LIMIT 100`
+       LIMIT 10`
     )
 
-    // Assign ranks (ties in tier share same "weight" but keep insertion order)
     const supporters = rows.map((r, i) => ({
       rank:       i + 1,
       name:       r.name,
       tier:       r.tier as string,
-      weight:     TIER_WEIGHT[r.tier] ?? 1,
+      amount:     r.amount as number | null,
       created_at: r.created_at,
     }))
 

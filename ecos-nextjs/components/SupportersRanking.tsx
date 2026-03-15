@@ -9,6 +9,7 @@ interface Supporter {
   rank: number
   name: string
   tier: string
+  amount: number | null
   created_at: string
 }
 
@@ -32,7 +33,13 @@ export default function SupportersRanking() {
   }
 
   const top3 = list.slice(0, 3)
-  const rest  = list.slice(3)
+  const rest  = list.slice(3, 10)
+
+  function fmtAmount(amount: number | null, tierId: string) {
+    if (amount) return `R$ ${amount.toLocaleString(pt ? 'pt-BR' : 'en-US', { minimumFractionDigits: 2 })}`
+    const td = tierData(tierId)
+    return pt ? td.rangePt : td.rangeEn
+  }
 
   return (
     <section className={`section ${styles.section}`} id="apoiadores">
@@ -82,6 +89,9 @@ export default function SupportersRanking() {
                         style={{ color: td.accent, borderColor: td.accent + '55', background: td.accentGlow }}>
                         {td.icon} {pt ? td.namePt : td.nameEn}
                       </span>
+                      <span className={styles.podiumAmount} style={{ color: td.accent }}>
+                        {fmtAmount(s.amount, s.tier)}
+                      </span>
                       <span className={styles.podiumDate}>
                         {new Date(s.created_at).toLocaleDateString(pt ? 'pt-BR' : 'en-US', { month: 'short', year: 'numeric' })}
                       </span>
@@ -110,6 +120,9 @@ export default function SupportersRanking() {
                       <span className={styles.listTier}
                         style={{ color: td.accent, borderColor: td.accent + '44', background: td.accentGlow }}>
                         {td.icon} {pt ? td.namePt : td.nameEn}
+                      </span>
+                      <span className={styles.listAmount} style={{ color: td.accent }}>
+                        {fmtAmount(s.amount, s.tier)}
                       </span>
                       <span className={styles.listDate}>
                         {new Date(s.created_at).toLocaleDateString(pt ? 'pt-BR' : 'en-US', { month: 'short', year: 'numeric' })}

@@ -153,6 +153,13 @@
   border-radius: 99px;
 }
 
+.podiumAmount {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 12px currentColor;
+}
+
 .podiumDate {
   font-size: 0.68rem;
   color: rgba(200, 220, 255, 0.3);
@@ -230,6 +237,13 @@
   border: 1px solid;
   border-radius: 99px;
   white-space: nowrap;
+}
+
+.listAmount {
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .listDate {
