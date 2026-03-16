@@ -1,8 +1,7 @@
 'use client'
 
+import Image from 'next/image'
 import { useLanguage } from '@/context/LanguageContext'
-import PixelSprite from './PixelSprite'
-import { lumiSprite, ayaSprite } from '@/lib/sprites'
 import styles from './CharactersSection.module.css'
 
 export default function CharactersSection() {
@@ -18,16 +17,19 @@ export default function CharactersSection() {
 
           {/* Lumi */}
           <div className={styles.charCard}>
-            <div className={styles.spriteWrapper}>
-              <div className={styles.spriteAura} />
-              <div className={styles.spriteBounce}>
-                <PixelSprite
-                  grid={lumiSprite}
-                  pixelSize={4}
-                  glow="rgba(240,192,64,0.5)"
+            <div className={styles.portraitWrapper}>
+              <div className={styles.portraitAura} />
+              <div className={styles.portraitBounce}>
+                <Image
+                  src="/characters/LumiPerfil.png"
+                  alt="Lumi"
+                  width={220}
+                  height={280}
+                  className={styles.portrait}
+                  style={{ imageRendering: 'pixelated' }}
                 />
               </div>
-              <div className={styles.spriteGround} />
+              <div className={styles.portraitGround} />
             </div>
 
             <div className={styles.charInfo}>
@@ -44,16 +46,19 @@ export default function CharactersSection() {
 
           {/* Aya */}
           <div className={`${styles.charCard} ${styles.charCardRight}`}>
-            <div className={styles.spriteWrapper}>
-              <div className={`${styles.spriteAura} ${styles.spriteAuraAnti}`} />
-              <div className={styles.spriteBounce} style={{ animationDelay: '0.8s' }}>
-                <PixelSprite
-                  grid={ayaSprite}
-                  pixelSize={4}
-                  glow="rgba(139,63,255,0.6)"
+            <div className={styles.portraitWrapper}>
+              <div className={`${styles.portraitAura} ${styles.portraitAuraAnti}`} />
+              <div className={styles.portraitBounce} style={{ animationDelay: '0.8s' }}>
+                <Image
+                  src="/characters/AyaPerfil.png"
+                  alt="Aya"
+                  width={220}
+                  height={280}
+                  className={`${styles.portrait} ${styles.portraitAnti}`}
+                  style={{ imageRendering: 'pixelated' }}
                 />
               </div>
-              <div className={`${styles.spriteGround} ${styles.spriteGroundAnti}`} />
+              <div className={`${styles.portraitGround} ${styles.portraitGroundAnti}`} />
             </div>
 
             <div className={styles.charInfo}>
