@@ -7,6 +7,7 @@ const StorySection       = dynamic(() => import('@/components/StorySection'))
 const CharactersSection  = dynamic(() => import('@/components/CharactersSection'))
 const CitiesSection      = dynamic(() => import('@/components/CitiesSection'))
 const WorldSection       = dynamic(() => import('@/components/WorldSection'))
+const MapSection         = dynamic(() => import('@/components/MapSection'))
 const SupportSection     = dynamic(() => import('@/components/SupportSection'))
 const SupportersRanking  = dynamic(() => import('@/components/SupportersRanking'))
 const FaqSection         = dynamic(() => import('@/components/FaqSection'))
@@ -23,6 +24,7 @@ export default function Home() {
       <CharactersSection />
       <CitiesSection />
       <WorldSection />
+      <MapSection />
       <SupportSection />
       <SupportersRanking />
       <FaqSection />
