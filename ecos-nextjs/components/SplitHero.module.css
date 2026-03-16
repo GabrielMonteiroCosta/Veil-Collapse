@@ -301,3 +301,10 @@
   .tagline     { font-size: 0.92rem; white-space: normal }
   .title       { font-size: clamp(1.7rem, 8vw, 2.8rem) }
 }
+
+@media (max-width: 400px) {
+  .heroContent { padding: 4.5rem 0.85rem 2.5rem }
+  .title       { font-size: clamp(1.35rem, 7.5vw, 1.9rem) }
+  .tagline     { font-size: 0.82rem }
+  .moon        { width: 72px; height: 72px; right: 3% }
+}

@@ -226,6 +226,17 @@
   opacity: 0.7;
 }
 
+.fieldError {
+  font-size: 0.75rem;
+  color: #f06070;
+  margin: 0.3rem 0 0;
+}
+
+.nextBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .msgError {
   font-size: 0.8rem;
   color: #f06070;
@@ -250,6 +261,53 @@
 .nextBtn:hover { opacity: 0.88; transform: translateY(-1px) }
 .nextBtn:active { transform: translateY(0) }
 
+/* ── Skip naming ── */
+.skipBtn {
+  background: transparent;
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: rgba(200,220,255,0.35);
+  font-size: 0.75rem;
+  font-family: inherit;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: center;
+}
+.skipBtn:hover {
+  border-color: rgba(255,255,255,0.25);
+  color: rgba(200,220,255,0.6);
+}
+
+.skipNotice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 0.8rem;
+  color: rgba(200,220,255,0.45);
+}
+
+.skipUndo {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: rgba(200,220,255,0.55);
+  font-size: 0.72rem;
+  font-family: inherit;
+  padding: 0.25rem 0.65rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.skipUndo:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+
 /* ── Payment step ── */
 .payStep {
   display: flex;
@@ -270,7 +328,44 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(200, 220, 255, 0.45);
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.85rem;
+  text-align: center;
+}
+
+.qrWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 0.85rem;
+}
+
+.qrHint {
+  font-size: 0.72rem;
+  color: rgba(200, 220, 255, 0.45);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.pixDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: rgba(200, 220, 255, 0.3);
+  font-size: 0.72rem;
+}
+
+.pixDivider::before,
+.pixDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(200, 220, 255, 0.1);
 }
 
 .pixKeyRow {

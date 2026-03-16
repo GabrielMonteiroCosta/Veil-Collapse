@@ -2,8 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import pool from '@/lib/db'
 import { RowDataPacket } from 'mysql2'
+import { rateLimit } from '@/lib/rateLimit'
+
+// 5 cadastros por IP a cada hora
+const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 60 * 60_000 })
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+  const { success } = limiter.check(5, ip)
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Muitas tentativas de cadastro. Tente novamente mais tarde.' },
+      { status: 429 }
+    )
+  }
   let body: { username?: string; email?: string; password?: string }
   try {
     body = await req.json()

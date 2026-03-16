@@ -234,6 +234,10 @@ export default function CitiesSection() {
               />
             ))}
           </div>
+
+          <p className={styles.swipeHint}>
+            {lang === 'pt' ? '← Arraste para navegar →' : '← Swipe to navigate →'}
+          </p>
         </div>
 
         {/* ── Strip ── */}

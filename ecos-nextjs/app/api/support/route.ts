@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import pool from '@/lib/db'
+import { rateLimit } from '@/lib/rateLimit'
+
+// 3 submissões por IP a cada 10 minutos
+const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 10 * 60_000 })
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+  const { success } = limiter.check(3, ip)
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.' },
+      { status: 429 }
+    )
+  }
+
   let body: {
     name?: string
     email?: string

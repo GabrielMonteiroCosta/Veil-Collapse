@@ -3,8 +3,21 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import pool from '@/lib/db'
 import { RowDataPacket } from 'mysql2'
+import { rateLimit } from '@/lib/rateLimit'
+
+// 10 tentativas de login por IP a cada 15 minutos
+const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 15 * 60_000 })
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+  const { success } = limiter.check(10, ip)
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Muitas tentativas de login. Aguarde 15 minutos.' },
+      { status: 429 }
+    )
+  }
+
   let body: { email?: string; password?: string }
   try {
     body = await req.json()

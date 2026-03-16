@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join } from 'path'
+import { rateLimit } from '@/lib/rateLimit'
+
+// 3 inscrições por IP a cada hora
+const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 60 * 60_000 })
 
 const WAITLIST_PATH = join(process.cwd(), 'data', 'waitlist.json')
 
@@ -30,6 +34,15 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
+  const { success } = limiter.check(3, ip)
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Muitas tentativas. Tente novamente mais tarde.' },
+      { status: 429 }
+    )
+  }
+
   let body: { email?: string }
   try {
     body = await req.json()

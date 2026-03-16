@@ -74,6 +74,15 @@ export default function Nav() {
                   >
                     {lang === 'pt' ? '⚙ Configurações' : '⚙ Settings'}
                   </a>
+                  {!!user.is_admin && (
+                    <a
+                      href="/admin/doacoes"
+                      className={`${styles.dropdownItem} ${styles.dropdownAdmin}`}
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      ✦ Admin
+                    </a>
+                  )}
                   <button
                     className={`${styles.dropdownItem} ${styles.dropdownLogout}`}
                     onClick={() => { logout(); setDropdownOpen(false) }}
@@ -118,6 +127,11 @@ export default function Nav() {
                 <a href="/perfil" className={styles.mobileLink} onClick={() => setOpen(false)}>
                   {lang === 'pt' ? '⚙ Configurações' : '⚙ Settings'}
                 </a>
+                {!!user.is_admin && (
+                  <a href="/admin/doacoes" className={`${styles.mobileLink} ${styles.mobileLinkAdmin}`} onClick={() => setOpen(false)}>
+                    ✦ Admin
+                  </a>
+                )}
                 <button className={styles.mobileLinkBtn} onClick={() => { logout(); setOpen(false) }}>
                   {lang === 'pt' ? '↩ Sair' : '↩ Sign Out'}
                 </button>

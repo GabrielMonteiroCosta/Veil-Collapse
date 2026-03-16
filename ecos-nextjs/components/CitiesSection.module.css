@@ -582,3 +582,25 @@
   .strip::-webkit-scrollbar { display: none; }
   .arrow { width: 36px; height: 36px; font-size: 0.65rem; }
 }
+
+@media (max-width: 600px) {
+  .arrow { display: none; }
+  .strip { display: none; }
+}
+
+/* ── Swipe hint ───────────────────────────────────────────────── */
+.swipeHint {
+  display: none;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  opacity: 0.7;
+  animation: fadeUp 0.5s ease both 0.3s;
+}
+
+@media (max-width: 600px) {
+  .swipeHint { display: block; }
+}

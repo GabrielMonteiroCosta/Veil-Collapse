@@ -217,6 +217,11 @@
   background: rgba(248, 113, 113, 0.06);
 }
 
+.dropdownAdmin { color: var(--rift) !important; }
+.dropdownAdmin:hover { color: var(--rift-bright) !important; background: rgba(139,63,255,0.08) !important; }
+
+.mobileLinkAdmin { color: var(--rift) !important; }
+
 .mobileLinkBtn {
   font-family: 'Press Start 2P', monospace;
   font-size: 0.5rem;

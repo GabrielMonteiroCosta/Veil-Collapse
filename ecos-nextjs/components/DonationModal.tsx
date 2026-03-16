@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 import { tiers, type TierId } from '@/data/milestones'
+import { useAuth } from '@/context/AuthContext'
 import styles from './DonationModal.module.css'
 
 interface Props {
@@ -12,11 +14,54 @@ interface Props {
 
 type Status = { type: 'success' | 'error'; message: string } | null
 
-// ── Replace with your real PIX key ──
-const PIX_KEY = 'email@seupix.com.br'
+const PIX_KEY      = 'b707d741-4d84-4540-be90-71bfaccb5c80'
+const PIX_NAME     = 'Projeto E.M.Q'
+const PIX_CITY     = 'Cotia'
+
+// ── PIX EMV payload generator (Banco Central BR) ──
+function fmt(id: string, value: string) {
+  return `${id}${value.length.toString().padStart(2, '0')}${value}`
+}
+
+function crc16(str: string) {
+  let crc = 0xffff
+  for (let i = 0; i < str.length; i++) {
+    crc ^= str.charCodeAt(i) << 8
+    for (let j = 0; j < 8; j++) {
+      crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1
+      crc &= 0xffff
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0')
+}
+
+function buildPixPayload(amount?: number) {
+  const mai = fmt('26',
+    fmt('00', 'br.gov.bcb.pix') +
+    fmt('01', PIX_KEY)
+  )
+  const amtField  = amount ? fmt('54', amount.toFixed(2)) : ''
+  const additional = fmt('62', fmt('05', '***'))
+  const body =
+    '000201' +
+    mai +
+    fmt('52', '0000') +
+    fmt('53', '986') +
+    amtField +
+    fmt('58', 'BR') +
+    fmt('59', PIX_NAME.slice(0, 25)) +
+    fmt('60', PIX_CITY.slice(0, 15)) +
+    additional +
+    '6304'
+  return body + crc16(body)
+}
+
+const TIER_MIN: Record<string, number> = { apoiador: 10, criador: 50, lenda: 100 }
 
 export default function DonationModal({ tierId, lang, onClose }: Props) {
+  const { user } = useAuth()
   const tier = tiers.find(t => t.id === tierId)
+  const minAmount = tierId ? TIER_MIN[tierId] : 0
   const [name,             setName]             = useState('')
   const [email,            setEmail]            = useState('')
   const [amount,           setAmount]           = useState('')
@@ -32,6 +77,27 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
   const [loading,          setLoading]          = useState(false)
   const [step,             setStep]             = useState<1 | 2>(1)
   const [pixCopied,        setPixCopied]        = useState(false)
+  const [skipNaming,       setSkipNaming]       = useState(false)
+
+  // Reset form whenever a different tier is opened
+  useEffect(() => {
+    if (!tierId) return
+    setName(user?.username ?? '')
+    setEmail(user?.email ?? '')
+    setAmount(String(TIER_MIN[tierId]))
+    setNpcOrItem('')
+    setNpcName('')
+    setNpcDesc('')
+    setItemName('')
+    setItemDesc('')
+    setQuestName('')
+    setQuestDesc('')
+    setMessage('')
+    setStatus(null)
+    setStep(1)
+    setPixCopied(false)
+    setSkipNaming(false)
+  }, [tierId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!tierId) return
@@ -49,6 +115,20 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
   const pt = lang === 'pt'
   const ac = tier.accent
   const ag = tier.accentGlow
+
+  const parsedAmount = parseFloat(amount.replace(',', '.'))
+  const amountValid  = amount !== '' && !isNaN(parsedAmount) && parsedAmount >= minAmount
+
+  const namingValid =
+    skipNaming ||
+    (tier.id === 'apoiador' ? npcOrItem.trim() !== '' :
+     tier.id === 'criador'  ? npcName.trim() !== '' :
+     tier.id === 'lenda'    ? npcName.trim() !== '' && questName.trim() !== '' : true)
+
+  function goToPayment() {
+    if (!amountValid || !namingValid) return
+    setStep(2)
+  }
 
   function copyPix() {
     navigator.clipboard.writeText(PIX_KEY).then(() => {
@@ -146,7 +226,9 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
             <button
               className={`${styles.stepBtn} ${step === 2 ? styles.stepActive : ''}`}
               style={step === 2 ? { color: ac, borderColor: ac } : {}}
-              onClick={() => setStep(2)}
+              onClick={goToPayment}
+              disabled={!amountValid || !namingValid}
+              title={!amountValid ? (pt ? `Mínimo R$ ${minAmount}` : `Minimum R$ ${minAmount}`) : !namingValid ? (pt ? 'Preencha os campos obrigatórios' : 'Fill in the required fields') : undefined}
             >
               {pt ? '2. Pagamento' : '2. Payment'}
             </button>
@@ -162,7 +244,7 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
             </button>
           </div>
         ) : step === 1 ? (
-          <form className={styles.form} onSubmit={e => { e.preventDefault(); setStep(2) }}>
+          <form className={styles.form} onSubmit={e => { e.preventDefault(); goToPayment() }}>
             <div className={styles.row2}>
               <div className={styles.field}>
                 <label className={styles.label}>{pt ? 'Seu nome' : 'Your name'} *</label>
@@ -175,53 +257,90 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>{pt ? 'Valor que pretende doar (R$)' : 'Amount you intend to donate (R$)'}</label>
-              <input className={styles.input} placeholder="Ex: 30" value={amount} onChange={e => setAmount(e.target.value)} />
+              <label className={styles.label}>
+                {pt ? `Valor a doar (R$) — mínimo R$ ${minAmount}` : `Amount (R$) — minimum R$ ${minAmount}`}
+              </label>
+              <input
+                className={styles.input}
+                type="number"
+                min={minAmount}
+                step="1"
+                value={amount}
+                onChange={e => setAmount(e.target.value)}
+              />
+              {amount !== '' && parseFloat(amount) < minAmount && (
+                <p className={styles.fieldError}>
+                  {pt
+                    ? `Valor mínimo para este tier é R$ ${minAmount}`
+                    : `Minimum amount for this tier is R$ ${minAmount}`}
+                </p>
+              )}
             </div>
 
-            {/* Apoiador */}
-            {tier.id === 'apoiador' && (
-              <div className={styles.field}>
-                <label className={styles.label}>{pt ? 'Nome do NPC ou item que deseja batizar' : 'NPC or item name you want to give'}</label>
-                <input className={styles.input} placeholder={pt ? 'Ex: Velha Mira / Espada do Crepúsculo' : 'Ex: Old Mira / Twilight Sword'} value={npcOrItem} onChange={e => setNpcOrItem(e.target.value)} />
+            {/* ── Naming block ── */}
+            {skipNaming ? (
+              <div className={styles.skipNotice}>
+                <span>{pt ? '✦ Você optou por não nomear personagem/item' : '✦ You chose not to name a character/item'}</span>
+                <button type="button" className={styles.skipUndo} onClick={() => setSkipNaming(false)}>
+                  {pt ? 'Alterar' : 'Change'}
+                </button>
               </div>
+            ) : (
+              <>
+                {/* Apoiador */}
+                {tier.id === 'apoiador' && (
+                  <div className={styles.field}>
+                    <label className={styles.label}>{pt ? 'Nome do NPC ou item que deseja batizar *' : 'NPC or item name you want to give *'}</label>
+                    <input
+                      className={styles.input}
+                      placeholder={pt ? 'Ex: Velha Mira / Espada do Crepúsculo' : 'Ex: Old Mira / Twilight Sword'}
+                      value={npcOrItem}
+                      onChange={e => setNpcOrItem(e.target.value)}
+                    />
+                  </div>
+                )}
+
+                {/* Criador + Lenda */}
+                {(tier.id === 'criador' || tier.id === 'lenda') && (<>
+                  <div className={styles.dividerLabel} style={{ color: ac }}>{pt ? '── Seu NPC ──' : '── Your NPC ──'}</div>
+                  <div className={styles.row2}>
+                    <div className={styles.field}>
+                      <label className={styles.label}>{pt ? 'Nome do NPC *' : 'NPC name *'}</label>
+                      <input className={styles.input} value={npcName} onChange={e => setNpcName(e.target.value)} />
+                    </div>
+                    <div className={styles.field}>
+                      <label className={styles.label}>{pt ? 'Nome do item' : 'Item name'}</label>
+                      <input className={styles.input} value={itemName} onChange={e => setItemName(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>{pt ? 'Backstory do NPC (até 300 caracteres)' : 'NPC backstory (up to 300 chars)'}</label>
+                    <textarea className={styles.textarea} maxLength={300} rows={3} value={npcDesc} onChange={e => setNpcDesc(e.target.value)} />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>{pt ? 'Descrição do item' : 'Item description'}</label>
+                    <textarea className={styles.textarea} maxLength={200} rows={2} value={itemDesc} onChange={e => setItemDesc(e.target.value)} />
+                  </div>
+                </>)}
+
+                {/* Lenda */}
+                {tier.id === 'lenda' && (<>
+                  <div className={styles.dividerLabel} style={{ color: ac }}>{pt ? '── Sua Quest ──' : '── Your Quest ──'}</div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>{pt ? 'Nome da quest *' : 'Quest name *'}</label>
+                    <input className={styles.input} value={questName} onChange={e => setQuestName(e.target.value)} />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>{pt ? 'Ideia geral da quest' : 'Quest general idea'}</label>
+                    <textarea className={styles.textarea} maxLength={500} rows={3} placeholder={pt ? 'Descreva a premissa, personagens envolvidos, objetivo...' : 'Describe the premise, involved characters, objective...'} value={questDesc} onChange={e => setQuestDesc(e.target.value)} />
+                  </div>
+                </>)}
+
+                <button type="button" className={styles.skipBtn} onClick={() => setSkipNaming(true)}>
+                  {pt ? 'Prefiro não informar nenhum nome agora' : 'I prefer not to provide any names now'}
+                </button>
+              </>
             )}
-
-            {/* Criador + Lenda */}
-            {(tier.id === 'criador' || tier.id === 'lenda') && (<>
-              <div className={styles.dividerLabel} style={{ color: ac }}>{pt ? '── Seu NPC ──' : '── Your NPC ──'}</div>
-              <div className={styles.row2}>
-                <div className={styles.field}>
-                  <label className={styles.label}>{pt ? 'Nome do NPC' : 'NPC name'}</label>
-                  <input className={styles.input} value={npcName} onChange={e => setNpcName(e.target.value)} />
-                </div>
-                <div className={styles.field}>
-                  <label className={styles.label}>{pt ? 'Nome do item' : 'Item name'}</label>
-                  <input className={styles.input} value={itemName} onChange={e => setItemName(e.target.value)} />
-                </div>
-              </div>
-              <div className={styles.field}>
-                <label className={styles.label}>{pt ? 'Backstory do NPC (até 300 caracteres)' : 'NPC backstory (up to 300 chars)'}</label>
-                <textarea className={styles.textarea} maxLength={300} rows={3} value={npcDesc} onChange={e => setNpcDesc(e.target.value)} />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.label}>{pt ? 'Descrição do item' : 'Item description'}</label>
-                <textarea className={styles.textarea} maxLength={200} rows={2} value={itemDesc} onChange={e => setItemDesc(e.target.value)} />
-              </div>
-            </>)}
-
-            {/* Lenda */}
-            {tier.id === 'lenda' && (<>
-              <div className={styles.dividerLabel} style={{ color: ac }}>{pt ? '── Sua Quest ──' : '── Your Quest ──'}</div>
-              <div className={styles.field}>
-                <label className={styles.label}>{pt ? 'Nome da quest' : 'Quest name'}</label>
-                <input className={styles.input} value={questName} onChange={e => setQuestName(e.target.value)} />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.label}>{pt ? 'Ideia geral da quest' : 'Quest general idea'}</label>
-                <textarea className={styles.textarea} maxLength={500} rows={3} placeholder={pt ? 'Descreva a premissa, personagens envolvidos, objetivo...' : 'Describe the premise, involved characters, objective...'} value={questDesc} onChange={e => setQuestDesc(e.target.value)} />
-              </div>
-            </>)}
 
             <div className={styles.field}>
               <label className={styles.label}>{pt ? 'Mensagem para a equipe (opcional)' : 'Message to the team (optional)'}</label>
@@ -229,14 +348,38 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
             </div>
 
             {status?.type === 'error' && <p className={styles.msgError}>{status.message}</p>}
-            <button type="submit" className={styles.nextBtn} style={{ background: ac, color: '#05091a' }}>
+            <button
+              type="submit"
+              className={styles.nextBtn}
+              style={{ background: ac, color: '#05091a' }}
+              disabled={!amountValid || !namingValid}
+            >
               {pt ? 'Continuar para pagamento →' : 'Continue to payment →'}
             </button>
           </form>
         ) : (
           <div className={styles.payStep}>
             <div className={styles.pixCard} style={{ borderColor: ac + '50' }}>
-              <p className={styles.pixLabel}>{pt ? '✦ Chave PIX' : '✦ PIX Key'}</p>
+              <p className={styles.pixLabel}>{pt ? '✦ Pague via PIX' : '✦ Pay via PIX'}</p>
+
+              {/* QR Code */}
+              <div className={styles.qrWrap} style={{ borderColor: ac + '40' }}>
+                <QRCodeSVG
+                  value={buildPixPayload(amount ? parseFloat(amount.replace(',', '.')) : undefined)}
+                  size={180}
+                  bgColor="transparent"
+                  fgColor="#ffffff"
+                  level="M"
+                />
+                <p className={styles.qrHint}>
+                  {pt ? 'Escaneie com o app do seu banco' : 'Scan with your banking app'}
+                </p>
+              </div>
+
+              <div className={styles.pixDivider}>
+                <span>{pt ? 'ou copie a chave' : 'or copy the key'}</span>
+              </div>
+
               <div className={styles.pixKeyRow}>
                 <span className={styles.pixKey}>{PIX_KEY}</span>
                 <button className={styles.copyBtn} style={{ borderColor: ac, color: ac }} onClick={copyPix}>
@@ -245,8 +388,8 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
               </div>
               <p className={styles.pixNote}>
                 {pt
-                  ? `Faça o PIX de ${tier.rangePt} e clique em "Já paguei" abaixo.`
-                  : `Send a PIX of ${tier.rangeEn} and click "I paid" below.`}
+                  ? `Valor: ${tier.rangePt}. Após pagar clique em "Já paguei" abaixo.`
+                  : `Amount: ${tier.rangeEn}. After paying click "I paid" below.`}
               </p>
             </div>
 
