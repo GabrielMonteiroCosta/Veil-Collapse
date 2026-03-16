@@ -16,18 +16,19 @@ export default function SupportSection() {
   const timelineRef                        = useRef<HTMLDivElement>(null)
   const [activeIdx, setActiveIdx]         = useState<number | null>(null)
 
-  // Auto-scroll timeline to active milestone
+  // Auto-scroll timeline to active milestone (horizontal only, sem mover a página)
   useEffect(() => {
     const activeMs = milestones.findIndex(m => m.status === 'active')
-    if (activeMs >= 0 && timelineRef.current) {
-      const dots = timelineRef.current.querySelectorAll('[data-ms]')
-      const dot  = dots[activeMs] as HTMLElement | undefined
-      if (dot) {
-        setTimeout(() => {
-          dot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-        }, 600)
-      }
-    }
+    if (activeMs < 0 || !timelineRef.current) return
+    const container = timelineRef.current.querySelector('[class*="timelineScroll"]') as HTMLElement | null
+    const dots      = timelineRef.current.querySelectorAll('[data-ms]')
+    const dot       = dots[activeMs] as HTMLElement | undefined
+    if (!container || !dot) return
+    setTimeout(() => {
+      const dotCenter   = dot.offsetLeft + dot.offsetWidth / 2
+      const scrollLeft  = dotCenter - container.clientWidth / 2
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
+    }, 600)
   }, [])
 
   const pt = lang === 'pt'
