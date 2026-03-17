@@ -1,0 +1,270 @@
+.section {
+  background: var(--bg2);
+}
+
+.subtitle {
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
+}
+
+/* ── Terminal window ── */
+.terminal {
+  max-width: 780px;
+  margin: 0 auto;
+  background: #060b1a;
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(240, 192, 64, 0.08),
+    0 8px 40px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(240, 192, 64, 0.04);
+  cursor: text;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+/* ── Title bar ── */
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  background: #0a1028;
+  border-bottom: 1px solid rgba(240, 192, 64, 0.12);
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.15;
+}
+
+/* Ciclo: 1→2→3 apaga, 3→2→1 apaga, repete (2800ms total) */
+/* Cada passo = 300ms, pausa = 500ms */
+.dot1 { animation: dot1Pulse 2800ms linear infinite; }
+.dot2 { animation: dot2Pulse 2800ms linear infinite; }
+.dot3 { animation: dot3Pulse 2800ms linear infinite; }
+
+/* dot1: acende em t=0, apaga em t=900, acende em t=2100, apaga em t=2400 */
+@keyframes dot1Pulse {
+  0%     { opacity: 0.15; }
+  0.1%   { opacity: 1; }
+  32%    { opacity: 1; }
+  32.1%  { opacity: 0.15; }
+  74.9%  { opacity: 0.15; }
+  75%    { opacity: 1; }
+  85.6%  { opacity: 1; }
+  85.7%  { opacity: 0.15; }
+  100%   { opacity: 0.15; }
+}
+
+/* dot2: acende em t=300, apaga em t=900, acende em t=1800, apaga em t=2400 */
+@keyframes dot2Pulse {
+  0%     { opacity: 0.15; }
+  10.7%  { opacity: 0.15; }
+  10.8%  { opacity: 1; }
+  32%    { opacity: 1; }
+  32.1%  { opacity: 0.15; }
+  64.2%  { opacity: 0.15; }
+  64.3%  { opacity: 1; }
+  85.6%  { opacity: 1; }
+  85.7%  { opacity: 0.15; }
+  100%   { opacity: 0.15; }
+}
+
+/* dot3: acende em t=600, apaga em t=900, acende em t=1500, apaga em t=2400 */
+@keyframes dot3Pulse {
+  0%     { opacity: 0.15; }
+  21.4%  { opacity: 0.15; }
+  21.5%  { opacity: 1; }
+  32%    { opacity: 1; }
+  32.1%  { opacity: 0.15; }
+  53.5%  { opacity: 0.15; }
+  53.6%  { opacity: 1; }
+  85.6%  { opacity: 1; }
+  85.7%  { opacity: 0.15; }
+  100%   { opacity: 0.15; }
+}
+
+.titleText {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+/* ── Output area ── */
+.outputArea {
+  padding: 1.25rem 1.5rem;
+  min-height: 280px;
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-dim) transparent;
+}
+
+.outputArea::-webkit-scrollbar { width: 4px; }
+.outputArea::-webkit-scrollbar-track { background: transparent; }
+.outputArea::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 0.3rem;
+}
+
+/* ── Line types ── */
+.line {
+  line-height: 1.2;
+  white-space: pre;
+}
+
+.system {
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  font-weight: bold;
+}
+
+.output {
+  color: #8ab4d0;
+}
+
+.error {
+  color: #e05050;
+}
+
+.echo {
+  color: var(--rift-bright);
+}
+
+.diary {
+  color: #90e0a0;
+  font-style: italic;
+}
+
+.separator {
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+
+/* ── Input line (history echo) ── */
+.inputLine {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Input row ── */
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.5rem 0.9rem;
+  border-top: 1px solid rgba(240, 192, 64, 0.08);
+}
+
+.prompt {
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+.inputText {
+  color: var(--text);
+}
+
+/* Wrapper que exibe o texto espelhado + cursor bloco */
+.inputWrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Texto visível do input */
+.inputMirror {
+  color: var(--text);
+  white-space: pre;
+  pointer-events: none;
+  user-select: none;
+}
+
+.placeholder {
+  color: var(--text-muted);
+  opacity: 0.45;
+}
+
+/* Cursor bloco piscando */
+.blockCursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  background: var(--gold);
+  opacity: 0.85;
+  vertical-align: text-bottom;
+  margin-left: 1px;
+  animation: blink 1.1s step-end infinite;
+}
+
+.lockCursor {
+  font-size: 0.85em;
+  filter: hue-rotate(200deg) saturate(2);
+  vertical-align: text-bottom;
+}
+
+/* Input real — invisível, cobre o wrapper inteiro */
+.hiddenInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: transparent;
+  caret-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.85; }
+  50%       { opacity: 0; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .terminal {
+    font-size: 0.75rem;
+  }
+
+  .output {
+    padding: 1rem;
+    max-height: 340px;
+  }
+
+  .inputRow {
+    padding: 0.5rem 1rem 0.75rem;
+  }
+
+  .line,
+  .inputMirror {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
