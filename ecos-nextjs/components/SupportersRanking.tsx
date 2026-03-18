@@ -28,8 +28,11 @@ export default function SupportersRanking() {
       .catch(() => setLoading(false))
   }, [])
 
+  const LEGACY: Record<string, string> = { apoiador: 'pesquisador', criador: 'sentinela', lenda: 'rifter' }
+
   function tierData(id: string) {
-    return tiers.find(t => t.id === id) ?? tiers[0]
+    const resolved = LEGACY[id] ?? id
+    return tiers.find(t => t.id === resolved) ?? tiers[1]
   }
 
   const top3 = list.slice(0, 3)
@@ -123,15 +126,15 @@ export default function SupportersRanking() {
                         style={{ color: td.accent, textShadow: `0 0 10px ${td.accentGlow}` }}>
                         {s.name}
                       </span>
-                      <span className={styles.listTier}
-                        style={{ color: td.accent, borderColor: td.accent + '44', background: td.accentGlow }}>
-                        {td.icon} {pt ? td.namePt : td.nameEn}
-                      </span>
                       <span className={styles.listAmount} style={{ color: td.accent }}>
                         {fmtAmount(s.amount, s.tier)}
                       </span>
                       <span className={styles.listDate}>
                         {new Date(s.created_at).toLocaleDateString(pt ? 'pt-BR' : 'en-US', { month: 'short', year: 'numeric' })}
+                      </span>
+                      <span className={styles.listTier}
+                        style={{ color: td.accent, borderColor: td.accent + '44', background: td.accentGlow }}>
+                        {td.icon} {pt ? td.namePt : td.nameEn}
                       </span>
                     </div>
                   )

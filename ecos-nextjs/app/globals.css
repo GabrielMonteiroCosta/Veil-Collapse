@@ -55,9 +55,6 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   z-index: 1;
   padding: var(--section-pad);
-  contain: layout style;
-  content-visibility: auto;
-  contain-intrinsic-size: 0 600px;
 }
 
 .section-inner {

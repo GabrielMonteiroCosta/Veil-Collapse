@@ -241,13 +241,13 @@
   border: 1px solid;
   border-radius: 99px;
   white-space: nowrap;
+  margin-left: auto;
 }
 
 .listAmount {
   font-size: 0.8rem;
   font-weight: 700;
   white-space: nowrap;
-  margin-left: auto;
 }
 
 .listDate {

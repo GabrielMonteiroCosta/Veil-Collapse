@@ -34,7 +34,7 @@ export default function WorldSection() {
   ]
 
   return (
-    <section className="section" id="mundo">
+    <section className={`section ${styles.section}`} id="mundo">
       <div className="section-inner">
         <div className="section-tag">{t('world.tag')}</div>
         <h2 className="section-title">{t('world.title')}</h2>

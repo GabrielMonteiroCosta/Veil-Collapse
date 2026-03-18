@@ -50,7 +50,7 @@ export const translations = {
     'world.p1.name': 'Cidade Estrela',
     'world.p1.desc': 'O lar de Lumi e Aya. Um vilarejo tranquilo sob um céu eternamente estrelado — ou assim era, antes que a sobreposição chegasse.',
     'world.p1.status': 'Intacta',
-    'world.p2.name': 'Zonas Sobrepostas',
+    'world.p2.name': 'Zonas de Rift',
     'world.p2.desc': 'Cidades presas entre os dois universos. Nem aqui, nem lá. Habitadas por ecos de ambos os mundos — criaturas e fenômenos impossíveis.',
     'world.p2.status': 'Sobreposta',
     'world.p3.name': 'O Anti-Universo',

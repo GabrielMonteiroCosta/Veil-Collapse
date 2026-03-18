@@ -7,12 +7,12 @@ import LoginModal from './LoginModal'
 import styles from './Nav.module.css'
 
 const links = [
-  { href: '#historia',    keyPt: 'História',    keyEn: 'Story' },
+  { href: '#mundo',       keyPt: 'O Mundo',      keyEn: 'World' },
   { href: '#personagens', keyPt: 'Personagens',  keyEn: 'Characters' },
   { href: '#cidades',     keyPt: 'Cidades',      keyEn: 'Cities' },
-  { href: '#mundo',       keyPt: 'O Mundo',      keyEn: 'World' },
   { href: '#devlog',      keyPt: 'Devlog',       keyEn: 'Devlog' },
-  { href: '#notificar',   keyPt: 'Notificar',    keyEn: 'Notify' },
+  { href: '#apoie',       keyPt: 'Apoie',        keyEn: 'Support' },
+  { href: '#faq',         keyPt: 'FAQ',          keyEn: 'FAQ' },
 ]
 
 export default function Nav() {
@@ -40,6 +40,29 @@ export default function Nav() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  function smoothScroll(target: number) {
+    const start = window.scrollY
+    const distance = target - start
+    const duration = Math.min(Math.abs(distance) * 0.4, 900)
+    let startTime: number | null = null
+
+    function step(now: number) {
+      if (!startTime) startTime = now
+      const p = Math.min((now - startTime) / duration, 1)
+      const ease = 1 - Math.pow(1 - p, 4)
+      window.scrollTo(0, start + distance * ease)
+      if (p < 1) requestAnimationFrame(step)
+    }
+
+    requestAnimationFrame(step)
+  }
+
+  function scrollTo(id: string) {
+    const el = document.getElementById(id)
+    if (!el) return
+    smoothScroll(el.getBoundingClientRect().top + window.scrollY - 80)
+  }
+
   return (
     <>
       <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
@@ -48,7 +71,8 @@ export default function Nav() {
         {/* Desktop links */}
         <div className={styles.links}>
           {links.map(l => (
-            <a key={l.href} href={l.href} className={styles.link}>
+            <a key={l.href} href={l.href} className={styles.link}
+              onClick={e => { e.preventDefault(); scrollTo(l.href.slice(1)) }}>
               {lang === 'pt' ? l.keyPt : l.keyEn}
             </a>
           ))}
@@ -117,7 +141,7 @@ export default function Nav() {
                 key={l.href}
                 href={l.href}
                 className={styles.mobileLink}
-                onClick={() => setOpen(false)}
+                onClick={e => { e.preventDefault(); scrollTo(l.href.slice(1)); setOpen(false) }}
               >
                 {lang === 'pt' ? l.keyPt : l.keyEn}
               </a>
@@ -146,6 +170,15 @@ export default function Nav() {
       </nav>
 
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} lang={lang} />
+
+      {/* Voltar ao topo */}
+      <button
+        className={`${styles.backToTop} ${scrolled ? styles.backToTopVisible : ''}`}
+        onClick={() => smoothScroll(0)}
+        aria-label="Voltar ao topo"
+      >
+        ▲
+      </button>
     </>
   )
 }

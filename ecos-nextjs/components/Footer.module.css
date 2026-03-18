@@ -73,3 +73,68 @@
   font-size: 0.85rem;
   color: var(--text-muted);
 }
+
+/* ── Waitlist ── */
+.waitlist {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.waitlistCount {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.waitlistNum {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.waitlistForm {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 420px;
+}
+
+.waitlistInput {
+  flex: 1;
+  min-width: 180px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 228, 255, 0.15);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  padding: 0.65rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.waitlistInput:focus { border-color: var(--gold-dim); }
+.waitlistInput::placeholder { color: var(--text-muted); }
+.waitlistInput:disabled { opacity: 0.6; }
+
+.waitlistBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.waitlistSuccess {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  line-height: 2;
+}
+
+.waitlistError {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  color: #ff6060;
+  letter-spacing: 0.05em;
+}

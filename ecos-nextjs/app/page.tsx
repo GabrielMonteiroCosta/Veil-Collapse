@@ -12,7 +12,6 @@ const SupportersRanking  = dynamic(() => import('@/components/SupportersRanking'
 const FaqSection         = dynamic(() => import('@/components/FaqSection'))
 const TerminalSection    = dynamic(() => import('@/components/TerminalSection'))
 const DevlogSection      = dynamic(() => import('@/components/DevlogSection'))
-const NotifySection      = dynamic(() => import('@/components/NotifySection'))
 const Footer             = dynamic(() => import('@/components/Footer'))
 
 export default function Home() {
@@ -20,16 +19,14 @@ export default function Home() {
     <>
       <Nav />
       <SplitHero />
-      <StorySection />
+      <WorldSection />
       <CharactersSection />
       <CitiesSection />
-      <WorldSection />
+      <TerminalSection />
+      <DevlogSection />
       <SupportSection />
       <SupportersRanking />
       <FaqSection />
-      <TerminalSection />
-      <DevlogSection />
-      <NotifySection />
       <Footer />
     </>
   )

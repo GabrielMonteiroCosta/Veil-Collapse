@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'E-mail inválido' }, { status: 400 })
   }
 
-  if (!['apoiador', 'criador', 'lenda'].includes(tier)) {
+  if (!['viajante', 'pesquisador', 'sentinela', 'rifter'].includes(tier)) {
     return NextResponse.json({ error: 'Tier inválido' }, { status: 400 })
   }
 

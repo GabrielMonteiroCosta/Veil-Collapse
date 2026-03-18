@@ -43,59 +43,13 @@
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--gold);
-  opacity: 0.15;
 }
 
-/* Ciclo: 1→2→3 apaga, 3→2→1 apaga, repete (2800ms total) */
-/* Cada passo = 300ms, pausa = 500ms */
-.dot1 { animation: dot1Pulse 2800ms linear infinite; }
-.dot2 { animation: dot2Pulse 2800ms linear infinite; }
-.dot3 { animation: dot3Pulse 2800ms linear infinite; }
-
-/* dot1: acende em t=0, apaga em t=900, acende em t=2100, apaga em t=2400 */
-@keyframes dot1Pulse {
-  0%     { opacity: 0.15; }
-  0.1%   { opacity: 1; }
-  32%    { opacity: 1; }
-  32.1%  { opacity: 0.15; }
-  74.9%  { opacity: 0.15; }
-  75%    { opacity: 1; }
-  85.6%  { opacity: 1; }
-  85.7%  { opacity: 0.15; }
-  100%   { opacity: 0.15; }
-}
-
-/* dot2: acende em t=300, apaga em t=900, acende em t=1800, apaga em t=2400 */
-@keyframes dot2Pulse {
-  0%     { opacity: 0.15; }
-  10.7%  { opacity: 0.15; }
-  10.8%  { opacity: 1; }
-  32%    { opacity: 1; }
-  32.1%  { opacity: 0.15; }
-  64.2%  { opacity: 0.15; }
-  64.3%  { opacity: 1; }
-  85.6%  { opacity: 1; }
-  85.7%  { opacity: 0.15; }
-  100%   { opacity: 0.15; }
-}
-
-/* dot3: acende em t=600, apaga em t=900, acende em t=1500, apaga em t=2400 */
-@keyframes dot3Pulse {
-  0%     { opacity: 0.15; }
-  21.4%  { opacity: 0.15; }
-  21.5%  { opacity: 1; }
-  32%    { opacity: 1; }
-  32.1%  { opacity: 0.15; }
-  53.5%  { opacity: 0.15; }
-  53.6%  { opacity: 1; }
-  85.6%  { opacity: 1; }
-  85.7%  { opacity: 0.15; }
-  100%   { opacity: 0.15; }
-}
+/* opacidade controlada via JS no componente */
 
 .titleText {
   color: var(--text-muted);
@@ -250,21 +204,22 @@
 /* ── Mobile ── */
 @media (max-width: 600px) {
   .terminal {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
-  .output {
-    padding: 1rem;
-    max-height: 340px;
+  .outputArea {
+    padding: 0.75rem;
+    max-height: 320px;
+    overflow-x: auto;
   }
 
   .inputRow {
-    padding: 0.5rem 1rem 0.75rem;
+    padding: 0.5rem 0.75rem 0.75rem;
+    overflow-x: auto;
   }
 
   .line,
   .inputMirror {
-    white-space: pre-wrap;
-    word-break: break-word;
+    white-space: pre;
   }
 }

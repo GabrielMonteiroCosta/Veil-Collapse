@@ -56,7 +56,7 @@ function buildPixPayload(amount?: number) {
   return body + crc16(body)
 }
 
-const TIER_MIN: Record<string, number> = { apoiador: 10, criador: 50, lenda: 100 }
+const TIER_MIN: Record<string, number> = { viajante: 1, pesquisador: 10, sentinela: 50, rifter: 100 }
 
 export default function DonationModal({ tierId, lang, onClose }: Props) {
   const { user } = useAuth()
@@ -121,9 +121,9 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
 
   const namingValid =
     skipNaming ||
-    (tier.id === 'apoiador' ? npcOrItem.trim() !== '' :
-     tier.id === 'criador'  ? npcName.trim() !== '' :
-     tier.id === 'lenda'    ? npcName.trim() !== '' && questName.trim() !== '' : true)
+    (tier.id === 'pesquisador' ? npcOrItem.trim() !== '' :
+     tier.id === 'sentinela'  ? npcName.trim() !== '' :
+     tier.id === 'rifter'     ? npcName.trim() !== '' && questName.trim() !== '' : true)
 
   function goToPayment() {
     if (!amountValid || !namingValid) return
@@ -287,8 +287,8 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
               </div>
             ) : (
               <>
-                {/* Apoiador */}
-                {tier.id === 'apoiador' && (
+                {/* Pesquisador */}
+                {tier.id === 'pesquisador' && (
                   <div className={styles.field}>
                     <label className={styles.label}>{pt ? 'Nome do NPC ou item que deseja batizar *' : 'NPC or item name you want to give *'}</label>
                     <input
@@ -300,8 +300,8 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
                   </div>
                 )}
 
-                {/* Criador + Lenda */}
-                {(tier.id === 'criador' || tier.id === 'lenda') && (<>
+                {/* Sentinela + Rifter */}
+                {(tier.id === 'sentinela' || tier.id === 'rifter') && (<>
                   <div className={styles.dividerLabel} style={{ color: ac }}>{pt ? '── Seu NPC ──' : '── Your NPC ──'}</div>
                   <div className={styles.row2}>
                     <div className={styles.field}>
@@ -323,8 +323,8 @@ export default function DonationModal({ tierId, lang, onClose }: Props) {
                   </div>
                 </>)}
 
-                {/* Lenda */}
-                {tier.id === 'lenda' && (<>
+                {/* Rifter */}
+                {tier.id === 'rifter' && (<>
                   <div className={styles.dividerLabel} style={{ color: ac }}>{pt ? '── Sua Quest ──' : '── Your Quest ──'}</div>
                   <div className={styles.field}>
                     <label className={styles.label}>{pt ? 'Nome da quest *' : 'Quest name *'}</label>
