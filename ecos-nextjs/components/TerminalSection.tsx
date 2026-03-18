@@ -97,7 +97,7 @@ export default function TerminalSection() {
 
   // Re-foca o input quando o terminal termina de digitar
   useEffect(() => {
-    if (!isTyping) inputRef.current?.focus()
+    if (!isTyping) inputRef.current?.focus({ preventScroll: true })
   }, [isTyping])
 
   function revealLines(lines: TerminalLine[], inputText: string | undefined, onDone?: () => void) {

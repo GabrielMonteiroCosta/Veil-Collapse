@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join } from 'path'
 import { rateLimit } from '@/lib/rateLimit'
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 // 3 inscrições por IP a cada hora
 const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 60 * 60_000 })
@@ -65,6 +68,23 @@ export async function POST(req: NextRequest) {
   data.emails.push(email)
   data.count = data.emails.length
   saveWaitlist(data)
+
+  await resend.emails.send({
+    from: 'E.M.Q <onboarding@resend.dev>',
+    to: email,
+    subject: 'Você entrou na lista de espera de E.M.Q!',
+    html: `
+      <div style="background:#0a0a0f;color:#e8e8e8;font-family:monospace;padding:40px;max-width:600px;margin:0 auto;">
+        <h1 style="color:#f0c040;letter-spacing:2px;">E.M.Q — Ecos de um Mundo Quebrado</h1>
+        <hr style="border-color:#333;margin:24px 0;">
+        <p>Olá,</p>
+        <p>Seu cadastro na lista de espera foi confirmado. Você é um dos primeiros a saber quando o jogo estiver disponível.</p>
+        <p style="color:#f0c040;">Quando os dois universos colidirem, você será o primeiro a saber.</p>
+        <hr style="border-color:#333;margin:24px 0;">
+        <p style="color:#666;font-size:12px;">Você recebeu este email porque se cadastrou em ecos-emq.vercel.app</p>
+      </div>
+    `,
+  }).catch(() => {}) // silencia erro de email para não bloquear o cadastro
 
   return NextResponse.json({ count: data.count, success: true })
 }
