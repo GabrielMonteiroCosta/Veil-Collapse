@@ -4,14 +4,16 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import GlitchText from './GlitchText'
 import StarField from './StarField'
+import NotifyModal from './NotifyModal'
 import styles from './SplitHero.module.css'
 
 const INITIAL_X = 55
 
 export default function SplitHero() {
   const { t } = useLanguage()
-  const [hinted, setHinted] = useState(false)
+  const [hinted, setHinted]   = useState(false)
   const [dragging, setDragging] = useState(false)
+  const [notify, setNotify]   = useState(false)
 
   const containerRef    = useRef<HTMLDivElement>(null)
   const normalLayerRef  = useRef<HTMLDivElement>(null)
@@ -115,8 +117,8 @@ export default function SplitHero() {
           </h1>
           <p className={styles.tagline}>{t('hero.tagline')}</p>
           <div className={styles.btns}>
-            <a href="#historia" className="btn btn-primary">{t('hero.btn.story')}</a>
-            <a href="#personagens" className="btn btn-secondary">{t('hero.btn.chars')}</a>
+            <button className="btn btn-primary" onClick={() => setNotify(true)}>{t('hero.btn.story')}</button>
+            <a href="#cidades" className="btn btn-secondary">{t('hero.btn.chars')}</a>
           </div>
         </div>
         <div className={styles.worldLabel} style={{ left: '5%' }}>
@@ -148,8 +150,8 @@ export default function SplitHero() {
             {t('hero.tagline')}
           </p>
           <div className={styles.btns}>
-            <a href="#historia" className={`btn ${styles.btnRift}`}>{t('hero.btn.story')}</a>
-            <a href="#personagens" className="btn btn-secondary">{t('hero.btn.chars')}</a>
+            <button className={`btn ${styles.btnRift}`} onClick={() => setNotify(true)}>{t('hero.btn.story')}</button>
+            <a href="#cidades" className="btn btn-secondary">{t('hero.btn.chars')}</a>
           </div>
         </div>
         <div className={`${styles.worldLabel} ${styles.worldLabelAnti}`} style={{ right: '5%', left: 'auto' }}>
@@ -178,6 +180,8 @@ export default function SplitHero() {
 
       {/* Scroll hint */}
       <div className={styles.scrollHint}>▼</div>
+
+      {notify && <NotifyModal onClose={() => setNotify(false)} />}
     </section>
   )
 }

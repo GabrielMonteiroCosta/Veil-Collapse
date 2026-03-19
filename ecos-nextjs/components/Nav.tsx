@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import { useAuth } from '@/context/AuthContext'
 import LoginModal from './LoginModal'
+import LoginTransition from './LoginTransition'
+import LogoutTransition from './LogoutTransition'
 import styles from './Nav.module.css'
 
 const links = [
@@ -22,6 +24,9 @@ export default function Nav() {
   const [open, setOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [transition, setTransition] = useState<{ active: boolean; username: string }>({ active: false, username: '' })
+  const [logoutConfirm, setLogoutConfirm] = useState(false)
+  const [logoutTransition, setLogoutTransition] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -109,7 +114,7 @@ export default function Nav() {
                   )}
                   <button
                     className={`${styles.dropdownItem} ${styles.dropdownLogout}`}
-                    onClick={() => { logout(); setDropdownOpen(false) }}
+                    onClick={() => { setDropdownOpen(false); setLogoutConfirm(true) }}
                   >
                     {lang === 'pt' ? '↩ Sair' : '↩ Sign Out'}
                   </button>
@@ -156,7 +161,7 @@ export default function Nav() {
                     ✦ Admin
                   </a>
                 )}
-                <button className={styles.mobileLinkBtn} onClick={() => { logout(); setOpen(false) }}>
+                <button className={styles.mobileLinkBtn} onClick={() => { setOpen(false); setLogoutConfirm(true) }}>
                   {lang === 'pt' ? '↩ Sair' : '↩ Sign Out'}
                 </button>
               </>
@@ -169,7 +174,67 @@ export default function Nav() {
         )}
       </nav>
 
-      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} lang={lang} />
+      <LoginModal
+        open={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        onLoginSuccess={username => {
+          setLoginOpen(false)
+          setTransition({ active: true, username })
+        }}
+        lang={lang}
+      />
+
+      {transition.active && (
+        <LoginTransition
+          username={transition.username}
+          lang={lang}
+          onComplete={() => setTransition({ active: false, username: '' })}
+        />
+      )}
+
+      {logoutTransition && (
+        <LogoutTransition
+          lang={lang}
+          onComplete={async () => {
+            await logout()
+            window.location.reload()
+          }}
+        />
+      )}
+
+      {/* Logout confirmation */}
+      {logoutConfirm && (
+        <div className={styles.logoutOverlay} onClick={() => setLogoutConfirm(false)}>
+          <div className={styles.logoutModal} onClick={e => e.stopPropagation()}>
+            <p className={styles.logoutTag}>⟷ RIFT</p>
+            <h2 className={styles.logoutTitle}>
+              {lang === 'pt' ? 'Dessincronizar?' : 'Desync?'}
+            </h2>
+            <p className={styles.logoutText}>
+              {lang === 'pt'
+                ? 'Tem certeza que deseja dessincronizar o seu Rift?'
+                : 'Are you sure you want to desync your Rift?'}
+            </p>
+            <div className={styles.logoutBtns}>
+              <button
+                className={styles.logoutConfirmBtn}
+                onClick={() => {
+                  setLogoutConfirm(false)
+                  setLogoutTransition(true)
+                }}
+              >
+                {lang === 'pt' ? 'Sim, sair' : 'Yes, sign out'}
+              </button>
+              <button
+                className={styles.logoutCancelBtn}
+                onClick={() => setLogoutConfirm(false)}
+              >
+                {lang === 'pt' ? 'Cancelar' : 'Cancel'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Voltar ao topo */}
       <button

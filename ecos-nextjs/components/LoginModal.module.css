@@ -85,6 +85,27 @@
   background: linear-gradient(135deg, #0d0520 0%, #160830 50%, #0f0525 100%);
 }
 
+/* Scanlines overlay */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.07) 3px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: scanlinesSlide 10s linear infinite;
+}
+
+@keyframes scanlinesSlide {
+  from { transform: translateY(0); }
+  to   { transform: translateY(4px); }
+}
+
 /* Moon */
 .moon {
   position: absolute;
@@ -154,6 +175,22 @@
   gap: 1rem;
 }
 
+/* Staggered entrance */
+.content > * {
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.content > *:nth-child(1) { animation-delay: 0.04s; }
+.content > *:nth-child(2) { animation-delay: 0.11s; }
+.content > *:nth-child(3) { animation-delay: 0.18s; }
+.content > *:nth-child(4) { animation-delay: 0.25s; }
+.content > *:nth-child(5) { animation-delay: 0.32s; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* Labels */
 .sideTag {
   font-family: 'Press Start 2P', monospace;
@@ -169,6 +206,25 @@
   letter-spacing: 0.28em;
   color: var(--rift);
   text-shadow: 0 0 10px var(--rift-glow);
+}
+
+/* Title glitch */
+@keyframes glitchEffect {
+  0%, 84%, 100% { clip-path: none; transform: none; color: inherit; }
+  85%  { clip-path: inset(15% 0 55% 0); transform: translateX(-4px); filter: hue-rotate(90deg); }
+  86%  { clip-path: inset(65% 0 10% 0); transform: translateX(4px); }
+  87%  { clip-path: inset(40% 0 35% 0); transform: translateX(-2px); filter: none; }
+  88%  { clip-path: none; transform: translateX(1px); }
+  89%  { transform: none; }
+}
+
+.glitch {
+  animation: glitchEffect 9s step-end infinite;
+}
+
+.glitchAnti {
+  animation: glitchEffect 9s step-end infinite;
+  animation-delay: 4s;
 }
 
 .sideTitle {
@@ -222,7 +278,7 @@
   font-family: 'Crimson Text', serif;
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   width: 100%;
 }
 
@@ -240,7 +296,36 @@
   background: rgba(139, 63, 255, 0.05);
 }
 
+/* Password row with forgot link */
+.passwordRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.forgotLink {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.28rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: right;
+  padding: 0;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  align-self: flex-end;
+}
+
+.forgotLink:hover {
+  color: var(--gold-dim);
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+
+/* Submit buttons with shimmer */
 .submitNormal {
+  position: relative;
+  overflow: hidden;
   background: var(--gold);
   color: #080d28;
   border: none;
@@ -255,13 +340,30 @@
   margin-top: 0.2rem;
 }
 
+.submitNormal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.5s ease;
+}
+
 .submitNormal:hover {
   background: #ffe070;
   box-shadow: 0 0 35px rgba(240, 192, 64, 0.6);
   transform: translateY(-2px);
 }
 
+.submitNormal:hover::before {
+  left: 150%;
+}
+
 .submitAnti {
+  position: relative;
+  overflow: hidden;
   background: var(--rift);
   color: #fff;
   border: none;
@@ -276,10 +378,25 @@
   margin-top: 0.2rem;
 }
 
+.submitAnti::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
 .submitAnti:hover {
   background: var(--rift-bright);
   box-shadow: 0 0 35px rgba(139, 63, 255, 0.6);
   transform: translateY(-2px);
+}
+
+.submitAnti:hover::before {
+  left: 150%;
 }
 
 .formLink {

@@ -13,7 +13,7 @@ interface AuthCtx {
   user: AuthUser | null
   loading: boolean
   setUser: (u: AuthUser | null) => void
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthCtx>({
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   function logout() {
-    fetch('/api/auth/logout', { method: 'POST' }).then(() => setUser(null))
+    return fetch('/api/auth/logout', { method: 'POST' }).then(() => setUser(null))
   }
 
   return (

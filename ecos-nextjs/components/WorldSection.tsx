@@ -14,6 +14,7 @@ export default function WorldSection() {
       status: t('world.p1.status'),
       statusClass: styles.statusSafe,
       cardClass: '',
+      reveal: true,
     },
     {
       icon: '🌀',
@@ -22,6 +23,7 @@ export default function WorldSection() {
       status: t('world.p2.status'),
       statusClass: styles.statusOverlap,
       cardClass: styles.cardOverlap,
+      reveal: true,
     },
     {
       icon: '🔮',
@@ -30,18 +32,23 @@ export default function WorldSection() {
       status: t('world.p3.status'),
       statusClass: styles.statusUnknown,
       cardClass: styles.cardUnknown,
+      reveal: false,
     },
   ]
 
   return (
     <section className={`section ${styles.section}`} id="mundo">
       <div className="section-inner">
-        <div className="section-tag">{t('world.tag')}</div>
-        <h2 className="section-title">{t('world.title')}</h2>
+        <div className="section-tag" data-reveal data-delay="0">{t('world.tag')}</div>
+        <h2 className="section-title" data-reveal data-delay="100">{t('world.title')}</h2>
 
         <div className={styles.grid}>
           {places.map((p, i) => (
-            <div key={i} className={`${styles.card} ${p.cardClass}`}>
+            <div
+              key={i}
+              className={`${styles.card} ${p.cardClass}`}
+              {...(p.reveal ? { 'data-reveal': '', 'data-delay': String(i * 130) } : {})}
+            >
               <div className={styles.cardIcon}>{p.icon}</div>
               <h3 className={styles.cardName}>{p.name}</h3>
               <p className={styles.cardDesc}>{p.desc}</p>

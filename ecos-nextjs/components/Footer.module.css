@@ -18,6 +18,12 @@
   color: var(--gold);
   margin-bottom: 0.4rem;
   text-shadow: 0 0 20px var(--gold-glow);
+  animation: titleGlow 4s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 20px var(--gold-glow); }
+  50%       { text-shadow: 0 0 35px rgba(240, 192, 64, 0.5), 0 0 70px rgba(240, 192, 64, 0.15); }
 }
 
 .tagline {
@@ -42,15 +48,34 @@
   color: var(--text-muted);
   letter-spacing: 0.05em;
   transition: color 0.2s;
+  position: relative;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 0%;
+  height: 1px;
+  background: var(--gold);
+  box-shadow: 0 0 6px var(--gold-glow);
+  transition: width 0.25s ease, left 0.25s ease;
 }
 
 .link:hover { color: var(--gold); }
+
+.link:hover::after {
+  width: 100%;
+  left: 0%;
+}
 
 .dot {
   font-size: 0.5rem;
   color: var(--gold-dim);
 }
 
+/* Animated rift divider */
 .riftDivider {
   display: flex;
   align-items: center;
@@ -61,12 +86,42 @@
 .riftLine {
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(139, 63, 255, 0.3), transparent);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(139, 63, 255, 0.1) 15%,
+    rgba(139, 63, 255, 0.55) 40%,
+    rgba(240, 192, 64, 0.4) 50%,
+    rgba(139, 63, 255, 0.55) 60%,
+    rgba(139, 63, 255, 0.1) 85%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: riftLineFlow 5s linear infinite;
+}
+
+@keyframes riftLineFlow {
+  0%   { background-position: 150% 0; }
+  100% { background-position: -50% 0; }
 }
 
 .riftStar {
   font-size: 0.8rem;
   color: var(--gold-dim);
+  animation: riftStarPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes riftStarPulse {
+  0%, 100% {
+    color: var(--gold-dim);
+    text-shadow: none;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    color: var(--gold);
+    text-shadow: 0 0 10px var(--gold-glow), 0 0 20px rgba(240,192,64,0.2);
+    transform: scale(1.2) rotate(20deg);
+  }
 }
 
 .copy {
@@ -115,10 +170,13 @@
   font-size: 0.95rem;
   padding: 0.65rem 1rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.waitlistInput:focus { border-color: var(--gold-dim); }
+.waitlistInput:focus {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 8px var(--gold-glow);
+}
 .waitlistInput::placeholder { color: var(--text-muted); }
 .waitlistInput:disabled { opacity: 0.6; }
 

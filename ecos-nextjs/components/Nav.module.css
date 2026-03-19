@@ -234,6 +234,110 @@
   text-align: left;
 }
 
+/* ── Logout confirmation modal ── */
+.logoutOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 9, 26, 0.82);
+  backdrop-filter: blur(6px);
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.18s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+.logoutModal {
+  background: linear-gradient(160deg, #0d1235 0%, #080d28 100%);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.08), 0 20px 60px rgba(0,0,0,0.6);
+  animation: modalIn 0.25s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.94) translateY(16px) }
+  to   { opacity: 1; transform: none }
+}
+
+.logoutTag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.3em;
+  color: #f87171;
+  text-shadow: 0 0 10px rgba(248, 113, 113, 0.4);
+  margin-bottom: 0.6rem;
+}
+
+.logoutTitle {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.logoutText {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.logoutBtns {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.logoutConfirmBtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  padding: 0.75rem 1.2rem;
+  border-radius: var(--radius);
+  border: none;
+  background: #f87171;
+  color: #0d0520;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 14px rgba(248, 113, 113, 0.3);
+}
+.logoutConfirmBtn:hover {
+  background: #fca5a5;
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(248, 113, 113, 0.5);
+}
+
+.logoutCancelBtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  padding: 0.75rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--text-muted);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+.logoutCancelBtn:hover {
+  border-color: var(--text-dim);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
 /* ── Back to top ── */
 .backToTop {
   position: fixed;

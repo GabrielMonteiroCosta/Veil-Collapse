@@ -94,9 +94,17 @@
   overflow: hidden;
 }
 
-/* Re-enable pointer events for buttons */
-.heroContent a {
+/* Re-enable pointer events for interactive elements */
+.heroContent a,
+.heroContent button {
   pointer-events: auto;
+}
+
+.btns {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .eyebrow {

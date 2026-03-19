@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { AuthProvider } from '@/context/AuthContext'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'Ecos de um Mundo Quebrado',
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </LanguageProvider>
         </AuthProvider>
+        <ScrollReveal />
       </body>
     </html>
   )

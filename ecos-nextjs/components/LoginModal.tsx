@@ -8,12 +8,14 @@ import { useAuth } from '@/context/AuthContext'
 interface Props {
   open: boolean
   onClose: () => void
+  onLoginSuccess?: (username: string) => void
   lang: string
 }
 
 type Status = { type: 'success' | 'error'; message: string } | null
+type View = 'login' | 'forgot'
 
-export default function LoginModal({ open, onClose, lang }: Props) {
+export default function LoginModal({ open, onClose, onLoginSuccess, lang }: Props) {
   const { setUser } = useAuth()
   const [loginEmail, setLoginEmail] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
@@ -26,6 +28,11 @@ export default function LoginModal({ open, onClose, lang }: Props) {
   const [regStatus, setRegStatus] = useState<Status>(null)
   const [regLoading, setRegLoading] = useState(false)
 
+  const [view, setView] = useState<View>('login')
+  const [forgotEmail, setForgotEmail] = useState('')
+  const [forgotStatus, setForgotStatus] = useState<Status>(null)
+  const [forgotLoading, setForgotLoading] = useState(false)
+
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -36,6 +43,14 @@ export default function LoginModal({ open, onClose, lang }: Props) {
       document.body.style.overflow = ''
     }
   }, [open, onClose])
+
+  useEffect(() => {
+    if (!open) {
+      setView('login')
+      setForgotEmail('')
+      setForgotStatus(null)
+    }
+  }, [open])
 
   if (!open) return null
 
@@ -54,13 +69,17 @@ export default function LoginModal({ open, onClose, lang }: Props) {
         setLoginStatus({ type: 'error', message: data.error })
       } else {
         setUser(data.user)
-        setLoginStatus({
-          type: 'success',
-          message: lang === 'pt'
-            ? `Bem-vindo, ${data.user.username}!`
-            : `Welcome, ${data.user.username}!`,
-        })
-        setTimeout(() => onClose(), 1000)
+        if (onLoginSuccess) {
+          setTimeout(() => onLoginSuccess(data.user.username), 300)
+        } else {
+          setLoginStatus({
+            type: 'success',
+            message: lang === 'pt'
+              ? `Bem-vindo, ${data.user.username}!`
+              : `Welcome, ${data.user.username}!`,
+          })
+          setTimeout(() => onClose(), 1000)
+        }
       }
     } catch {
       setLoginStatus({
@@ -104,60 +123,147 @@ export default function LoginModal({ open, onClose, lang }: Props) {
     }
   }
 
+  async function handleForgot(e: React.FormEvent) {
+    e.preventDefault()
+    setForgotStatus(null)
+    setForgotLoading(true)
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: forgotEmail }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setForgotStatus({ type: 'error', message: data.error })
+      } else {
+        setForgotStatus({
+          type: 'success',
+          message: lang === 'pt'
+            ? 'Se o e-mail existir, um link foi enviado.'
+            : 'If the email exists, a link was sent.',
+        })
+      }
+    } catch {
+      setForgotStatus({
+        type: 'error',
+        message: lang === 'pt' ? 'Erro de conexão' : 'Connection error',
+      })
+    } finally {
+      setForgotLoading(false)
+    }
+  }
+
   return (
     <div className={styles.backdrop} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
 
         <button className={styles.closeBtn} onClick={onClose} aria-label="Fechar">×</button>
 
-        {/* Normal Universe — Login */}
+        {/* Normal Universe — Login / Forgot */}
         <div className={styles.sideNormal}>
           <StarField mode="normal" lite />
           <div className={styles.moon} />
           <div className={styles.crack} />
-          <div className={styles.content}>
+          <div className={styles.scanlines} />
+
+          <div className={styles.content} key={view}>
             <p className={styles.sideTag}>
               {lang === 'pt' ? '✦ UNIVERSO NORMAL' : '✦ NORMAL UNIVERSE'}
             </p>
-            <h2 className={styles.sideTitle}>
-              {lang === 'pt' ? 'Entrar' : 'Sign In'}
-            </h2>
-            <p className={styles.sideSubtitle}>
-              {lang === 'pt'
-                ? 'Acesse sua conta no universo conhecido'
-                : 'Access your account in the known universe'}
-            </p>
-            <form className={styles.form} onSubmit={handleLogin}>
-              <input
-                className={`${styles.input} ${styles.inputNormal}`}
-                type="email"
-                placeholder={lang === 'pt' ? 'E-mail' : 'Email'}
-                autoComplete="email"
-                value={loginEmail}
-                onChange={e => setLoginEmail(e.target.value)}
-                required
-              />
-              <input
-                className={`${styles.input} ${styles.inputNormal}`}
-                type="password"
-                placeholder={lang === 'pt' ? 'Senha' : 'Password'}
-                autoComplete="current-password"
-                value={loginPassword}
-                onChange={e => setLoginPassword(e.target.value)}
-                required
-              />
-              {loginStatus && (
-                <p className={loginStatus.type === 'success' ? styles.msgSuccess : styles.msgError}>
-                  {loginStatus.message}
+
+            {view === 'login' ? (
+              <>
+                <h2 className={`${styles.sideTitle} ${styles.glitch}`}>
+                  {lang === 'pt' ? 'Entrar' : 'Sign In'}
+                </h2>
+                <p className={styles.sideSubtitle}>
+                  {lang === 'pt'
+                    ? 'Acesse sua conta no universo conhecido'
+                    : 'Access your account in the known universe'}
                 </p>
-              )}
-              <button type="submit" className={styles.submitNormal} disabled={loginLoading}>
-                {loginLoading
-                  ? (lang === 'pt' ? 'Entrando...' : 'Signing in...')
-                  : (lang === 'pt' ? 'Acessar' : 'Enter')}
-              </button>
-            </form>
+                <form className={styles.form} onSubmit={handleLogin}>
+                  <input
+                    className={`${styles.input} ${styles.inputNormal}`}
+                    type="email"
+                    placeholder={lang === 'pt' ? 'E-mail' : 'Email'}
+                    autoComplete="email"
+                    value={loginEmail}
+                    onChange={e => setLoginEmail(e.target.value)}
+                    required
+                  />
+                  <div className={styles.passwordRow}>
+                    <input
+                      className={`${styles.input} ${styles.inputNormal}`}
+                      type="password"
+                      placeholder={lang === 'pt' ? 'Senha' : 'Password'}
+                      autoComplete="current-password"
+                      value={loginPassword}
+                      onChange={e => setLoginPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={styles.forgotLink}
+                      onClick={() => { setView('forgot'); setForgotStatus(null); setForgotEmail('') }}
+                    >
+                      {lang === 'pt' ? 'Esqueceu a senha?' : 'Forgot password?'}
+                    </button>
+                  </div>
+                  {loginStatus && (
+                    <p className={loginStatus.type === 'success' ? styles.msgSuccess : styles.msgError}>
+                      {loginStatus.message}
+                    </p>
+                  )}
+                  <button type="submit" className={styles.submitNormal} disabled={loginLoading}>
+                    {loginLoading
+                      ? (lang === 'pt' ? 'Entrando...' : 'Signing in...')
+                      : (lang === 'pt' ? 'Acessar' : 'Enter')}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <h2 className={styles.sideTitle}>
+                  {lang === 'pt' ? 'Recuperar Senha' : 'Reset Password'}
+                </h2>
+                <p className={styles.sideSubtitle}>
+                  {lang === 'pt'
+                    ? 'Enviaremos um link de recuperação para o seu e-mail'
+                    : 'We will send a recovery link to your email'}
+                </p>
+                <form className={styles.form} onSubmit={handleForgot}>
+                  <input
+                    className={`${styles.input} ${styles.inputNormal}`}
+                    type="email"
+                    placeholder={lang === 'pt' ? 'Seu e-mail' : 'Your email'}
+                    autoComplete="email"
+                    value={forgotEmail}
+                    onChange={e => setForgotEmail(e.target.value)}
+                    required
+                  />
+                  {forgotStatus && (
+                    <p className={forgotStatus.type === 'success' ? styles.msgSuccess : styles.msgError}>
+                      {forgotStatus.message}
+                    </p>
+                  )}
+                  <button type="submit" className={styles.submitNormal} disabled={forgotLoading}>
+                    {forgotLoading
+                      ? (lang === 'pt' ? 'Enviando...' : 'Sending...')
+                      : (lang === 'pt' ? 'Enviar Link' : 'Send Link')}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.formLink}
+                    onClick={() => setView('login')}
+                  >
+                    ← {lang === 'pt' ? 'Voltar ao login' : 'Back to login'}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
+
           <span className={styles.worldLabel}>
             {lang === 'pt' ? 'UNIVERSO NORMAL' : 'NORMAL UNIVERSE'}
           </span>
@@ -178,11 +284,12 @@ export default function LoginModal({ open, onClose, lang }: Props) {
           <StarField mode="anti" lite />
           <div className={styles.voidGlow} />
           <div className={styles.crack} style={{ right: '12%', left: 'auto' }} />
+          <div className={styles.scanlines} />
           <div className={styles.content}>
             <p className={styles.sideTagAnti}>
               {lang === 'pt' ? '⟷ ANTI-UNIVERSO' : '⟷ ANTI-UNIVERSE'}
             </p>
-            <h2 className={styles.sideTitleAnti}>
+            <h2 className={`${styles.sideTitleAnti} ${styles.glitchAnti}`}>
               {lang === 'pt' ? 'Criar Conta' : 'Register'}
             </h2>
             <p className={styles.sideSubtitleAnti}>

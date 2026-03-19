@@ -9,8 +9,15 @@ const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 60 * 60_000 }
 
 const WAITLIST_PATH = join(process.cwd(), 'data', 'waitlist.json')
 
+interface WaitlistEntry {
+  email: string
+  prefs: string[]
+  date: string
+}
+
 interface WaitlistData {
   emails: string[]
+  entries?: WaitlistEntry[]
   count: number
 }
 
@@ -44,7 +51,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  let body: { email?: string }
+  let body: { email?: string; prefs?: string[] }
   try {
     body = await req.json()
   } catch {
@@ -52,6 +59,7 @@ export async function POST(req: NextRequest) {
   }
 
   const email = body.email?.trim().toLowerCase()
+  const prefs = Array.isArray(body.prefs) ? body.prefs.slice(0, 5) : []
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
@@ -64,6 +72,7 @@ export async function POST(req: NextRequest) {
   }
 
   data.emails.push(email)
+  data.entries = [...(data.entries ?? []), { email, prefs, date: new Date().toISOString().slice(0, 10) }]
   data.count = data.emails.length
   saveWaitlist(data)
 

@@ -10,8 +10,10 @@ export default function StorySection() {
   return (
     <section className="section" id="historia">
       <div className="section-inner">
-        <div className="section-tag">{t('story.tag')}</div>
-        <GlitchText normal={t('story.title')} as="h2" className="section-title" />
+        <div className="section-tag" data-reveal data-delay="0">{t('story.tag')}</div>
+        <div data-reveal data-delay="100">
+          <GlitchText normal={t('story.title')} as="h2" className="section-title" />
+        </div>
 
         <div className={styles.cards}>
           {[
@@ -19,7 +21,12 @@ export default function StorySection() {
             { icon: '⚔️', title: t('story.card2.title'), text: t('story.card2.text'), highlight: true },
             { icon: '🌌', title: t('story.card3.title'), text: t('story.card3.text'), highlight: false },
           ].map((card, i) => (
-            <div key={i} className={`${styles.card} ${card.highlight ? styles.cardHighlight : ''}`}>
+            <div
+              key={i}
+              className={`${styles.card} ${card.highlight ? styles.cardHighlight : ''}`}
+              data-reveal
+              data-delay={String(i * 150)}
+            >
               <div className={styles.cardIcon}>{card.icon}</div>
               <h3 className={styles.cardTitle}>{card.title}</h3>
               <p className={styles.cardText}>{card.text}</p>
@@ -28,7 +35,7 @@ export default function StorySection() {
         </div>
 
         {/* Overlap visualizer */}
-        <div className={styles.riftBlock}>
+        <div className={styles.riftBlock} data-reveal="scale" data-delay="200">
           <div className={styles.riftVisual}>
             <div className={styles.universe}>
               <span className={styles.universeName}>{t('story.rift.our')}</span>
@@ -53,6 +60,9 @@ export default function StorySection() {
                 ))}
               </div>
             </div>
+
+            {/* Spark positioned relative to the full visual, not the 6px rift */}
+            <div className={styles.riftSpark} />
           </div>
 
           <p className={styles.riftText}>{t('story.rift.text')}</p>

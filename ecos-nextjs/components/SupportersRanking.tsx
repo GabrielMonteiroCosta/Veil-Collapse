@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import { tiers } from '@/data/milestones'
+import TransparencyModal from './TransparencyModal'
 import styles from './SupportersRanking.module.css'
 
 interface Supporter {
@@ -19,6 +20,7 @@ export default function SupportersRanking() {
   const { lang }           = useLanguage()
   const [list, setList]    = useState<Supporter[]>([])
   const [loading, setLoading] = useState(true)
+  const [showTransparency, setShowTransparency] = useState(false)
   const pt = lang === 'pt'
 
   useEffect(() => {
@@ -27,6 +29,8 @@ export default function SupportersRanking() {
       .then(d => { setList(d.supporters ?? []); setLoading(false) })
       .catch(() => setLoading(false))
   }, [])
+
+  const totalRaised = list.reduce((sum, s) => sum + (s.amount ?? 0), 0)
 
   const LEGACY: Record<string, string> = { apoiador: 'pesquisador', criador: 'sentinela', lenda: 'rifter' }
 
@@ -149,7 +153,21 @@ export default function SupportersRanking() {
             ? '✦ O ranking é ordenado por tier de apoio e data. Os 3 primeiros receberão uma recompensa exclusiva ao lançamento do jogo.'
             : '✦ The ranking is sorted by support tier and date. The top 3 will receive an exclusive reward at the game\'s launch.'}
         </p>
+
+        <div className={styles.transparencyRow}>
+          <button className={styles.transparencyBtn} onClick={() => setShowTransparency(true)}>
+            {pt ? '📊 Saber mais — transparência financeira' : '📊 Learn more — financial transparency'}
+          </button>
+        </div>
       </div>
+
+      {showTransparency && (
+        <TransparencyModal
+          totalRaised={totalRaised}
+          lang={lang}
+          onClose={() => setShowTransparency(false)}
+        />
+      )}
     </section>
   )
 }

@@ -1,0 +1,214 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 9, 26, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: overlayIn 0.2s ease;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+.modal {
+  background: linear-gradient(160deg, #0d1235 0%, #080d28 100%);
+  border: 1px solid rgba(240, 192, 64, 0.2);
+  border-radius: 18px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(240, 192, 64, 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(240, 192, 64, 0.04);
+  animation: modalIn 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96) }
+  to   { opacity: 1; transform: translateY(0) scale(1) }
+}
+
+/* ── Header ── */
+.header {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-right: 2rem;
+}
+
+.tag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.closeBtn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Summary cards ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.9rem 0.75rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid;
+}
+
+.cardRaised {
+  background: rgba(240, 192, 64, 0.06);
+  border-color: rgba(240, 192, 64, 0.2);
+}
+
+.cardSpent {
+  background: rgba(139, 63, 255, 0.06);
+  border-color: rgba(139, 63, 255, 0.2);
+}
+
+.cardBalance {
+  background: rgba(64, 200, 120, 0.06);
+  border-color: rgba(64, 200, 120, 0.2);
+}
+
+.cardNegative {
+  background: rgba(255, 80, 80, 0.06);
+  border-color: rgba(255, 80, 80, 0.25);
+}
+
+.cardLabel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.36rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.cardRaised .cardValue   { color: var(--gold); text-shadow: 0 0 12px var(--gold-glow); }
+.cardSpent .cardValue    { color: var(--rift-bright); text-shadow: 0 0 12px var(--rift-glow); }
+.cardBalance .cardValue  { color: #48cc80; text-shadow: 0 0 12px rgba(72, 204, 128, 0.35); }
+.cardNegative .cardValue { color: #ff6060; }
+
+.cardValue {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+  font-weight: 700;
+}
+
+/* ── Breakdown ── */
+.breakdown {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(212, 228, 255, 0.07);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.breakdownTitle {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.noExpenses {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.expenseList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.expenseItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.expenseDesc {
+  flex: 1;
+  color: var(--text-dim);
+}
+
+.expenseDate {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.expenseAmount {
+  font-weight: 700;
+  color: var(--rift-bright);
+  white-space: nowrap;
+}
+
+/* ── Note ── */
+.note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .modal { padding: 1.5rem 1.25rem }
+  .cards { grid-template-columns: 1fr }
+  .expenseDate { display: none }
+}
