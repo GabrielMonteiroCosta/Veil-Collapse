@@ -4,8 +4,6 @@ import { join } from 'path'
 import { rateLimit } from '@/lib/rateLimit'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 // 3 inscrições por IP a cada hora
 const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 60 * 60_000 })
 
@@ -69,6 +67,7 @@ export async function POST(req: NextRequest) {
   data.count = data.emails.length
   saveWaitlist(data)
 
+  const resend = new Resend(process.env.RESEND_API_KEY)
   await resend.emails.send({
     from: 'E.M.Q <onboarding@resend.dev>',
     to: email,

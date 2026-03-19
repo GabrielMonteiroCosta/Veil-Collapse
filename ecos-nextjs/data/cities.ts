@@ -24,6 +24,7 @@ export interface City {
   accentAlt: string        // second accent for dual-color cities
   accentAltGlow: string
   icon: string
+  image?: string
   traits: string[]
   dangerLevel: 0 | 1 | 2 | 3
   notablePt: string

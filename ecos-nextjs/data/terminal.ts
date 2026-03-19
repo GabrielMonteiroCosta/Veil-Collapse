@@ -11,25 +11,34 @@ export interface TerminalCommand {
   outputEn: TerminalLine[]
 }
 
-export const BOOT_LINES_PT: TerminalLine[] = [
-  { type: 'system', text: 'CIDADELA ÂMBAR — SISTEMA DE ARQUIVOS CLASSIFICADOS v2.4.1' },
-  { type: 'system', text: 'Laboratório Rift — Projeto Omega' },
-  { type: 'separator', text: '─────────────────────────────────────────────────────' },
-  { type: 'output', text: 'Verificando credenciais...' },
-  { type: 'output', text: 'Acesso concedido. Bem-vindo, pesquisador.' },
-  { type: 'separator', text: '─────────────────────────────────────────────────────' },
-  { type: 'output', text: 'Digite  help  para ver os comandos disponíveis.' },
-]
-
-export const BOOT_LINES_EN: TerminalLine[] = [
-  { type: 'system', text: 'AMBER CITADEL — CLASSIFIED FILE SYSTEM v2.4.1' },
-  { type: 'system', text: 'Rift Laboratory — Omega Project' },
-  { type: 'separator', text: '─────────────────────────────────────────────────────' },
-  { type: 'output', text: 'Verifying credentials...' },
-  { type: 'output', text: 'Access granted. Welcome, researcher.' },
-  { type: 'separator', text: '─────────────────────────────────────────────────────' },
-  { type: 'output', text: 'Type  help  to see available commands.' },
-]
+export function getBootLines(lang: string, username: string | null): TerminalLine[] {
+  if (lang === 'pt') {
+    const welcome = username
+      ? `Acesso concedido. Bem-vindo, @${username}.`
+      : 'Acesso concedido. Bem-vindo, pesquisador.'
+    return [
+      { type: 'system', text: 'CIDADELA ÂMBAR — SISTEMA DE ARQUIVOS CLASSIFICADOS v2.4.1' },
+      { type: 'system', text: 'Laboratório Rift — Projeto Omega' },
+      { type: 'separator', text: '─────────────────────────────────────────────────────' },
+      { type: 'output', text: 'Verificando credenciais...' },
+      { type: 'output', text: welcome },
+      { type: 'separator', text: '─────────────────────────────────────────────────────' },
+      { type: 'output', text: 'Digite  help  para ver os comandos disponíveis.' },
+    ]
+  }
+  const welcome = username
+    ? `Access granted. Welcome, @${username}.`
+    : 'Access granted. Welcome, researcher.'
+  return [
+    { type: 'system', text: 'AMBER CITADEL — CLASSIFIED FILE SYSTEM v2.4.1' },
+    { type: 'system', text: 'Rift Laboratory — Omega Project' },
+    { type: 'separator', text: '─────────────────────────────────────────────────────' },
+    { type: 'output', text: 'Verifying credentials...' },
+    { type: 'output', text: welcome },
+    { type: 'separator', text: '─────────────────────────────────────────────────────' },
+    { type: 'output', text: 'Type  help  to see available commands.' },
+  ]
+}
 
 export const commands: TerminalCommand[] = [
   {

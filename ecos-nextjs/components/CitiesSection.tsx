@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import { cities, statusLabels, themeLabels } from '@/data/cities'
 import type { City } from '@/data/cities'
+import CityIcon from './CityIcon'
 import styles from './CitiesSection.module.css'
 
 const LOCK_MS = 520
@@ -132,7 +133,7 @@ export default function CitiesSection() {
                 <div className={styles.iconWrap}>
                   <div className={styles.iconGlow}
                     style={{ background: `radial-gradient(circle, ${active.accentGlow} 0%, ${active.accentAltGlow} 50%, transparent 75%)` }} />
-                  <span className={styles.icon}>{active.icon}</span>
+                  <CityIcon theme={active.theme} color={active.accent} glow={active.accentGlow} size={80} />
                 </div>
 
                 <p className={styles.subtitle} style={{ color: active.accentDim }}>
@@ -252,7 +253,7 @@ export default function CitiesSection() {
               } : {}}
               onClick={() => navigate(i)}
             >
-              <span className={styles.stripIcon}>{city.icon}</span>
+              <CityIcon theme={city.theme} color={i === idx ? city.accent : '#6a7a9a'} glow={city.accentGlow} size={22} />
               <span className={styles.stripName} style={{ color: i === idx ? city.accent : undefined }}>
                 {lang === 'pt' ? city.namePt : city.nameEn}
               </span>

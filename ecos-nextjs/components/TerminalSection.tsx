@@ -5,10 +5,10 @@ import { useLanguage } from '@/context/LanguageContext'
 import {
   commands,
   commandAliases,
-  BOOT_LINES_PT,
-  BOOT_LINES_EN,
+  getBootLines,
   TerminalLine,
 } from '@/data/terminal'
+import { useAuth } from '@/context/AuthContext'
 import styles from './TerminalSection.module.css'
 
 interface HistoryEntry {
@@ -37,6 +37,7 @@ const CYCLE_MS = 2800
 
 export default function TerminalSection() {
   const { lang } = useLanguage()
+  const { user, loading: authLoading } = useAuth()
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [input, setInput] = useState('')
   const [booted, setBooted] = useState(false)
@@ -80,14 +81,15 @@ export default function TerminalSection() {
     return () => cancelAnimationFrame(frame)
   }, [])
 
-  // Boot sequence on mount
+  // Boot sequence — aguarda auth resolver antes de iniciar
   useEffect(() => {
-    const bootLines = lang === 'pt' ? BOOT_LINES_PT : BOOT_LINES_EN
+    if (authLoading) return
+    const bootLines = getBootLines(lang, user?.username ?? null)
     const timer = setTimeout(() => {
       revealLines(bootLines, undefined, () => setBooted(true))
     }, 400)
     return () => clearTimeout(timer)
-  }, [])
+  }, [authLoading])
 
   // Scroll to bottom inside the output div only
   useEffect(() => {
@@ -128,7 +130,8 @@ export default function TerminalSection() {
     if (!raw || isTyping) return
 
     if (raw === 'clear') {
-      setHistory([])
+      const bootLines = getBootLines(lang, user?.username ?? null)
+      setHistory([{ lines: bootLines }])
       setInput('')
       return
     }
