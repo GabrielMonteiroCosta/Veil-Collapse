@@ -49,22 +49,80 @@
   flex-shrink: 0;
 }
 
+.langMenu {
+  position: relative;
+}
+
 .langBtn {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.5rem;
+  font-size: 0.46rem;
   background: transparent;
   border: 1px solid var(--gold-dim);
   color: var(--gold);
-  padding: 0.5rem 0.9rem;
+  padding: 0.45rem 0.75rem;
   cursor: pointer;
   letter-spacing: 0.1em;
   transition: all 0.2s;
   border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .langBtn:hover {
   background: var(--gold-glow);
   box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.langChevron {
+  font-size: 0.28rem;
+  opacity: 0.7;
+}
+
+.langDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: rgba(5, 9, 26, 0.97);
+  border: 1px solid rgba(240, 192, 64, 0.3);
+  border-radius: var(--radius);
+  min-width: 110px;
+  padding: 0.4rem 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(240, 192, 64, 0.08);
+  z-index: 200;
+  animation: dropIn 0.15s ease;
+}
+
+.langOption {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.langOption:hover {
+  color: var(--gold);
+  background: rgba(240, 192, 64, 0.06);
+}
+
+.langOptionActive {
+  color: var(--gold);
+  background: rgba(240, 192, 64, 0.1);
+}
+
+.langFlag {
+  font-size: 0.85rem;
+  line-height: 1;
 }
 
 /* Burger */
@@ -373,9 +431,53 @@
   box-shadow: 0 0 24px var(--gold-glow);
 }
 
+/* ── Mobile lang row (inside burger menu) ── */
+.mobileLangRow {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  border-top: 1px solid rgba(240, 192, 64, 0.08);
+  border-bottom: 1px solid rgba(240, 192, 64, 0.08);
+}
+
+.mobileLangBtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(240, 192, 64, 0.2);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.mobileLangBtn:hover {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: rgba(240, 192, 64, 0.06);
+}
+
+.mobileLangBtnActive {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: rgba(240, 192, 64, 0.1);
+}
+
 @media (max-width: 750px) {
   .links { display: none; }
   .burger { display: flex; }
   .nav { padding: 1rem 1.5rem; }
   .backToTop { bottom: 1.25rem; right: 1.25rem; width: 36px; height: 36px; }
+  .right { gap: 0.65rem; }
+
+  /* Dropdown do idioma: abre para a esquerda em telas pequenas */
+  .langDropdown {
+    left: auto;
+    right: 0;
+  }
 }

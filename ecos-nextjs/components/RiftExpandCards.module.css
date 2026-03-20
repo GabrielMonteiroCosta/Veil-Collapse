@@ -1,0 +1,224 @@
+/* ── Card list ───────────────────────────────────────────── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* ── Main card ───────────────────────────────────────────── */
+.card {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(139, 63, 255, 0.2);
+  background: linear-gradient(135deg, rgba(139, 63, 255, 0.06) 0%, rgba(5, 9, 26, 0.8) 100%);
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.card:hover,
+.cardOpen {
+  border-color: rgba(139, 63, 255, 0.45);
+  box-shadow: 0 0 40px rgba(139, 63, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Border beam on the main card */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    transparent 72%,
+    rgba(139, 63, 255, 0.6) 78%,
+    rgba(180, 130, 255, 0.9) 81%,
+    white 83%,
+    rgba(180, 130, 255, 0.9) 85%,
+    transparent 91%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: beamRotate 6s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Header (button) ─────────────────────────────────────── */
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.75rem 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 1rem;
+  transition: background 0.2s;
+}
+
+.header:hover {
+  background: rgba(139, 63, 255, 0.05);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.icon {
+  font-size: 2.4rem;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 10px rgba(139, 63, 255, 0.5));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s;
+}
+
+.card:hover .icon,
+.cardOpen .icon {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 16px rgba(139, 63, 255, 0.8));
+}
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 0 0 0.3rem;
+  line-height: 1;
+}
+
+.tagline {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Chevron ─────────────────────────────────────────────── */
+.chevron {
+  color: rgba(139, 63, 255, 0.6);
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+  color: var(--rift-bright);
+}
+
+/* ── Expand animation (grid-template-rows trick) ─────────── */
+.subWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.subWrapOpen {
+  grid-template-rows: 1fr;
+}
+
+.subInner {
+  overflow: hidden;
+}
+
+/* ── Sub-cards grid ──────────────────────────────────────── */
+.subGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+/* ── Sub-card ────────────────────────────────────────────── */
+.subCard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid color-mix(in srgb, var(--sub-ac) 25%, transparent);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  animation: subCardIn 0.35s ease both;
+  transition: border-color 0.25s, background 0.25s, transform 0.25s;
+}
+
+.subCard:hover {
+  border-color: color-mix(in srgb, var(--sub-ac) 55%, transparent);
+  background: color-mix(in srgb, var(--sub-ac) 6%, transparent);
+  transform: translateY(-3px);
+}
+
+@keyframes subCardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.subTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.subIcon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.subCard:hover .subIcon {
+  transform: scale(1.15);
+}
+
+.subLabel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.35rem;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--sub-ac) 70%, transparent);
+  margin: 0 0 0.3rem;
+  text-transform: uppercase;
+}
+
+.subTitle {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sub-ac);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.subText {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Divider between header and sub-cards ────────────────── */
+.subWrapOpen .subInner {
+  border-top: 1px solid rgba(139, 63, 255, 0.15);
+}
+
+/* ── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .subGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    padding: 1.25rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.15rem;
+  }
+}

@@ -6,7 +6,7 @@ import { translations, Lang, TranslationKey } from '@/lib/translations'
 interface LanguageContextType {
   lang: Lang
   t: (key: TranslationKey) => string
-  toggleLang: () => void
+  setLang: (lang: Lang) => void
 }
 
 const LanguageContext = createContext<LanguageContextType | null>(null)
@@ -16,10 +16,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const t = (key: TranslationKey): string => translations[lang][key] ?? key
 
-  const toggleLang = () => setLang(l => l === 'pt' ? 'en' : 'pt')
-
   return (
-    <LanguageContext.Provider value={{ lang, t, toggleLang }}>
+    <LanguageContext.Provider value={{ lang, t, setLang }}>
       {children}
     </LanguageContext.Provider>
   )

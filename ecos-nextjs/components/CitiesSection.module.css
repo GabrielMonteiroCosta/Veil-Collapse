@@ -82,6 +82,60 @@
   box-shadow: 0 8px 48px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
+/* Glow aura — blurred layer behind */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 4px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    transparent 45%,
+    color-mix(in srgb, var(--ac) 20%, transparent) 58%,
+    color-mix(in srgb, var(--ac) 60%, transparent) 70%,
+    color-mix(in srgb, var(--ac) 90%, white)        78%,
+    white                                            81%,
+    color-mix(in srgb, var(--ac) 90%, white)        84%,
+    transparent 92%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  filter: blur(5px);
+  animation: beamRotate 5s linear infinite;
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* Sharp comet — crisp layer on top */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    transparent 72%,
+    color-mix(in srgb, var(--ac) 70%, transparent) 76%,
+    color-mix(in srgb, var(--ac) 95%, white)       80%,
+    white                                           82%,
+    color-mix(in srgb, var(--ac) 95%, white)       84%,
+    transparent 90%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: beamRotate 5s linear infinite;
+  pointer-events: none;
+  z-index: 7;
+}
+
 /* Slide-in animations */
 .enterRight {
   animation: enterFromRight 0.5s cubic-bezier(0.22, 1, 0.36, 1);

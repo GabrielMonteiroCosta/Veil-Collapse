@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
+import type { Lang } from '@/lib/translations'
 import { useAuth } from '@/context/AuthContext'
 import LoginModal from './LoginModal'
 import LoginTransition from './LoginTransition'
@@ -9,25 +10,33 @@ import LogoutTransition from './LogoutTransition'
 import styles from './Nav.module.css'
 
 const links = [
-  { href: '#mundo',       keyPt: 'O Mundo',      keyEn: 'World' },
+  { href: '#rift-cards',  keyPt: 'Universo',     keyEn: 'Universe' },
+  { href: '#mundo',       keyPt: 'Lore',         keyEn: 'Lore' },
   { href: '#personagens', keyPt: 'Personagens',  keyEn: 'Characters' },
   { href: '#cidades',     keyPt: 'Cidades',      keyEn: 'Cities' },
-  { href: '#devlog',      keyPt: 'Devlog',       keyEn: 'Devlog' },
+  { href: '#classes',     keyPt: 'Classes',      keyEn: 'Classes' },
   { href: '#apoie',       keyPt: 'Apoie',        keyEn: 'Support' },
   { href: '#faq',         keyPt: 'FAQ',          keyEn: 'FAQ' },
 ]
 
 export default function Nav() {
-  const { t, lang, toggleLang } = useLanguage()
+  const { t, lang, setLang } = useLanguage()
   const { user, logout } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
   const [transition, setTransition] = useState<{ active: boolean; username: string }>({ active: false, username: '' })
   const [logoutConfirm, setLogoutConfirm] = useState(false)
   const [logoutTransition, setLogoutTransition] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const langRef = useRef<HTMLDivElement>(null)
+
+  const languages: { code: Lang; flag: string; label: string }[] = [
+    { code: 'pt', flag: '🇧🇷', label: 'PT' },
+    { code: 'en', flag: '🇺🇸', label: 'EN' },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -39,6 +48,9 @@ export default function Nav() {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false)
+      }
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -84,6 +96,30 @@ export default function Nav() {
         </div>
 
         <div className={styles.right}>
+          <div className={styles.langMenu} ref={langRef}>
+            <button
+              className={styles.langBtn}
+              onClick={() => setLangOpen(o => !o)}
+              aria-expanded={langOpen}
+            >
+              {lang.toUpperCase()}
+              <span className={styles.langChevron}>{langOpen ? '▲' : '▼'}</span>
+            </button>
+            {langOpen && (
+              <div className={styles.langDropdown}>
+                {languages.map(l => (
+                  <button
+                    key={l.code}
+                    className={`${styles.langOption} ${lang === l.code ? styles.langOptionActive : ''}`}
+                    onClick={() => { setLang(l.code); setLangOpen(false) }}
+                  >
+                    <span className={styles.langFlag}>{l.flag}</span>
+                    {l.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           {user ? (
             <div className={styles.userMenu} ref={dropdownRef}>
               <button
@@ -126,9 +162,6 @@ export default function Nav() {
               {lang === 'pt' ? 'Entrar' : 'Sign In'}
             </button>
           )}
-          <button className={styles.langBtn} onClick={toggleLang}>
-            {t('nav.lang')}
-          </button>
           <button
             className={`${styles.burger} ${open ? styles.burgerOpen : ''}`}
             onClick={() => setOpen(o => !o)}
@@ -151,6 +184,20 @@ export default function Nav() {
                 {lang === 'pt' ? l.keyPt : l.keyEn}
               </a>
             ))}
+
+            {/* Language selector inside mobile menu */}
+            <div className={styles.mobileLangRow}>
+              {languages.map(l => (
+                <button
+                  key={l.code}
+                  className={`${styles.mobileLangBtn} ${lang === l.code ? styles.mobileLangBtnActive : ''}`}
+                  onClick={() => { setLang(l.code); setOpen(false) }}
+                >
+                  {l.flag} {l.label}
+                </button>
+              ))}
+            </div>
+
             {user ? (
               <>
                 <a href="/perfil" className={styles.mobileLink} onClick={() => setOpen(false)}>

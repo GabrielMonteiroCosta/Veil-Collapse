@@ -196,3 +196,20 @@
   color: #ff6060;
   letter-spacing: 0.05em;
 }
+
+@media (max-width: 480px) {
+  .footer { padding: 2.5rem 1.25rem; }
+
+  .title { font-size: 1.15rem; }
+
+  .waitlistForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .waitlistInput {
+    min-width: unset;
+    width: 100%;
+  }
+}

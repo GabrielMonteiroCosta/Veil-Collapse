@@ -125,11 +125,13 @@ a { color: inherit; text-decoration: none; }
 [data-reveal="right"] { transform: translateX(30px); }
 [data-reveal="scale"] { transform: scale(0.92) translateY(10px); }
 
-/* Disable heavy animations for users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+/* ── Border beam animation (tier cards + city cards) ── */
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
+@keyframes beamRotate {
+  to { --beam-angle: 360deg; }
+}
+

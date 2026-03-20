@@ -93,3 +93,11 @@
   font-size: 0.95rem;
   line-height: 1.75;
 }
+
+@media (max-width: 480px) {
+  .entry { gap: 1rem; }
+  .entryRight { padding-bottom: 2rem; }
+  .entryTitle { font-size: 1rem; }
+  .entryMeta { gap: 0.6rem; flex-wrap: wrap; }
+  .subtitle { margin-bottom: 2rem; font-size: 0.9rem; }
+}

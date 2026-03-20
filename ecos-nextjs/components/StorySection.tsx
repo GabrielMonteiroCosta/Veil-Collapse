@@ -17,9 +17,9 @@ export default function StorySection() {
 
         <div className={styles.cards}>
           {[
-            { icon: '🌃', title: t('story.card1.title'), text: t('story.card1.text'), highlight: false },
-            { icon: '⚔️', title: t('story.card2.title'), text: t('story.card2.text'), highlight: true },
-            { icon: '🌌', title: t('story.card3.title'), text: t('story.card3.text'), highlight: false },
+            { icon: '⚡', title: t('story.card1.title'), text: t('story.card1.text'), highlight: false },
+            { icon: '💠', title: t('story.card2.title'), text: t('story.card2.text'), highlight: true },
+            { icon: '🛡️', title: t('story.card3.title'), text: t('story.card3.text'), highlight: false },
           ].map((card, i) => (
             <div
               key={i}
