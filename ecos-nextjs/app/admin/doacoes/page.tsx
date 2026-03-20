@@ -90,7 +90,11 @@ export default function AdminDoacoesPage() {
           <p className={styles.breadcrumb}>Admin</p>
           <h1 className={styles.title}>✦ Doações</h1>
         </div>
-        <a href="/" className={styles.backBtn}>← Voltar ao site</a>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <a href="/admin/dashboard" className={styles.backBtn}>Dashboard</a>
+          <a href="/admin/notificacoes" className={styles.backBtn}>Notificações</a>
+          <a href="/" className={styles.backBtn}>← Voltar ao site</a>
+        </div>
       </div>
 
       {/* Filters */}

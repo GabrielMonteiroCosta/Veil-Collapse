@@ -2,6 +2,8 @@
 
 import { Suspense, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import PasswordStrength from '@/components/PasswordStrength'
+import { validatePassword } from '@/lib/validators'
 import styles from './page.module.css'
 
 function ResetForm() {
@@ -16,6 +18,8 @@ function ResetForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const pwErr = validatePassword(password)
+    if (pwErr) { setStatus({ type: 'error', message: pwErr }); return }
     if (password !== confirm) {
       setStatus({ type: 'error', message: 'As senhas não coincidem.' })
       return
@@ -64,13 +68,13 @@ function ResetForm() {
         <input
           className={styles.input}
           type="password"
-          placeholder="Nova senha (mín. 6 caracteres)"
+          placeholder="Nova senha"
           autoComplete="new-password"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          minLength={6}
           required
         />
+        <PasswordStrength password={password} />
         <input
           className={styles.input}
           type="password"

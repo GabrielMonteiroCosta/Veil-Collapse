@@ -1,0 +1,130 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #05091a 0%, #080d28 60%, #0a1035 100%);
+  color: var(--text);
+  padding: 2.5rem 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.breadcrumb {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.35rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  margin-bottom: 0.4rem;
+}
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(240,192,64,0.2);
+  margin: 0;
+}
+
+.headerLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.navLink {
+  font-size: 0.8rem;
+  color: var(--rift-bright);
+  text-decoration: none;
+  border: 1px solid rgba(139,63,255,0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.navLink:hover { background: rgba(139,63,255,0.1); border-color: var(--rift); }
+
+.backBtn {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.backBtn:hover { border-color: var(--gold); color: var(--gold); }
+
+.card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(139,63,255,0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 680px;
+}
+
+.cardDesc {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin: 0 0 1.75rem;
+  line-height: 1.6;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.3rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.textarea {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,228,255,0.1);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  color: var(--text);
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.textarea:focus {
+  border-color: var(--rift);
+  box-shadow: 0 0 10px var(--rift-glow);
+}
+
+.btn {
+  background: rgba(139,63,255,0.15);
+  color: var(--rift-bright);
+  border: 1px solid rgba(139,63,255,0.35);
+  border-radius: 8px;
+  padding: 0.85rem 1.25rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+.btn:hover:not(:disabled) {
+  background: rgba(139,63,255,0.28);
+  border-color: var(--rift);
+  box-shadow: 0 0 16px var(--rift-glow);
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.msgSuccess { font-size: 0.82rem; color: #4ade80; margin: 0; }
+.msgError   { font-size: 0.82rem; color: #f87171; margin: 0; }

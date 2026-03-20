@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import pool from '@/lib/db'
+import { validatePassword } from '@/lib/validators'
 
 export async function POST(req: NextRequest) {
   let body: { token?: string; password?: string }
@@ -13,9 +14,12 @@ export async function POST(req: NextRequest) {
 
   const { token, password } = body
 
-  if (!token || !password || password.length < 6) {
+  if (!token || !password) {
     return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
   }
+
+  const passwordErr = validatePassword(password)
+  if (passwordErr) return NextResponse.json({ error: passwordErr }, { status: 400 })
 
   let payload: { email: string; purpose: string }
   try {

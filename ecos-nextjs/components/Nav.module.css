@@ -396,6 +396,135 @@
   transform: translateY(-2px);
 }
 
+/* ── Bell notifications ── */
+.bellMenu {
+  position: relative;
+}
+
+.bellBtn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.bellBtn:hover {
+  color: var(--text);
+  transform: scale(1.1);
+}
+
+.bellBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f87171;
+  box-shadow: 0 0 6px rgba(248, 113, 113, 0.8);
+  border: 1.5px solid rgba(5, 9, 26, 0.9);
+}
+
+.bellDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 300px;
+  background: rgba(5, 9, 26, 0.97);
+  border: 1px solid rgba(139, 63, 255, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 24px rgba(139, 63, 255, 0.08);
+  z-index: 200;
+  animation: dropIn 0.15s ease;
+  overflow: hidden;
+}
+
+.bellHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bellTitle {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.bellMarkAll {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.3rem;
+  letter-spacing: 0.06em;
+  color: var(--rift);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.bellMarkAll:hover { color: var(--rift-bright); }
+
+.bellList {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.bellList::-webkit-scrollbar { width: 4px; }
+.bellList::-webkit-scrollbar-track { background: transparent; }
+.bellList::-webkit-scrollbar-thumb { background: rgba(139, 63, 255, 0.3); border-radius: 2px; }
+
+.bellEmpty {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin: 0;
+}
+
+.bellItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.15s;
+}
+
+.bellItem:last-child { border-bottom: none; }
+
+.bellItem:hover { background: rgba(255,255,255,0.03); }
+
+.bellItemUnread { background: rgba(139, 63, 255, 0.06); }
+
+.bellDot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rift);
+  box-shadow: 0 0 6px var(--rift-glow);
+  margin-top: 4px;
+}
+
+.bellMsg {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
 /* ── Back to top ── */
 .backToTop {
   position: fixed;

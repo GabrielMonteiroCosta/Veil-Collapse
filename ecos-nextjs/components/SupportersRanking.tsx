@@ -21,6 +21,8 @@ export default function SupportersRanking() {
   const [list, setList]    = useState<Supporter[]>([])
   const [loading, setLoading] = useState(true)
   const [showTransparency, setShowTransparency] = useState(false)
+  const [tierFilter, setTierFilter] = useState<string>('all')
+  const [userCount, setUserCount] = useState<number | null>(null)
   const pt = lang === 'pt'
 
   useEffect(() => {
@@ -28,6 +30,10 @@ export default function SupportersRanking() {
       .then(r => r.json())
       .then(d => { setList(d.supporters ?? []); setLoading(false) })
       .catch(() => setLoading(false))
+    fetch('/api/stats')
+      .then(r => r.json())
+      .then(d => setUserCount(d.users ?? null))
+      .catch(() => {})
   }, [])
 
   const totalRaised = list.reduce((sum, s) => sum + (s.amount ?? 0), 0)
@@ -39,8 +45,12 @@ export default function SupportersRanking() {
     return tiers.find(t => t.id === resolved) ?? tiers[1]
   }
 
-  const top3 = list.slice(0, 3)
-  const rest  = list.slice(3, 10)
+  const filtered = tierFilter === 'all' ? list : list.filter(s => {
+    const resolved = (LEGACY[s.tier] ?? s.tier)
+    return resolved === tierFilter
+  })
+  const top3 = filtered.slice(0, 3)
+  const rest  = filtered.slice(3, 10)
 
   function fmtAmount(amount: number | null, tierId: string) {
     if (amount) return `R$ ${amount.toLocaleString(pt ? 'pt-BR' : 'en-US', { minimumFractionDigits: 2 })}`
@@ -60,6 +70,31 @@ export default function SupportersRanking() {
             ? 'Cada apoiador está escrevendo a história deste mundo. Os primeiros a acreditar no projeto ganham um lugar especial — e uma surpresa ao fim do desenvolvimento.'
             : 'Every supporter is writing the history of this world. The first to believe in the project earn a special place — and a surprise at the end of development.'}
         </p>
+
+        {userCount !== null && (
+          <p className={styles.userCounter}>
+            ◈ {userCount} {pt ? 'exploradores cadastrados' : 'explorers registered'}
+          </p>
+        )}
+
+        {/* Tier filter */}
+        <div className={styles.tierFilters}>
+          {(['all', 'pesquisador', 'sentinela', 'rifter'] as const).map(f => {
+            const td = f === 'all' ? null : tiers.find(t => t.id === f)
+            return (
+              <button
+                key={f}
+                className={`${styles.tierFilterBtn} ${tierFilter === f ? styles.tierFilterActive : ''}`}
+                style={tierFilter === f && td ? { borderColor: td.accent, color: td.accent } as React.CSSProperties : undefined}
+                onClick={() => setTierFilter(f)}
+              >
+                {f === 'all'
+                  ? (pt ? 'Todos' : 'All')
+                  : `${td?.icon} ${pt ? td?.namePt : td?.nameEn}`}
+              </button>
+            )
+          })}
+        </div>
 
         {loading ? (
           <div className={styles.loading}>

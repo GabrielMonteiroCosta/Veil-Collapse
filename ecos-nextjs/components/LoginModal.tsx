@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import StarField from './StarField'
 import styles from './LoginModal.module.css'
 import { useAuth } from '@/context/AuthContext'
+import PasswordStrength from './PasswordStrength'
+import { validateUsername, validateEmail, validatePassword } from '@/lib/validators'
 
 interface Props {
   open: boolean
@@ -88,6 +90,14 @@ export default function LoginModal({ open, onClose, onLoginSuccess, lang }: Prop
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
     setRegStatus(null)
+
+    const unErr = validateUsername(regUsername)
+    if (unErr) { setRegStatus({ type: 'error', message: unErr }); return }
+    const emErr = validateEmail(regEmail)
+    if (emErr) { setRegStatus({ type: 'error', message: emErr }); return }
+    const pwErr = validatePassword(regPassword)
+    if (pwErr) { setRegStatus({ type: 'error', message: pwErr }); return }
+
     setRegLoading(true)
     try {
       const res = await fetch('/api/auth/register', {
@@ -278,12 +288,13 @@ export default function LoginModal({ open, onClose, onLoginSuccess, lang }: Prop
                 <input
                   className={`${styles.input} ${styles.inputAnti}`}
                   type="password"
-                  placeholder={pt ? 'Senha (mín. 6 caracteres)' : 'Password (min. 6 chars)'}
+                  placeholder={pt ? 'Mín. 8 chars, maiúscula, número, especial' : 'Min. 8 chars, uppercase, number, special'}
                   autoComplete="new-password"
                   value={regPassword}
                   onChange={e => setRegPassword(e.target.value)}
                   required
                 />
+                <PasswordStrength password={regPassword} />
                 {regStatus && (
                   <p className={regStatus.type === 'success' ? styles.msgSuccess : styles.msgError}>
                     {regStatus.message}

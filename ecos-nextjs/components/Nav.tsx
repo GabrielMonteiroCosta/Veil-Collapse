@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import type { Lang } from '@/lib/translations'
 import { useAuth } from '@/context/AuthContext'
+import { Bell } from 'lucide-react'
 import LoginModal from './LoginModal'
 import LoginTransition from './LoginTransition'
 import LogoutTransition from './LogoutTransition'
@@ -11,13 +12,21 @@ import styles from './Nav.module.css'
 
 const links = [
   { href: '#rift-cards',  keyPt: 'Universo',     keyEn: 'Universe' },
-  { href: '#mundo',       keyPt: 'Lore',         keyEn: 'Lore' },
+  { href: '/lore',        keyPt: 'Lore',         keyEn: 'Lore',    page: true },
   { href: '#personagens', keyPt: 'Personagens',  keyEn: 'Characters' },
   { href: '#cidades',     keyPt: 'Cidades',      keyEn: 'Cities' },
-  { href: '#classes',     keyPt: 'Classes',      keyEn: 'Classes' },
+  { href: '/classes',     keyPt: 'Classes',      keyEn: 'Classes',  page: true },
   { href: '#apoie',       keyPt: 'Apoie',        keyEn: 'Support' },
   { href: '#faq',         keyPt: 'FAQ',          keyEn: 'FAQ' },
 ]
+
+type Notification = {
+  id: number
+  message_pt: string
+  message_en: string
+  read_at: string | null
+  created_at: string
+}
 
 export default function Nav() {
   const { t, lang, setLang } = useLanguage()
@@ -27,11 +36,16 @@ export default function Nav() {
   const [loginOpen, setLoginOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
+  const [bellOpen, setBellOpen] = useState(false)
+  const [notifications, setNotifications] = useState<Notification[]>([])
   const [transition, setTransition] = useState<{ active: boolean; username: string }>({ active: false, username: '' })
   const [logoutConfirm, setLogoutConfirm] = useState(false)
   const [logoutTransition, setLogoutTransition] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const langRef = useRef<HTMLDivElement>(null)
+  const bellRef = useRef<HTMLDivElement>(null)
+
+  const unreadCount = notifications.filter(n => !n.read_at).length
 
   const languages: { code: Lang; flag: string; label: string }[] = [
     { code: 'pt', flag: '🇧🇷', label: 'PT' },
@@ -52,10 +66,26 @@ export default function Nav() {
       if (langRef.current && !langRef.current.contains(e.target as Node)) {
         setLangOpen(false)
       }
+      if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
+        setBellOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  useEffect(() => {
+    if (!user) return
+    fetch('/api/notifications')
+      .then(r => r.json())
+      .then(data => setNotifications(data.notifications ?? []))
+      .catch(() => {})
+  }, [user])
+
+  async function handleMarkAllRead() {
+    await fetch('/api/notifications/read-all', { method: 'POST' })
+    setNotifications(prev => prev.map(n => ({ ...n, read_at: new Date().toISOString() })))
+  }
 
   function smoothScroll(target: number) {
     const start = window.scrollY
@@ -89,13 +119,58 @@ export default function Nav() {
         <div className={styles.links}>
           {links.map(l => (
             <a key={l.href} href={l.href} className={styles.link}
-              onClick={e => { e.preventDefault(); scrollTo(l.href.slice(1)) }}>
+              onClick={l.page ? undefined : (e => { e.preventDefault(); scrollTo(l.href.slice(1)) })}>
               {lang === 'pt' ? l.keyPt : l.keyEn}
             </a>
           ))}
         </div>
 
         <div className={styles.right}>
+          {user && (
+            <div className={styles.bellMenu} ref={bellRef}>
+              <button
+                className={styles.bellBtn}
+                onClick={() => setBellOpen(o => !o)}
+                aria-label="Notificações"
+              >
+                <Bell size={18} strokeWidth={1.5} />
+                {unreadCount > 0 && <span className={styles.bellBadge} />}
+              </button>
+              {bellOpen && (
+                <div className={styles.bellDropdown}>
+                  <div className={styles.bellHeader}>
+                    <span className={styles.bellTitle}>
+                      {lang === 'pt' ? 'Notificações' : 'Notifications'}
+                    </span>
+                    {unreadCount > 0 && (
+                      <button className={styles.bellMarkAll} onClick={handleMarkAllRead}>
+                        {lang === 'pt' ? 'Marcar todas' : 'Mark all'}
+                      </button>
+                    )}
+                  </div>
+                  <div className={styles.bellList}>
+                    {notifications.length === 0 ? (
+                      <p className={styles.bellEmpty}>
+                        {lang === 'pt' ? 'Nenhuma notificação' : 'No notifications'}
+                      </p>
+                    ) : (
+                      notifications.map(n => (
+                        <div
+                          key={n.id}
+                          className={`${styles.bellItem} ${!n.read_at ? styles.bellItemUnread : ''}`}
+                        >
+                          {!n.read_at && <span className={styles.bellDot} />}
+                          <span className={styles.bellMsg}>
+                            {lang === 'pt' ? n.message_pt : n.message_en}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           <div className={styles.langMenu} ref={langRef}>
             <button
               className={styles.langBtn}
@@ -179,7 +254,7 @@ export default function Nav() {
                 key={l.href}
                 href={l.href}
                 className={styles.mobileLink}
-                onClick={e => { e.preventDefault(); scrollTo(l.href.slice(1)); setOpen(false) }}
+                onClick={l.page ? () => setOpen(false) : (e => { e.preventDefault(); scrollTo(l.href.slice(1)); setOpen(false) })}
               >
                 {lang === 'pt' ? l.keyPt : l.keyEn}
               </a>

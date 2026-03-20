@@ -1,0 +1,115 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #05091a 0%, #080d28 60%, #0a1035 100%);
+  color: var(--text);
+  padding: 2.5rem 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.breadcrumb {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.35rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  margin-bottom: 0.4rem;
+}
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(240,192,64,0.2);
+  margin: 0;
+}
+
+.headerLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.navLink {
+  font-size: 0.8rem;
+  color: var(--rift-bright);
+  text-decoration: none;
+  border: 1px solid rgba(139,63,255,0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.navLink:hover { background: rgba(139,63,255,0.1); border-color: var(--rift); }
+
+.backBtn {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.backBtn:hover { border-color: var(--gold); color: var(--gold); }
+
+.loading {
+  color: var(--text-muted);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(139,63,255,0.15);
+  border-radius: 14px;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: rgba(139,63,255,0.3); }
+
+.cardLabel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cardValue {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.gold { color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); }
+.green { color: #4ade80; text-shadow: 0 0 12px rgba(74,222,128,0.3); }
+.yellow { color: #fbbf24; text-shadow: 0 0 12px rgba(251,191,36,0.3); }
+.red { color: #f87171; text-shadow: 0 0 12px rgba(248,113,113,0.3); }
+
+@media (max-width: 720px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .grid { grid-template-columns: 1fr; }
+}

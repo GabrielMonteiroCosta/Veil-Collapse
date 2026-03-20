@@ -7,6 +7,8 @@ export interface AuthUser {
   username: string
   email: string
   is_admin: number
+  created_at?: string | null
+  avatar?: string | null
 }
 
 interface AuthCtx {
@@ -20,7 +22,7 @@ const AuthContext = createContext<AuthCtx>({
   user: null,
   loading: true,
   setUser: () => {},
-  logout: () => {},
+  logout: async () => {},
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {

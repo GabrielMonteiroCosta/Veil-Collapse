@@ -1,0 +1,326 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 7rem 1.5rem 5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.bgGlow {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 30%, rgba(139,63,255,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(240,192,64,0.05) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.04) 3px,
+    rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.backLink {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,0.02);
+  transition: color 0.2s, border-color 0.2s;
+  align-self: flex-start;
+}
+.backLink:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+/* ── Hero ── */
+.heroSection {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.3em;
+  color: var(--rift);
+  text-shadow: 0 0 8px var(--rift-glow);
+  margin: 0;
+}
+
+.heroTitle {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.heroDesc {
+  max-width: 580px;
+  font-size: 1rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Grid ── */
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Card ── */
+.card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s;
+}
+.card:hover { border-color: color-mix(in srgb, var(--ca) 30%, transparent); }
+.cardOpen { border-color: color-mix(in srgb, var(--ca) 40%, transparent) !important; }
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  gap: 1rem;
+}
+
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.cardIcon { font-size: 1.6rem; flex-shrink: 0; }
+
+.cardName {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cardRole {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.28rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cardChevron {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+.cardHeader:hover .cardChevron { color: var(--text-dim); }
+
+/* ── Card body (collapsible) ── */
+.cardBody {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.cardOpen .cardBody { grid-template-rows: 1fr; }
+
+.cardBodyInner {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardDesc {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+  margin: 0;
+  padding: 0 1.5rem 1.25rem;
+}
+
+/* ── Stats ── */
+.stats {
+  padding: 0 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.statLabel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.28rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.statBar {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+}
+
+.statSegment {
+  flex: 1;
+  height: 6px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.07);
+  transition: background 0.3s;
+}
+
+.statVal {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.3rem;
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Info rows ── */
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0 1.5rem 1rem;
+}
+
+.infoLabel {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.28rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  padding-top: 2px;
+  width: 55px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.weaponTag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.26rem;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.55rem;
+  border-radius: 99px;
+  border: 1px solid;
+  background: rgba(255,255,255,0.02);
+}
+
+.traitTag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.26rem;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.55rem;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.03);
+}
+
+.upgradeVal {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ── Abilities ── */
+.abilities {
+  padding: 0 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.abilitiesTitle {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.34rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.abilitiesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.abilityItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.abilityName {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.3rem;
+  letter-spacing: 0.06em;
+}
+
+.abilityDesc {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .cardHeader { padding: 1rem; }
+  .statRow { gap: 0.5rem; }
+  .statLabel { width: 50px; }
+  .infoRow { flex-direction: column; gap: 0.4rem; }
+  .infoLabel { width: auto; }
+}
