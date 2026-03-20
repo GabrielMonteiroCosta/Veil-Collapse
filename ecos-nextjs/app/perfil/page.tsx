@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
+import { useToast } from '@/context/ToastContext'
 import Nav from '@/components/Nav'
 import PasswordStrength from '@/components/PasswordStrength'
 import styles from './Perfil.module.css'
@@ -36,6 +37,7 @@ const AVATAR_OPTIONS = ['⚔️', '🌟', '🌙', '⚓', '⚙️', '🔬', '👑
 export default function PerfilPage() {
   const { user, setUser, logout, loading } = useAuth()
   const router = useRouter()
+  const showToast = useToast()
 
   const [newUsername, setNewUsername] = useState('')
   const [usernameStatus, setUsernameStatus] = useState<Status>(null)
@@ -55,6 +57,8 @@ export default function PerfilPage() {
   const [badges, setBadges] = useState<Badge[]>([])
   const [avatarOpen, setAvatarOpen] = useState(false)
   const [avatarLoading, setAvatarLoading] = useState(false)
+  // undefined = nenhuma alteração pendente; string | null = selecionado mas não salvo
+  const [pendingAvatar, setPendingAvatar] = useState<string | null | undefined>(undefined)
 
   useEffect(() => {
     if (user) {
@@ -170,22 +174,37 @@ export default function PerfilPage() {
     }
   }
 
-  async function handleAvatarSelect(avatar: string | null) {
+  function handleAvatarSelect(avatar: string | null) {
+    setPendingAvatar(avatar)
+  }
+
+  async function handleAvatarSave() {
     setAvatarLoading(true)
     try {
       const res = await fetch('/api/auth/update-avatar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ avatar }),
+        body: JSON.stringify({ avatar: pendingAvatar }),
       })
       const data = await res.json()
       if (res.ok) {
         setUser({ ...user!, avatar: data.avatar })
+        setPendingAvatar(undefined)
         setAvatarOpen(false)
+        showToast('Avatar atualizado com sucesso!', 'success')
+      } else {
+        showToast(data.error ?? 'Erro ao salvar avatar', 'error')
       }
-    } catch { /* silent */ } finally {
+    } catch {
+      showToast('Erro de conexão', 'error')
+    } finally {
       setAvatarLoading(false)
     }
+  }
+
+  function handleAvatarCancel() {
+    setPendingAvatar(undefined)
+    setAvatarOpen(false)
   }
 
   const riftId = String(user.id).padStart(4, '0')
@@ -236,8 +255,12 @@ export default function PerfilPage() {
             <div className={styles.avatarPickerCard}>
               <p className={styles.sectionLabel}>◈ Escolher Avatar</p>
               <div className={styles.avatarGrid}>
+                {/* opção: sem avatar (usa inicial) */}
                 <button
-                  className={`${styles.avatarOption} ${!user.avatar ? styles.avatarOptionActive : ''}`}
+                  className={`${styles.avatarOption} ${
+                    (pendingAvatar === undefined ? !user.avatar : pendingAvatar === null)
+                      ? styles.avatarOptionActive : ''
+                  }`}
                   onClick={() => handleAvatarSelect(null)}
                   disabled={avatarLoading}
                 >
@@ -246,7 +269,10 @@ export default function PerfilPage() {
                 {AVATAR_OPTIONS.map(a => (
                   <button
                     key={a}
-                    className={`${styles.avatarOption} ${user.avatar === a ? styles.avatarOptionActive : ''}`}
+                    className={`${styles.avatarOption} ${
+                      (pendingAvatar === undefined ? user.avatar === a : pendingAvatar === a)
+                        ? styles.avatarOptionActive : ''
+                    }`}
                     onClick={() => handleAvatarSelect(a)}
                     disabled={avatarLoading}
                   >
@@ -254,7 +280,18 @@ export default function PerfilPage() {
                   </button>
                 ))}
               </div>
-              <button className={styles.avatarCancelBtn} onClick={() => setAvatarOpen(false)}>Cancelar</button>
+              <div className={styles.avatarActions}>
+                <button
+                  className={styles.avatarSaveBtn}
+                  onClick={handleAvatarSave}
+                  disabled={avatarLoading || pendingAvatar === undefined}
+                >
+                  {avatarLoading ? 'Salvando...' : 'Salvar'}
+                </button>
+                <button className={styles.avatarCancelBtn} onClick={handleAvatarCancel}>
+                  Cancelar
+                </button>
+              </div>
             </div>
           )}
 

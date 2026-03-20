@@ -26,17 +26,23 @@ export default function SupportersRanking() {
   const pt = lang === 'pt'
 
   useEffect(() => {
-    fetch('/api/supporters')
-      .then(r => r.json())
-      .then(d => { setList(d.supporters ?? []); setLoading(false) })
-      .catch(() => setLoading(false))
-    fetch('/api/stats')
-      .then(r => r.json())
-      .then(d => setUserCount(d.users ?? null))
-      .catch(() => {})
+    function fetchData() {
+      fetch('/api/supporters')
+        .then(r => r.json())
+        .then(d => { setList(d.supporters ?? []); setLoading(false) })
+        .catch(() => setLoading(false))
+      fetch('/api/stats')
+        .then(r => r.json())
+        .then(d => setUserCount(d.users ?? null))
+        .catch(() => {})
+    }
+
+    fetchData()
+    const interval = setInterval(fetchData, 30_000)
+    return () => clearInterval(interval)
   }, [])
 
-  const totalRaised = list.reduce((sum, s) => sum + (s.amount ?? 0), 0)
+  const totalRaised = list.reduce((sum, s) => sum + Number(s.amount ?? 0), 0)
 
   const LEGACY: Record<string, string> = { apoiador: 'pesquisador', criador: 'sentinela', lenda: 'rifter' }
 

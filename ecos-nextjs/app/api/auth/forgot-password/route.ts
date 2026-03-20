@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     const resetLink = `${origin}/reset-password?token=${token}`
 
     const resend = new Resend(process.env.RESEND_API_KEY)
-    await resend.emails.send({
+    const { error: sendError } = await resend.emails.send({
       from: 'E.M.Q <onboarding@resend.dev>',
       to: email,
       subject: 'Redefinição de senha — E.M.Q',
@@ -72,7 +72,10 @@ export async function POST(req: NextRequest) {
           <p style="color:#555;font-size:12px;">Este link expira em 15 minutos.</p>
         </div>
       `,
-    }).catch(() => {})
+    })
+    if (sendError) {
+      console.error('[forgot-password] Resend error:', sendError)
+    }
   } finally {
     conn.release()
   }

@@ -21,7 +21,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   try {
     const [rows] = await conn.execute<RowDataPacket[]>(
       `SELECT fc.id, fc.parent_id, fc.content, fc.is_admin_reply, fc.created_at,
-              u.username
+              u.username, u.avatar
        FROM faq_comments fc
        JOIN users u ON u.id = fc.user_id
        WHERE fc.faq_id = ?
@@ -67,6 +67,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       [faqId, parentId, user.id, content, user.is_admin ? 1 : 0]
     ) as any[]
 
+    const [[userRow]] = await conn.execute<RowDataPacket[]>(
+      'SELECT avatar FROM users WHERE id = ?', [user.id]
+    )
+
     return NextResponse.json({
       comment: {
         id:             result.insertId,
@@ -74,6 +78,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         content,
         is_admin_reply: user.is_admin ? 1 : 0,
         username:       user.username,
+        avatar:         userRow?.avatar ?? null,
         created_at:     new Date().toISOString(),
       }
     })

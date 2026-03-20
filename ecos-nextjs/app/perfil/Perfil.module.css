@@ -314,6 +314,29 @@
 .avatarOption:hover { border-color: var(--rift); background: rgba(139,63,255,0.1); transform: scale(1.08); }
 .avatarOptionActive { border-color: var(--rift); background: rgba(139,63,255,0.15); box-shadow: 0 0 10px var(--rift-glow); }
 
+.avatarActions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.avatarSaveBtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  letter-spacing: 0.06em;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--rift);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 12px var(--rift-glow);
+}
+.avatarSaveBtn:hover:not(:disabled) { background: var(--rift-bright); transform: translateY(-1px); }
+.avatarSaveBtn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
 .avatarCancelBtn {
   font-family: 'Press Start 2P', monospace;
   font-size: 0.32rem;
@@ -325,7 +348,6 @@
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
-  align-self: flex-start;
 }
 .avatarCancelBtn:hover { border-color: var(--text-dim); color: var(--text); }
 

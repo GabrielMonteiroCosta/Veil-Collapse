@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   const conn = await pool.getConnection()
   try {
     const [rows] = await conn.execute<RowDataPacket[]>(
-      'SELECT id, username, email, password_hash, is_admin FROM users WHERE email = ?',
+      'SELECT id, username, email, password_hash, is_admin, avatar, created_at FROM users WHERE email = ?',
       [email]
     )
 
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     const response = NextResponse.json({
       success: true,
-      user: { id: user.id, username: user.username, email: user.email, is_admin: user.is_admin },
+      user: { id: user.id, username: user.username, email: user.email, is_admin: user.is_admin, avatar: user.avatar ?? null, created_at: user.created_at ?? null },
     })
 
     response.cookies.set('auth_token', token, {

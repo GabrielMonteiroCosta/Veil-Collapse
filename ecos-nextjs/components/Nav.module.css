@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   gap: 2rem;
-  padding: 1.2rem 2.5rem;
+  padding: 1.4rem 2.5rem;
   background: linear-gradient(to bottom, rgba(5,9,26,0.9), transparent);
   transition: background 0.3s, backdrop-filter 0.3s;
 }
@@ -59,7 +59,8 @@
   background: transparent;
   border: 1px solid var(--gold-dim);
   color: var(--gold);
-  padding: 0.45rem 0.75rem;
+  padding: 0 0.9rem;
+  min-height: 36px;
   cursor: pointer;
   letter-spacing: 0.1em;
   transition: all 0.2s;
@@ -173,20 +174,24 @@
 .loginBtn {
   font-family: 'Press Start 2P', monospace;
   font-size: 0.48rem;
-  background: transparent;
+  background: var(--rift);
   border: 1px solid var(--rift);
-  color: var(--rift-bright);
-  padding: 0.5rem 0.9rem;
+  color: #fff;
+  padding: 0 0.9rem;
+  min-height: 36px;
   cursor: pointer;
   letter-spacing: 0.08em;
   transition: all 0.2s;
   border-radius: var(--radius);
-  text-shadow: 0 0 8px var(--rift-glow);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 14px var(--rift-glow);
 }
 
 .loginBtn:hover {
-  background: var(--rift-glow);
-  box-shadow: 0 0 14px var(--rift-glow);
+  background: var(--rift-bright);
+  box-shadow: 0 0 22px var(--rift-glow);
+  transform: translateY(-1px);
 }
 
 /* User menu (logged in) */
@@ -200,7 +205,8 @@
   background: rgba(139, 63, 255, 0.1);
   border: 1px solid var(--rift);
   color: var(--rift-bright);
-  padding: 0.5rem 0.9rem;
+  padding: 0 0.9rem;
+  min-height: 36px;
   cursor: pointer;
   letter-spacing: 0.06em;
   transition: all 0.2s;
@@ -216,13 +222,25 @@
   box-shadow: 0 0 14px var(--rift-glow);
 }
 
-.userDot {
-  width: 6px;
-  height: 6px;
+.userAvatar {
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #4ade80;
-  box-shadow: 0 0 6px #4ade80;
+  background: rgba(139, 63, 255, 0.2);
+  border: 1px solid rgba(139, 63, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  line-height: 1;
+  padding-bottom: 2px;
   flex-shrink: 0;
+  box-shadow: 0 0 6px var(--rift-glow);
+  overflow: hidden;
+}
+
+.userLabel {
+  /* visível no desktop, escondido no mobile via media query */
 }
 
 .userChevron {
@@ -404,19 +422,22 @@
 .bellBtn {
   position: relative;
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  padding: 0.3rem;
+  padding: 0 0.65rem;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-dim);
-  transition: color 0.2s, transform 0.2s;
+  border-radius: var(--radius);
+  transition: color 0.2s, transform 0.2s, border-color 0.2s;
 }
 
 .bellBtn:hover {
   color: var(--text);
-  transform: scale(1.1);
+  border-color: rgba(255,255,255,0.1);
+  transform: scale(1.05);
 }
 
 .bellBadge {
@@ -600,13 +621,55 @@
 @media (max-width: 750px) {
   .links { display: none; }
   .burger { display: flex; }
-  .nav { padding: 1rem 1.5rem; }
-  .backToTop { bottom: 1.25rem; right: 1.25rem; width: 36px; height: 36px; }
-  .right { gap: 0.65rem; }
+  .langMenu { display: none; }
 
-  /* Dropdown do idioma: abre para a esquerda em telas pequenas */
-  .langDropdown {
-    left: auto;
-    right: 0;
+  .nav {
+    padding: 0.85rem 1.25rem;
+    justify-content: space-between;
   }
+
+  .right {
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  /* tamanho uniforme dos 3 botões */
+  .bellBtn,
+  .userBtn,
+  .burger {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    min-height: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* userBtn vira só o avatar no mobile */
+  .userLabel { display: none; }
+  .userChevron { display: none; }
+  .userBtn {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+  .userBtn:hover {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .userAvatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.95rem;
+  }
+
+  .bellDropdown {
+    right: auto;
+    left: 0;
+  }
+
+  .backToTop { bottom: 1.25rem; right: 1.25rem; width: 36px; height: 36px; }
 }

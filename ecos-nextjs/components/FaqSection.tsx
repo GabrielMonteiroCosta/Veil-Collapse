@@ -11,6 +11,7 @@ interface Comment {
   parent_id: number | null
   content: string
   username: string
+  avatar: string | null
   is_admin_reply: number
   created_at: string
 }
@@ -235,6 +236,9 @@ export default function FaqSection() {
                                 {/* Top-level comment */}
                                 <div className={styles.comment}>
                                   <div className={styles.commentHeader}>
+                                    <span className={styles.commentAvatar}>
+                                      {c.avatar ?? c.username[0].toUpperCase()}
+                                    </span>
                                     <span className={styles.commentUser}>
                                       {c.username}
                                     </span>
@@ -319,6 +323,9 @@ export default function FaqSection() {
                                       {replies.map(r => (
                                         <div key={r.id} className={styles.reply}>
                                           <div className={styles.commentHeader}>
+                                            <span className={styles.commentAvatar} style={{ borderColor: ac, color: ac }}>
+                                              {r.avatar ?? r.username[0].toUpperCase()}
+                                            </span>
                                             <span className={styles.commentUser} style={{ color: ac }}>
                                               <span className={styles.replyArrow}>↳</span>
                                               ⚡ {r.username}

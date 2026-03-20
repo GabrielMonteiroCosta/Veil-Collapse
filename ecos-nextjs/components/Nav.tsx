@@ -76,10 +76,17 @@ export default function Nav() {
 
   useEffect(() => {
     if (!user) return
-    fetch('/api/notifications')
-      .then(r => r.json())
-      .then(data => setNotifications(data.notifications ?? []))
-      .catch(() => {})
+
+    function fetchNotifications() {
+      fetch('/api/notifications')
+        .then(r => r.json())
+        .then(data => setNotifications(data.notifications ?? []))
+        .catch(() => {})
+    }
+
+    fetchNotifications()
+    const interval = setInterval(fetchNotifications, 30_000)
+    return () => clearInterval(interval)
   }, [user])
 
   async function handleMarkAllRead() {
@@ -133,7 +140,7 @@ export default function Nav() {
                 onClick={() => setBellOpen(o => !o)}
                 aria-label="Notificações"
               >
-                <Bell size={18} strokeWidth={1.5} />
+                <Bell size={20} strokeWidth={1.5} />
                 {unreadCount > 0 && <span className={styles.bellBadge} />}
               </button>
               {bellOpen && (
@@ -201,8 +208,10 @@ export default function Nav() {
                 className={styles.userBtn}
                 onClick={() => setDropdownOpen(o => !o)}
               >
-                <span className={styles.userDot} />
-                {user.username}
+                <span className={styles.userAvatar}>
+                  {user.avatar ?? user.username[0].toUpperCase()}
+                </span>
+                <span className={styles.userLabel}>{user.username}</span>
                 <span className={styles.userChevron}>{dropdownOpen ? '▲' : '▼'}</span>
               </button>
               {dropdownOpen && (

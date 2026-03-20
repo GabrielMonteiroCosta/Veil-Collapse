@@ -72,7 +72,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .section-title {
-  font-family: 'Cinzel', serif;
+  font-family: 'Oxanium', sans-serif;
   font-size: clamp(1.6rem, 3.5vw, 2.6rem);
   font-weight: 700;
   color: var(--text);
