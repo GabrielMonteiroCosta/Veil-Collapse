@@ -178,6 +178,22 @@ export default function LorePage() {
             </div>
           </section>
 
+          {/* Capítulos */}
+          <section className={styles.section}>
+            <div className={styles.chaptersCard}>
+              <p className={styles.ecoTag}>✦ {pt ? 'NARRATIVA' : 'NARRATIVE'}</p>
+              <h2 className={styles.ecoTitle}>{pt ? 'Capítulos' : 'Chapters'}</h2>
+              <p className={styles.ecoDesc}>
+                {pt
+                  ? 'Os eventos narrados em prosa — do dia antes do ataque à Cidade Estrela até os subterrâneos de Cálico. Quatro capítulos que constroem o mundo antes do gameplay começar.'
+                  : 'The events narrated in prose — from the day before the attack on Star City to the underground of Calico. Four chapters that build the world before gameplay begins.'}
+              </p>
+              <a href="/lore/capitulos" className={styles.chaptersLink}>
+                {pt ? 'Ler os capítulos →' : 'Read the chapters →'}
+              </a>
+            </div>
+          </section>
+
           {/* E.C.O */}
           <section className={styles.section}>
             <div className={styles.ecoCard}>
