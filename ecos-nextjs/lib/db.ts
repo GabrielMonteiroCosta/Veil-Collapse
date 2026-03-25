@@ -4,7 +4,11 @@ let _db: ReturnType<typeof neon> | null = null
 
 function getDb() {
   if (!_db) {
-    _db = neon(process.env.DATABASE_URL!)
+    // Remove channel_binding que o driver não suporta
+    const url = (process.env.DATABASE_URL || '')
+      .replace('&channel_binding=require', '')
+      .replace('?channel_binding=require', '')
+    _db = neon(url)
   }
   return _db
 }
