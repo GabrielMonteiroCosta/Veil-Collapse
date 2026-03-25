@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-import pool from '@/lib/db'
+import db from '@/lib/db'
 
 const VALID_AVATARS = ['⚔️', '🌟', '🌙', '⚓', '⚙️', '🔬', '👑', '🌿', '🥊', '📖', '🗡️', '🔮', '🛡️', '⚡']
 
@@ -26,11 +26,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Avatar inválido' }, { status: 400 })
   }
 
-  const conn = await pool.getConnection()
-  try {
-    await conn.execute('UPDATE users SET avatar = ? WHERE id = ?', [avatar, user.id])
-    return NextResponse.json({ success: true, avatar })
-  } finally {
-    conn.release()
-  }
+  await db('UPDATE users SET avatar = $1 WHERE id = $2', [avatar, user.id])
+  return NextResponse.json({ success: true, avatar })
 }

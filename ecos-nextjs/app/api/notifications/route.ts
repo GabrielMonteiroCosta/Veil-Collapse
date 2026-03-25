@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-import pool from '@/lib/db'
-import { RowDataPacket } from 'mysql2'
+import db from '@/lib/db'
 
 function getUser(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value
@@ -15,18 +14,13 @@ export async function GET(req: NextRequest) {
   const user = getUser(req)
   if (!user) return NextResponse.json({ notifications: [] })
 
-  const conn = await pool.getConnection()
-  try {
-    const [rows] = await conn.execute<RowDataPacket[]>(
-      `SELECT id, message_pt, message_en, read_at, created_at
-       FROM notifications
-       WHERE user_id = ?
-       ORDER BY created_at DESC
-       LIMIT 30`,
-      [user.id]
-    )
-    return NextResponse.json({ notifications: rows })
-  } finally {
-    conn.release()
-  }
+  const rows = await db(
+    `SELECT id, message_pt, message_en, read_at, created_at
+     FROM notifications
+     WHERE user_id = $1
+     ORDER BY created_at DESC
+     LIMIT 30`,
+    [user.id]
+  )
+  return NextResponse.json({ notifications: rows })
 }

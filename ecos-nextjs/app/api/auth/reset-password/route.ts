@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import pool from '@/lib/db'
+import db from '@/lib/db'
 import { validatePassword } from '@/lib/validators'
 
 export async function POST(req: NextRequest) {
@@ -36,15 +36,7 @@ export async function POST(req: NextRequest) {
   }
 
   const hash = await bcrypt.hash(password, 12)
-  const conn = await pool.getConnection()
-  try {
-    await conn.execute(
-      'UPDATE users SET password_hash = ? WHERE email = ?',
-      [hash, payload.email]
-    )
-  } finally {
-    conn.release()
-  }
+  await db('UPDATE users SET password_hash = $1 WHERE email = $2', [hash, payload.email])
 
   return NextResponse.json({ success: true })
 }

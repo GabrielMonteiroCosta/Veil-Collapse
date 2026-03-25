@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-import pool from '@/lib/db'
-import { RowDataPacket } from 'mysql2'
+import db from '@/lib/db'
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value
@@ -26,18 +25,10 @@ export async function GET(req: NextRequest) {
 
   // Try to fetch extra fields — gracefully skip if columns don't exist yet
   try {
-    const conn = await pool.getConnection()
-    try {
-      const [rows] = await conn.execute<RowDataPacket[]>(
-        'SELECT created_at, avatar FROM users WHERE id = ?',
-        [payload.id]
-      )
-      if (rows[0]) {
-        base.created_at = rows[0].created_at ?? null
-        base.avatar = rows[0].avatar ?? null
-      }
-    } finally {
-      conn.release()
+    const rows = await db('SELECT created_at, avatar FROM users WHERE id = $1', [payload.id])
+    if (rows[0]) {
+      base.created_at = rows[0].created_at ?? null
+      base.avatar = rows[0].avatar ?? null
     }
   } catch { /* columns may not exist yet — return base user */ }
 

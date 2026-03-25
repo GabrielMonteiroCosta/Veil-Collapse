@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-import pool from '@/lib/db'
+import db from '@/lib/db'
 
 function getUser(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value
@@ -14,14 +14,9 @@ export async function POST(req: NextRequest) {
   const user = getUser(req)
   if (!user) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-  const conn = await pool.getConnection()
-  try {
-    await conn.execute(
-      `UPDATE notifications SET read_at = NOW() WHERE user_id = ? AND read_at IS NULL`,
-      [user.id]
-    )
-    return NextResponse.json({ success: true })
-  } finally {
-    conn.release()
-  }
+  await db(
+    `UPDATE notifications SET read_at = NOW() WHERE user_id = $1 AND read_at IS NULL`,
+    [user.id]
+  )
+  return NextResponse.json({ success: true })
 }

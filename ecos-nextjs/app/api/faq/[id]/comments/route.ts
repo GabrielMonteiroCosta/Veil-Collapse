@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-import pool from '@/lib/db'
-import { RowDataPacket } from 'mysql2'
+import db from '@/lib/db'
 
 interface JwtPayload { id: number; username: string; email: string; is_admin: number }
 
@@ -17,21 +16,16 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   const faqId = parseInt(params.id)
   if (isNaN(faqId)) return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
 
-  const conn = await pool.getConnection()
-  try {
-    const [rows] = await conn.execute<RowDataPacket[]>(
-      `SELECT fc.id, fc.parent_id, fc.content, fc.is_admin_reply, fc.created_at,
-              u.username, u.avatar
-       FROM faq_comments fc
-       JOIN users u ON u.id = fc.user_id
-       WHERE fc.faq_id = ?
-       ORDER BY fc.created_at ASC`,
-      [faqId]
-    )
-    return NextResponse.json({ comments: rows })
-  } finally {
-    conn.release()
-  }
+  const rows = await db(
+    `SELECT fc.id, fc.parent_id, fc.content, fc.is_admin_reply, fc.created_at,
+            u.username, u.avatar
+     FROM faq_comments fc
+     JOIN users u ON u.id = fc.user_id
+     WHERE fc.faq_id = $1
+     ORDER BY fc.created_at ASC`,
+    [faqId]
+  )
+  return NextResponse.json({ comments: rows })
 }
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
@@ -59,32 +53,25 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   const parentId = body.parent_id ?? null
 
-  const conn = await pool.getConnection()
-  try {
-    const [result] = await conn.execute(
-      `INSERT INTO faq_comments (faq_id, parent_id, user_id, content, is_admin_reply)
-       VALUES (?, ?, ?, ?, ?)`,
-      [faqId, parentId, user.id, content, user.is_admin ? 1 : 0]
-    ) as any[]
+  const [result] = await db(
+    `INSERT INTO faq_comments (faq_id, parent_id, user_id, content, is_admin_reply)
+     VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+    [faqId, parentId, user.id, content, user.is_admin ? 1 : 0]
+  )
 
-    const [[userRow]] = await conn.execute<RowDataPacket[]>(
-      'SELECT avatar FROM users WHERE id = ?', [user.id]
-    )
+  const userRows = await db('SELECT avatar FROM users WHERE id = $1', [user.id])
 
-    return NextResponse.json({
-      comment: {
-        id:             result.insertId,
-        parent_id:      parentId,
-        content,
-        is_admin_reply: user.is_admin ? 1 : 0,
-        username:       user.username,
-        avatar:         userRow?.avatar ?? null,
-        created_at:     new Date().toISOString(),
-      }
-    })
-  } finally {
-    conn.release()
-  }
+  return NextResponse.json({
+    comment: {
+      id:             result.id,
+      parent_id:      parentId,
+      content,
+      is_admin_reply: user.is_admin ? 1 : 0,
+      username:       user.username,
+      avatar:         userRows[0]?.avatar ?? null,
+      created_at:     new Date().toISOString(),
+    }
+  })
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
@@ -95,11 +82,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   const commentId = parseInt(url.searchParams.get('commentId') || '')
   if (isNaN(commentId)) return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
 
-  const conn = await pool.getConnection()
-  try {
-    await conn.execute('DELETE FROM faq_comments WHERE id = ?', [commentId])
-    return NextResponse.json({ success: true })
-  } finally {
-    conn.release()
-  }
+  await db('DELETE FROM faq_comments WHERE id = $1', [commentId])
+  return NextResponse.json({ success: true })
 }

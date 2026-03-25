@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-import pool from '@/lib/db'
-import { RowDataPacket } from 'mysql2'
+import db from '@/lib/db'
 
 function getUser(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value
@@ -26,17 +25,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Mensagem em PT e EN são obrigatórias' }, { status: 400 })
   }
 
-  const conn = await pool.getConnection()
-  try {
-    const [users] = await conn.execute<RowDataPacket[]>('SELECT id FROM users')
-    for (const u of users) {
-      await conn.execute(
-        'INSERT INTO notifications (user_id, message_pt, message_en) VALUES (?, ?, ?)',
-        [u.id, message_pt, message_en]
-      )
-    }
-    return NextResponse.json({ success: true, count: users.length })
-  } finally {
-    conn.release()
+  const users = await db('SELECT id FROM users')
+  for (const u of users) {
+    await db(
+      'INSERT INTO notifications (user_id, message_pt, message_en) VALUES ($1, $2, $3)',
+      [u.id, message_pt, message_en]
+    )
   }
+  return NextResponse.json({ success: true, count: users.length })
 }

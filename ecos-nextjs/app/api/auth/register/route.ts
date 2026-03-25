@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import pool from '@/lib/db'
-import { RowDataPacket } from 'mysql2'
+import db from '@/lib/db'
 import { rateLimit } from '@/lib/rateLimit'
 import { validateUsername, validateEmail, validatePassword } from '@/lib/validators'
 
@@ -37,52 +36,45 @@ export async function POST(req: NextRequest) {
   const passwordErr = validatePassword(password ?? '')
   if (passwordErr) return NextResponse.json({ error: passwordErr }, { status: 400 })
 
-  const conn = await pool.getConnection()
-  try {
-    const [existing] = await conn.execute<RowDataPacket[]>(
-      'SELECT id FROM users WHERE email = ? OR username = ?',
-      [email, username]
-    )
+  const existing = await db(
+    'SELECT id FROM users WHERE email = $1 OR username = $2',
+    [email, username]
+  )
 
-    if (existing.length > 0) {
-      return NextResponse.json({ error: 'E-mail ou nome de usuário já cadastrado' }, { status: 409 })
-    }
-
-    const passwordHash = await bcrypt.hash(password, 12)
-
-    const [result] = await conn.execute<import('mysql2').ResultSetHeader>(
-      'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)',
-      [username, email, passwordHash]
-    )
-
-    await conn.execute(
-      `INSERT INTO notifications (user_id, message_pt, message_en) VALUES (?, ?, ?)`,
-      [
-        result.insertId,
-        `Bem-vindo ao E.M.Q, ${username}! Obrigado por se cadastrar. Fique de olho nas atualizações do jogo.`,
-        `Welcome to E.M.Q, ${username}! Thanks for signing up. Stay tuned for game updates.`,
-      ]
-    )
-
-    // Badges: welcome sempre; pioneer se entre os primeiros 100
-    try {
-      await conn.execute(
-        'INSERT IGNORE INTO user_badges (user_id, badge_id) VALUES (?, ?)',
-        [result.insertId, 'welcome']
-      )
-      const [[{ count }]] = await conn.execute<import('mysql2').RowDataPacket[]>(
-        'SELECT COUNT(*) as count FROM users'
-      ) as [import('mysql2').RowDataPacket[], unknown]
-      if (Number(count) <= 100) {
-        await conn.execute(
-          'INSERT IGNORE INTO user_badges (user_id, badge_id) VALUES (?, ?)',
-          [result.insertId, 'pioneer']
-        )
-      }
-    } catch { /* badges table may not exist yet */ }
-
-    return NextResponse.json({ success: true, message: 'Conta criada com sucesso!' })
-  } finally {
-    conn.release()
+  if (existing.length > 0) {
+    return NextResponse.json({ error: 'E-mail ou nome de usuário já cadastrado' }, { status: 409 })
   }
+
+  const passwordHash = await bcrypt.hash(password, 12)
+
+  const [newUser] = await db(
+    'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id',
+    [username, email, passwordHash]
+  )
+
+  await db(
+    `INSERT INTO notifications (user_id, message_pt, message_en) VALUES ($1, $2, $3)`,
+    [
+      newUser.id,
+      `Bem-vindo ao E.M.Q, ${username}! Obrigado por se cadastrar. Fique de olho nas atualizações do jogo.`,
+      `Welcome to E.M.Q, ${username}! Thanks for signing up. Stay tuned for game updates.`,
+    ]
+  )
+
+  // Badges: welcome sempre; pioneer se entre os primeiros 100
+  try {
+    await db(
+      'INSERT INTO user_badges (user_id, badge_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [newUser.id, 'welcome']
+    )
+    const [{ count }] = await db('SELECT COUNT(*) as count FROM users')
+    if (Number(count) <= 100) {
+      await db(
+        'INSERT INTO user_badges (user_id, badge_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+        [newUser.id, 'pioneer']
+      )
+    }
+  } catch { /* badges table may not exist yet */ }
+
+  return NextResponse.json({ success: true, message: 'Conta criada com sucesso!' })
 }
