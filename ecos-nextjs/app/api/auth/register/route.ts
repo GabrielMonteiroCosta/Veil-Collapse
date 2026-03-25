@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'E-mail ou nome de usuário já cadastrado' }, { status: 409 })
   }
 
-  const passwordHash = await bcrypt.hash(password, 12)
+  const passwordHash = await bcrypt.hash(password!, 12)
 
   const [newUser] = await db(
     'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id',
