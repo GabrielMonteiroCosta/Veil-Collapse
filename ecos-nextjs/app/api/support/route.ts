@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import pool from '@/lib/db'
+import db from '@/lib/db'
 import { rateLimit } from '@/lib/rateLimit'
 
 // 3 submissões por IP a cada 10 minutos
@@ -50,29 +50,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Tier inválido' }, { status: 400 })
   }
 
-  const conn = await pool.getConnection()
-  try {
-    await conn.execute(
-      `INSERT INTO donations
-        (name, email, tier, amount, npc_name, npc_description, item_name, item_description, quest_name, quest_description, message)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        name.trim(),
-        email.trim().toLowerCase(),
-        tier,
-        body.amount ?? null,
-        body.npcOrItem ?? body.npcName ?? null,
-        body.npcDescription ?? null,
-        body.itemName ?? null,
-        body.itemDescription ?? null,
-        body.questName ?? null,
-        body.questDescription ?? null,
-        body.message ?? null,
-      ]
-    )
+  await db(
+    `INSERT INTO donations
+      (name, email, tier, amount, npc_name, npc_description, item_name, item_description, quest_name, quest_description, message)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+    [
+      name.trim(),
+      email.trim().toLowerCase(),
+      tier,
+      body.amount ?? null,
+      body.npcOrItem ?? body.npcName ?? null,
+      body.npcDescription ?? null,
+      body.itemName ?? null,
+      body.itemDescription ?? null,
+      body.questName ?? null,
+      body.questDescription ?? null,
+      body.message ?? null,
+    ]
+  )
 
-    return NextResponse.json({ success: true })
-  } finally {
-    conn.release()
-  }
+  return NextResponse.json({ success: true })
 }
