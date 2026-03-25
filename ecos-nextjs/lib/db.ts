@@ -6,6 +6,7 @@ function getDb() {
   if (!_db) {
     // Remove channel_binding que o driver não suporta
     const url = (process.env.DATABASE_URL || '')
+      .trim()
       .replace('&channel_binding=require', '')
       .replace('?channel_binding=require', '')
     _db = neon(url)
