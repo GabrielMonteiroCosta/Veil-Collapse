@@ -203,7 +203,7 @@
 
 .statValue {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.3rem;
+  font-size: 0.5rem;
   color: var(--text-dim);
   width: 1rem;
   text-align: right;

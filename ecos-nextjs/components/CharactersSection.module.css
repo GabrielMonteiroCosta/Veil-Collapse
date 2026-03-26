@@ -142,7 +142,7 @@
 
 .charRole {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
+  font-size: 0.62rem;
   letter-spacing: 0.2em;
   color: var(--gold-dim);
   display: block;
@@ -170,7 +170,7 @@
 
 .trait {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
+  font-size: 0.58rem;
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--gold-dim);
   color: var(--gold-dim);

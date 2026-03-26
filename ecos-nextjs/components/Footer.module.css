@@ -44,7 +44,7 @@
 
 .link {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.42rem;
+  font-size: 0.6rem;
   color: var(--text-muted);
   letter-spacing: 0.05em;
   transition: color 0.2s;
@@ -184,7 +184,7 @@
 
 .waitlistSuccess {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
+  font-size: 0.6rem;
   color: var(--gold);
   letter-spacing: 0.05em;
   line-height: 2;
@@ -192,7 +192,7 @@
 
 .waitlistError {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
+  font-size: 0.6rem;
   color: #ff6060;
   letter-spacing: 0.05em;
 }

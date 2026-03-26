@@ -64,7 +64,7 @@ a { color: inherit; text-decoration: none; }
 
 .section-tag {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.5rem;
+  font-size: 0.62rem;
   letter-spacing: 0.3em;
   color: var(--gold);
   margin-bottom: 1rem;
@@ -81,7 +81,7 @@ a { color: inherit; text-decoration: none; }
 
 .btn {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   letter-spacing: 0.05em;
   padding: 1rem 1.6rem;
   border-radius: var(--radius);

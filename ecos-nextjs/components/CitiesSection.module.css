@@ -242,7 +242,7 @@
 
 .subtitle {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.38rem;
+  font-size: 0.55rem;
   letter-spacing: 0.2em;
   animation: fadeUp 0.4s ease both 0.07s;
 }
@@ -272,7 +272,7 @@
 
 .statusBadge {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.34rem;
+  font-size: 0.52rem;
   padding: 0.3rem 0.6rem;
   border: 1px solid;
   border-radius: var(--radius);
@@ -281,7 +281,7 @@
 
 .themeBadge {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.34rem;
+  font-size: 0.52rem;
   padding: 0.3rem 0.6rem;
   border: 1px solid;
   border-radius: var(--radius);
@@ -296,7 +296,7 @@
 
 .trait {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.34rem;
+  font-size: 0.52rem;
   letter-spacing: 0.1em;
   padding: 0.28rem 0.65rem;
   border: 1px solid;
@@ -356,7 +356,7 @@
 
 .statLabel {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.32rem;
+  font-size: 0.5rem;
   letter-spacing: 0.15em;
   color: var(--text-muted);
 }
@@ -444,7 +444,7 @@
 
 .overlapTag {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.28rem;
+  font-size: 0.48rem;
   letter-spacing: 0.1em;
 }
 
@@ -500,7 +500,7 @@
 
 .echoLabel {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.3rem;
+  font-size: 0.5rem;
   letter-spacing: 0.15em;
   color: var(--rift);
   text-shadow: 0 0 8px var(--rift-glow);
@@ -567,8 +567,8 @@
 .stripIcon { font-size: 1.5rem; }
 
 .stripName {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.27rem;
+  font-family: 'Oxanium', sans-serif;
+  font-size: 0.6rem;
   color: var(--text-muted);
   text-align: center;
   letter-spacing: 0.04em;
@@ -648,7 +648,7 @@
   display: none;
   text-align: center;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.32rem;
+  font-size: 0.52rem;
   letter-spacing: 0.15em;
   color: var(--text-muted);
   margin-top: 0.5rem;

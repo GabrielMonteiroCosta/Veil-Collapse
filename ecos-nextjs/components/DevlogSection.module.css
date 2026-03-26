@@ -66,14 +66,14 @@
 
 .date {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
+  font-size: 0.58rem;
   color: var(--text-muted);
   letter-spacing: 0.05em;
 }
 
 .tag {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.38rem;
+  font-size: 0.55rem;
   padding: 0.25rem 0.6rem;
   border: 1px solid;
   border-radius: var(--radius);
