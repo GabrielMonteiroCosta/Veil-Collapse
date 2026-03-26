@@ -28,8 +28,9 @@
 .links {
   display: flex;
   gap: 1.5rem;
-  flex: 1;
-  justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .link {
