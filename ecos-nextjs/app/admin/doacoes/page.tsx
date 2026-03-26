@@ -27,27 +27,18 @@ const TIER_COLOR = { apoiador: '#60b0ff', criador: '#f0c040', lenda: '#c06aff' }
 const STATUS_LABEL = { pending: 'Pendente', confirmed: 'Confirmado', rejected: 'Rejeitado' }
 
 export default function AdminDoacoesPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const router   = useRouter()
 
   const [donations,   setDonations]  = useState<Donation[]>([])
   const [filter,      setFilter]     = useState<'all' | 'pending' | 'confirmed' | 'rejected'>('all')
   const [expanded,    setExpanded]   = useState<number | null>(null)
-  const [authReady,   setAuthReady]  = useState(false)
   const [loading,     setLoading]    = useState(false)
   const [updating,    setUpdating]   = useState<number | null>(null)
   const [fetchError,  setFetchError] = useState<string | null>(null)
 
-  // Wait for AuthContext to resolve before redirecting or fetching
   useEffect(() => {
-    // AuthContext starts user as null — only act after /api/auth/me finishes
-    // We detect this by checking if user changed from initial null after a tick
-    const t = setTimeout(() => setAuthReady(true), 300)
-    return () => clearTimeout(t)
-  }, [])
-
-  useEffect(() => {
-    if (!authReady) return
+    if (authLoading) return
     if (!user?.is_admin) { router.replace('/'); return }
 
     setLoading(true)
@@ -61,7 +52,7 @@ export default function AdminDoacoesPage() {
       .catch(e => setFetchError(`Erro de rede: ${e.message}`))
       .finally(() => setLoading(false))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authReady, user?.id])
+  }, [authLoading, user?.id])
 
   async function updateStatus(id: number, status: 'confirmed' | 'rejected' | 'pending') {
     setUpdating(id)
@@ -74,7 +65,7 @@ export default function AdminDoacoesPage() {
     setUpdating(null)
   }
 
-  if (!authReady || !user?.is_admin) return null
+  if (authLoading || !user?.is_admin) return null
 
   const counts = {
     all:       donations.length,

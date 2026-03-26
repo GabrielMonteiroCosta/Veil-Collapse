@@ -6,25 +6,19 @@ import { useAuth } from '@/context/AuthContext'
 import styles from './page.module.css'
 
 export default function AdminNotificacoesPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const router = useRouter()
-  const [authReady, setAuthReady] = useState(false)
   const [messagePt, setMessagePt] = useState('')
   const [messageEn, setMessageEn] = useState('')
   const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => setAuthReady(true), 300)
-    return () => clearTimeout(t)
-  }, [])
-
-  useEffect(() => {
-    if (!authReady) return
+    if (authLoading) return
     if (!user?.is_admin) router.replace('/')
-  }, [authReady, user?.id])
+  }, [authLoading, user?.id])
 
-  if (!authReady || !user?.is_admin) return null
+  if (authLoading || !user?.is_admin) return null
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault()

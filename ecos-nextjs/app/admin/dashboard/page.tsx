@@ -18,26 +18,20 @@ type Stats = {
 }
 
 export default function AdminDashboardPage() {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const router = useRouter()
   const [stats, setStats] = useState<Stats | null>(null)
-  const [authReady, setAuthReady] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => setAuthReady(true), 300)
-    return () => clearTimeout(t)
-  }, [])
-
-  useEffect(() => {
-    if (!authReady) return
+    if (loading) return
     if (!user?.is_admin) { router.replace('/'); return }
     fetch('/api/admin/stats')
       .then(r => r.json())
       .then(d => setStats(d))
       .catch(() => {})
-  }, [authReady, user?.id])
+  }, [loading, user?.id])
 
-  if (!authReady || !user?.is_admin) return null
+  if (loading || !user?.is_admin) return null
 
   function fmtBRL(val: number) {
     const parts = Number(val).toFixed(2).split('.')
