@@ -16,6 +16,13 @@ export const metadata: Metadata = {
     title: 'Ecos de um Mundo Quebrado',
     description: 'Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
     type: 'website',
+    images: [{ url: '/cities/OGImage.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ecos de um Mundo Quebrado',
+    description: 'Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
+    images: ['/cities/OGImage.png'],
   },
 }
 
