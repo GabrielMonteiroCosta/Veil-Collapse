@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Ecos de um Mundo Quebrado',
   description: 'Um jogo de aventura em pixel art. Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
   keywords: ['jogo', 'pixel art', 'aventura', 'indie game', 'RPG'],
+  icons: {
+    icon: '/cities/Favicon.png',
+  },
   openGraph: {
     title: 'Ecos de um Mundo Quebrado',
     description: 'Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
