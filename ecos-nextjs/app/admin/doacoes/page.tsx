@@ -9,7 +9,7 @@ type Donation = {
   id: number
   name: string
   email: string
-  tier: 'apoiador' | 'criador' | 'lenda'
+  tier: string
   amount: number | null
   status: 'pending' | 'confirmed' | 'rejected'
   npc_name: string | null
@@ -22,8 +22,16 @@ type Donation = {
   created_at: string
 }
 
-const TIER_LABEL = { apoiador: 'Apoiador', criador: 'Criador', lenda: 'Lenda' }
-const TIER_COLOR = { apoiador: '#60b0ff', criador: '#f0c040', lenda: '#c06aff' }
+const TIER_LABEL: Record<string, string> = {
+  viajante: 'Viajante', pesquisador: 'Pesquisador', sentinela: 'Sentinela', rifter: 'Rifter',
+  // legado
+  apoiador: 'Apoiador', criador: 'Criador', lenda: 'Lenda',
+}
+const TIER_COLOR: Record<string, string> = {
+  viajante: '#60b0ff', pesquisador: '#60b0ff', sentinela: '#f0c040', rifter: '#c06aff',
+  // legado
+  apoiador: '#60b0ff', criador: '#f0c040', lenda: '#c06aff',
+}
 const STATUS_LABEL = { pending: 'Pendente', confirmed: 'Confirmado', rejected: 'Rejeitado' }
 
 export default function AdminDoacoesPage() {
@@ -56,12 +64,21 @@ export default function AdminDoacoesPage() {
 
   async function updateStatus(id: number, status: 'confirmed' | 'rejected' | 'pending') {
     setUpdating(id)
-    await fetch('/api/admin/donations', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, status }),
-    })
-    setDonations(prev => prev.map(d => d.id === id ? { ...d, status } : d))
+    try {
+      const res = await fetch('/api/admin/donations', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status }),
+      })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        setFetchError(`Erro ao atualizar: ${d.error ?? res.status}`)
+      } else {
+        setDonations(prev => prev.map(d => d.id === id ? { ...d, status } : d))
+      }
+    } catch (e: unknown) {
+      setFetchError(`Erro de rede: ${e instanceof Error ? e.message : 'desconhecido'}`)
+    }
     setUpdating(null)
   }
 

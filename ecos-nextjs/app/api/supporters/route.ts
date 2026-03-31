@@ -32,8 +32,7 @@ export async function GET() {
      ORDER BY
        tier_rank ASC,
        amount DESC NULLS LAST,
-       created_at ASC
-     LIMIT 10`
+       created_at ASC`
   )
 
   const supporters = rows.map((r, i) => ({

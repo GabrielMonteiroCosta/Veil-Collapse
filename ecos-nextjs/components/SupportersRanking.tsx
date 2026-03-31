@@ -56,7 +56,7 @@ export default function SupportersRanking() {
     return resolved === tierFilter
   })
   const top3 = filtered.slice(0, 3)
-  const rest  = filtered.slice(3, 10)
+  const rest  = filtered.slice(3)
 
   function fmtAmount(amount: number | null, tierId: string) {
     if (amount) return `R$ ${amount.toLocaleString(pt ? 'pt-BR' : 'en-US', { minimumFractionDigits: 2 })}`
