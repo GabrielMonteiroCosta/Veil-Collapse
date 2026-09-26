@@ -24,7 +24,7 @@ const chapters = [
   {
     number: '03',
     file: 'cap3.txt',
-    title: 'As Cinzas das Estrelas',
+    title: 'Ecos do Amanhecer',
     subtitle: 'Capítulo 3',
     teaser: 'A Cidade Estrela amanheceu em cinzas. Entre escombros e rostos conhecidos, Lumi descobre que as pessoas de sobretudo vermelho não vieram por acaso — sabiam exatamente onde ir. Restam uma fita de cabelo e um caminho ao norte.',
     accent: '#e05030',
