@@ -140,7 +140,8 @@ export default function SplitHero() {
             </span>
             <GlitchText
               normal={t('hero.title2')}
-              anti="C̴o̷l̸l̶a̵p̷s̵e̴"
+              anti={['C̴o̷l̸l̶a̵p̷s̵e̴', '崩壊']}
+              holdMs={700}
               as="span"
               className={`${styles.titleLine2} ${styles.rift}`}
               intensity="medium"
