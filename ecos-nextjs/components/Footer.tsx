@@ -41,7 +41,7 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
-        <p className={styles.title}>Ecos de um Mundo Quebrado</p>
+        <p className={styles.title}>Veil: Collapse</p>
         <p className={styles.tagline}>{t('footer.tagline')}</p>
 
         <div className={styles.links}>

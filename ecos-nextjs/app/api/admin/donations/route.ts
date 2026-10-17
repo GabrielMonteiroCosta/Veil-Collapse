@@ -67,8 +67,8 @@ export async function PATCH(req: NextRequest) {
 
       if (user) {
         const label = TIER_LABELS[donation.tier] ?? { pt: donation.tier, en: donation.tier }
-        const msgPt = `Obrigado pelo seu apoio, ${donation.name}! Sua doação foi confirmada e você agora carrega o título de ${label.pt} no universo do E.M.Q. Seu apoio faz toda a diferença! ✦`
-        const msgEn = `Thank you for your support, ${donation.name}! Your donation has been confirmed and you now carry the title of ${label.en} in the E.M.Q universe. Your support means everything! ✦`
+        const msgPt = `Obrigado pelo seu apoio, ${donation.name}! Sua doação foi confirmada e você agora carrega o título de ${label.pt} no universo de Veil: Collapse. Seu apoio faz toda a diferença! ✦`
+        const msgEn = `Thank you for your support, ${donation.name}! Your donation has been confirmed and you now carry the title of ${label.en} in the Veil: Collapse universe. Your support means everything! ✦`
 
         await db(
           'INSERT INTO notifications (user_id, message_pt, message_en) VALUES ($1, $2, $3)',

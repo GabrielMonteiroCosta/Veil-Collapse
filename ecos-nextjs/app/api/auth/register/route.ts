@@ -56,8 +56,8 @@ export async function POST(req: NextRequest) {
     `INSERT INTO notifications (user_id, message_pt, message_en) VALUES ($1, $2, $3)`,
     [
       newUser.id,
-      `Bem-vindo ao E.M.Q, ${username}! Obrigado por se cadastrar. Fique de olho nas atualizações do jogo.`,
-      `Welcome to E.M.Q, ${username}! Thanks for signing up. Stay tuned for game updates.`,
+      `Bem-vindo ao Veil: Collapse, ${username}! Obrigado por se cadastrar. Fique de olho nas atualizações do jogo.`,
+      `Welcome to Veil: Collapse, ${username}! Thanks for signing up. Stay tuned for game updates.`,
     ]
   )
 

@@ -25,8 +25,8 @@ export const faqs: FaqItem[] = [
     id: 3,
     questionPt: 'O jogo terá multiplayer?',
     questionEn: 'Will the game have multiplayer?',
-    answerPt: 'Não. Ecos de um Mundo Quebrado é uma experiência inteiramente solo focada em narrativa e imersão. A história é sobre a sua jornada — e só a sua.',
-    answerEn: 'No. Echoes of a Broken World is an entirely solo experience focused on narrative and immersion. The story is about your journey — and yours alone.',
+    answerPt: 'Não. Veil: Collapse é uma experiência inteiramente solo focada em narrativa e imersão. A história é sobre a sua jornada — e só a sua.',
+    answerEn: 'No. Veil: Collapse is an entirely solo experience focused on narrative and immersion. The story is about your journey — and yours alone.',
   },
   {
     id: 4,
@@ -60,7 +60,7 @@ export const faqs: FaqItem[] = [
     id: 8,
     questionPt: 'O jogo tem relação com algum outro universo ou franquia?',
     questionEn: 'Is the game related to any other universe or franchise?',
-    answerPt: 'Não. Ecos de um Mundo Quebrado é um universo 100% original criado do zero. Toda a lore, personagens, cidades e mecânicas são propriedade intelectual exclusiva do projeto.',
-    answerEn: 'No. Echoes of a Broken World is a 100% original universe created from scratch. All lore, characters, cities and mechanics are the project\'s exclusive intellectual property.',
+    answerPt: 'Não. Veil: Collapse é um universo 100% original criado do zero. Toda a lore, personagens, cidades e mecânicas são propriedade intelectual exclusiva do projeto.',
+    answerEn: 'No. Veil: Collapse is a 100% original universe created from scratch. All lore, characters, cities and mechanics are the project\'s exclusive intellectual property.',
   },
 ]

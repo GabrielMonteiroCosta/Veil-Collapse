@@ -78,12 +78,12 @@ export async function POST(req: NextRequest) {
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   await resend.emails.send({
-    from: 'E.M.Q <onboarding@resend.dev>',
+    from: 'VEIL <onboarding@resend.dev>',
     to: email,
-    subject: 'Você entrou na lista de espera de E.M.Q!',
+    subject: 'Você entrou na lista de espera de Veil: Collapse!',
     html: `
       <div style="background:#0a0a0f;color:#e8e8e8;font-family:monospace;padding:40px;max-width:600px;margin:0 auto;">
-        <h1 style="color:#f0c040;letter-spacing:2px;">E.M.Q — Ecos de um Mundo Quebrado</h1>
+        <h1 style="color:#f0c040;letter-spacing:2px;">Veil: Collapse</h1>
         <hr style="border-color:#333;margin:24px 0;">
         <p>Olá,</p>
         <p>Seu cadastro na lista de espera foi confirmado. Você é um dos primeiros a saber quando o jogo estiver disponível.</p>

@@ -123,8 +123,8 @@ export default function LorePage() {
             <h1 className={styles.heroTitle}>{pt ? 'Lore' : 'Lore'}</h1>
             <p className={styles.heroDesc}>
               {pt
-                ? 'A história por trás de Ecos de um Mundo Quebrado — o incidente que mudou tudo, os universos que colidiram e as pessoas que vivem entre eles.'
-                : 'The story behind Echoes of a Broken World — the incident that changed everything, the universes that collided, and the people who live between them.'}
+                ? 'A história por trás de Veil: Collapse — o incidente que mudou tudo, os universos que colidiram e as pessoas que vivem entre eles.'
+                : 'The story behind Veil: Collapse — the incident that changed everything, the universes that collided, and the people who live between them.'}
             </p>
           </div>
 

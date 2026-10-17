@@ -126,7 +126,7 @@ export default function CapitulosPage() {
             <h1 className={styles.title}>Capítulos</h1>
             <p className={styles.desc}>
               Os eventos que precedem a jornada — escritos em prosa antes de virarem gameplay.
-              Cada capítulo é um fragmento do mundo de E.M.Q.
+              Cada capítulo é um fragmento do mundo de Veil: Collapse.
             </p>
           </div>
 

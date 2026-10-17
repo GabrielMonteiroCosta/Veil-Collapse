@@ -45,8 +45,8 @@ export default function SupportSection() {
           </h2>
           <p className={styles.intro}>
             {pt
-              ? 'Ecos de um Mundo Quebrado é desenvolvido de forma independente com muito amor. Cada apoio ajuda a expandir o mundo, criar novas histórias e trazer o jogo mais perto do lançamento.'
-              : 'Echoes of a Broken World is developed independently with great love. Every contribution helps expand the world, create new stories and bring the game closer to launch.'}
+              ? 'Veil: Collapse é desenvolvido de forma independente com muito amor. Cada apoio ajuda a expandir o mundo, criar novas histórias e trazer o jogo mais perto do lançamento.'
+              : 'Veil: Collapse is developed independently with great love. Every contribution helps expand the world, create new stories and bring the game closer to launch.'}
           </p>
 
           {/* ── Progress bar ── */}

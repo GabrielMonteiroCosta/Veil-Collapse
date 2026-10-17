@@ -48,12 +48,12 @@ export async function POST(req: NextRequest) {
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const { error: sendError } = await resend.emails.send({
-    from: 'E.M.Q <onboarding@resend.dev>',
+    from: 'VEIL <onboarding@resend.dev>',
     to: email,
-    subject: 'Redefinição de senha — E.M.Q',
+    subject: 'Redefinição de senha — Veil: Collapse',
     html: `
       <div style="background:#0a0a0f;color:#e8e8e8;font-family:monospace;padding:40px;max-width:600px;margin:0 auto;">
-        <h1 style="color:#f0c040;letter-spacing:2px;">E.M.Q — Ecos de um Mundo Quebrado</h1>
+        <h1 style="color:#f0c040;letter-spacing:2px;">Veil: Collapse</h1>
         <hr style="border-color:#333;margin:24px 0;">
         <p>Olá, <strong>${user.username}</strong>.</p>
         <p>Recebemos uma solicitação para redefinir sua senha.</p>

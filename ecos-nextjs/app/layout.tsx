@@ -6,21 +6,21 @@ import { ToastProvider } from '@/context/ToastContext'
 import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
-  title: 'Ecos de um Mundo Quebrado',
+  title: 'Veil: Collapse',
   description: 'Um jogo de aventura em pixel art. Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
   keywords: ['jogo', 'pixel art', 'aventura', 'indie game', 'RPG'],
   icons: {
     icon: '/cities/Favicon.png',
   },
   openGraph: {
-    title: 'Ecos de um Mundo Quebrado',
+    title: 'Veil: Collapse',
     description: 'Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
     type: 'website',
     images: [{ url: '/cities/OGImage.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ecos de um Mundo Quebrado',
+    title: 'Veil: Collapse',
     description: 'Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
     images: ['/cities/OGImage.png'],
   },

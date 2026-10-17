@@ -15,7 +15,7 @@ interface Props {
 type Status = { type: 'success' | 'error'; message: string } | null
 
 const PIX_KEY      = 'b707d741-4d84-4540-be90-71bfaccb5c80'
-const PIX_NAME     = 'Projeto E.M.Q'
+const PIX_NAME     = 'Projeto Veil Collapse'
 const PIX_CITY     = 'Cotia'
 
 // ── PIX EMV payload generator (Banco Central BR) ──

@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════════════
---  E.M.Q — Schema completo (PostgreSQL / Neon)
+--  Veil: Collapse — Schema completo (PostgreSQL / Neon)
 --  Execute este arquivo UMA VEZ em um banco vazio
 -- ════════════════════════════════════════════════════════════════════════════
 

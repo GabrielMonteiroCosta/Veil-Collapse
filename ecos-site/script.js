@@ -112,7 +112,7 @@ drawStars();
 /* === LANG TOGGLE === */
 const translations = {
   pt: {
-    'nav-logo': '✦ EMQM',
+    'nav-logo': '✦ VEIL',
     'hero-eyebrow': 'Um jogo de aventura em pixel art',
     'hero-tagline': 'Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
     'btn-story': 'Descobrir a História',
@@ -152,7 +152,7 @@ const translations = {
     'status-unknown': 'Desconhecido',
     'section-tag-notify': '✦ Em Desenvolvimento',
     'cta-title': 'O mundo ainda está sendo construído',
-    'cta-text': 'Ecos de um Mundo Quebrado está em desenvolvimento. Deixe seu e-mail para ser notificado quando o jogo for lançado.',
+    'cta-text': 'Veil: Collapse está em desenvolvimento. Deixe seu e-mail para ser notificado quando o jogo for lançado.',
     'email-placeholder': 'seu@email.com',
     'btn-notify': 'Me avise!',
     'notify-success': '✦ Obrigado! Você será notificado quando o mundo renascer.',
@@ -160,7 +160,7 @@ const translations = {
     'footer-copy': '© 2025 · Feito com ✦ e muitas noites estreladas',
   },
   en: {
-    'nav-logo': '✦ EOBW',
+    'nav-logo': '✦ VEIL',
     'hero-eyebrow': 'A pixel art adventure game',
     'hero-tagline': 'When two universes overlap, no world remains intact.',
     'btn-story': 'Discover the Story',
@@ -200,7 +200,7 @@ const translations = {
     'status-unknown': 'Unknown',
     'section-tag-notify': '✦ In Development',
     'cta-title': 'The world is still being built',
-    'cta-text': 'Echoes of a Broken World is in development. Leave your email to be notified when the game launches.',
+    'cta-text': 'Veil: Collapse is in development. Leave your email to be notified when the game launches.',
     'email-placeholder': 'your@email.com',
     'btn-notify': 'Notify me!',
     'notify-success': '✦ Thank you! You\'ll be notified when the world is reborn.',
