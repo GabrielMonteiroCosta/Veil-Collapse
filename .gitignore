@@ -15,6 +15,11 @@ ecos-nextjs/.env
 ecos-nextjs/.env.local
 ecos-nextjs/.env.*.local
 
+# Dados locais (backups do banco e cadastros reais nunca vão para o repositório)
+*_backup.sql
+*.bundle
+ecos-nextjs/data/waitlist.json
+
 # Debug logs
 npm-debug.log*
 yarn-debug.log*
