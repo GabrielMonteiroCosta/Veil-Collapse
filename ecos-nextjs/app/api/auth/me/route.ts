@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import db from '@/lib/db'
 
 export async function GET(req: NextRequest) {
@@ -8,7 +9,7 @@ export async function GET(req: NextRequest) {
 
   let payload: { id: number; username: string; email: string; is_admin: number }
   try {
-    payload = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as typeof payload
+    payload = jwt.verify(token, jwtSecret()) as typeof payload
   } catch {
     return NextResponse.json({ user: null }, { status: 401 })
   }

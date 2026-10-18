@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import bcrypt from 'bcryptjs'
 import db from '@/lib/db'
 import { validatePassword } from '@/lib/validators'
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
   try {
     payload = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'fallback_secret'
+      jwtSecret()
     ) as { email: string; purpose: string }
   } catch {
     return NextResponse.json({ error: 'Link inválido ou expirado' }, { status: 400 })
