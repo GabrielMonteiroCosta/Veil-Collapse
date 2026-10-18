@@ -6,6 +6,8 @@ import { ToastProvider } from '@/context/ToastContext'
 import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
+  // Endereço público do site: sem ele, a imagem de compartilhamento aponta para localhost
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://e-m-q.vercel.app'),
   title: 'Veil: Collapse',
   description: 'Um jogo de aventura em pixel art. Quando dois universos se sobrepõem, nenhum mundo permanece intacto.',
   keywords: ['jogo', 'pixel art', 'aventura', 'indie game', 'RPG'],
