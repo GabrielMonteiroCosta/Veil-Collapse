@@ -31,7 +31,8 @@ export async function GET(req: NextRequest) {
   try {
     const wlPath = path.join(process.cwd(), 'data', 'waitlist.json')
     const wlData = JSON.parse(fs.readFileSync(wlPath, 'utf-8'))
-    waitlist = Array.isArray(wlData) ? wlData.length : 0
+    // O arquivo salvo pela rota /api/waitlist é um objeto { emails, count }, não uma lista
+    waitlist = Array.isArray(wlData) ? wlData.length : (wlData.count ?? wlData.emails?.length ?? 0)
   } catch { /* file may not exist */ }
 
   return NextResponse.json({
