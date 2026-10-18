@@ -1,44 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFileSync, writeFileSync, existsSync } from 'fs'
-import { join } from 'path'
+import db from '@/lib/db'
 import { rateLimit } from '@/lib/rateLimit'
 import { Resend } from 'resend'
 
 // 3 inscrições por IP a cada hora
 const limiter = rateLimit({ uniqueTokenPerInterval: 500, interval: 60 * 60_000 })
 
-const WAITLIST_PATH = join(process.cwd(), 'data', 'waitlist.json')
+// Endereço exibido no rodapé do e-mail (sem o https://)
+const SITE_HOST = (process.env.NEXT_PUBLIC_SITE_URL || 'https://e-m-q.vercel.app').replace(/^https?:\/\//, '').replace(/\/$/, '')
 
-interface WaitlistEntry {
-  email: string
-  prefs: string[]
-  date: string
-}
-
-interface WaitlistData {
-  emails: string[]
-  entries?: WaitlistEntry[]
-  count: number
-}
-
-function readWaitlist(): WaitlistData {
-  if (!existsSync(WAITLIST_PATH)) {
-    return { emails: [], count: 0 }
-  }
-  try {
-    return JSON.parse(readFileSync(WAITLIST_PATH, 'utf-8'))
-  } catch {
-    return { emails: [], count: 0 }
-  }
-}
-
-function saveWaitlist(data: WaitlistData) {
-  writeFileSync(WAITLIST_PATH, JSON.stringify(data, null, 2), 'utf-8')
+async function contarInscritos(): Promise<number> {
+  const [{ count }] = await db('SELECT COUNT(*) AS count FROM waitlist')
+  return Number(count)
 }
 
 export async function GET() {
-  const data = readWaitlist()
-  return NextResponse.json({ count: data.count })
+  return NextResponse.json({ count: await contarInscritos() })
 }
 
 export async function POST(req: NextRequest) {
@@ -65,16 +42,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
   }
 
-  const data = readWaitlist()
+  // ON CONFLICT evita duplicata mesmo com dois cadastros simultâneos do mesmo e-mail
+  const inseridos = await db(
+    `INSERT INTO waitlist (email, prefs) VALUES ($1, $2::jsonb)
+     ON CONFLICT (email) DO NOTHING
+     RETURNING id`,
+    [email, JSON.stringify(prefs)]
+  )
+  const count = await contarInscritos()
 
-  if (data.emails.includes(email)) {
-    return NextResponse.json({ count: data.count, alreadyRegistered: true })
+  if (inseridos.length === 0) {
+    return NextResponse.json({ count, alreadyRegistered: true })
   }
-
-  data.emails.push(email)
-  data.entries = [...(data.entries ?? []), { email, prefs, date: new Date().toISOString().slice(0, 10) }]
-  data.count = data.emails.length
-  saveWaitlist(data)
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   await resend.emails.send({
@@ -89,10 +68,10 @@ export async function POST(req: NextRequest) {
         <p>Seu cadastro na lista de espera foi confirmado. Você é um dos primeiros a saber quando o jogo estiver disponível.</p>
         <p style="color:#f0c040;">Quando os dois universos colidirem, você será o primeiro a saber.</p>
         <hr style="border-color:#333;margin:24px 0;">
-        <p style="color:#666;font-size:12px;">Você recebeu este email porque se cadastrou em ecos-emq.vercel.app</p>
+        <p style="color:#666;font-size:12px;">Você recebeu este email porque se cadastrou em ${SITE_HOST}</p>
       </div>
     `,
   }).catch(() => {}) // silencia erro de email para não bloquear o cadastro
 
-  return NextResponse.json({ count: data.count, success: true })
+  return NextResponse.json({ count, success: true })
 }

@@ -63,6 +63,14 @@ CREATE TABLE IF NOT EXISTS user_badges (
   UNIQUE (user_id, badge_id)
 );
 
+-- ── Lista de espera ───────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS waitlist (
+  id         SERIAL       PRIMARY KEY,
+  email      VARCHAR(255) NOT NULL UNIQUE,
+  prefs      JSONB        NOT NULL DEFAULT '[]'::jsonb,
+  created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
 -- ════════════════════════════════════════════════════════════════════════════
 --  APÓS executar este script:
 --

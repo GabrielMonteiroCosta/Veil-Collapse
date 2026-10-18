@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import db from '@/lib/db'
-import fs from 'fs'
-import path from 'path'
 
 function getUser(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value
   if (!token) return null
   try {
-    return jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as { id: number; is_admin: number }
+    return jwt.verify(token, jwtSecret()) as { id: number; is_admin: number }
   } catch { return null }
 }
 
@@ -29,11 +28,9 @@ export async function GET(req: NextRequest) {
 
   let waitlist = 0
   try {
-    const wlPath = path.join(process.cwd(), 'data', 'waitlist.json')
-    const wlData = JSON.parse(fs.readFileSync(wlPath, 'utf-8'))
-    // O arquivo salvo pela rota /api/waitlist é um objeto { emails, count }, não uma lista
-    waitlist = Array.isArray(wlData) ? wlData.length : (wlData.count ?? wlData.emails?.length ?? 0)
-  } catch { /* file may not exist */ }
+    const [{ count }] = await db('SELECT COUNT(*) AS count FROM waitlist')
+    waitlist = Number(count)
+  } catch { /* tabela waitlist ainda não criada (database/migrate_v6.sql) */ }
 
   return NextResponse.json({
     users: usersRow.count,
