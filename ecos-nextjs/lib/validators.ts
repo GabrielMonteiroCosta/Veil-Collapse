@@ -15,14 +15,19 @@ export interface PasswordStrengthResult {
   error: string | null
 }
 
-export function checkPasswordStrength(password: string): PasswordStrengthResult {
-  const checks = {
+// Cada requisito da senha separado, para a tela mostrar uma lista de conferência
+export function passwordChecks(password: string) {
+  return {
     length:   password.length >= 8,
     upper:    /[A-Z]/.test(password),
     number:   /[0-9]/.test(password),
     special:  /[!@#$%^&*()\-_=+\[\]{};:'",.<>/?\\|`~]/.test(password),
     long:     password.length >= 12,
   }
+}
+
+export function checkPasswordStrength(password: string): PasswordStrengthResult {
+  const checks = passwordChecks(password)
 
   let error: string | null = null
   if (!checks.length)  error = 'Mínimo 8 caracteres'
@@ -77,7 +82,7 @@ export function validateUsername(username: string): string | null {
   if (!trimmed) return 'Nome obrigatório'
   if (trimmed.length < 3)  return 'Mínimo 3 caracteres'
   if (trimmed.length > 24) return 'Máximo 24 caracteres'
-  if (!/^[a-zA-Z0-9_]+$/.test(trimmed)) return 'Apenas letras, números e _'
+  if (!/^[a-zA-Z0-9_-]+$/.test(trimmed)) return 'Use só letras, números, _ ou - (sem espaços ou acentos)'
 
   const norm = normalize(trimmed)
   for (const word of BLOCKED) {
