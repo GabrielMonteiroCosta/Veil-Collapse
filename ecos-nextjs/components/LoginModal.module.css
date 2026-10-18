@@ -19,9 +19,12 @@
 /* Modal */
 .modal {
   position: relative;
-  width: min(92vw, 540px);
-  max-height: 90vh;
-  overflow: hidden;
+  width: min(94vw, 600px);
+  max-height: 92vh;
+  max-height: 92dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border: 1px solid rgba(212, 228, 255, 0.15);
   border-radius: 16px;
   background: linear-gradient(145deg, #05091a 0%, #080d28 60%, #0a1035 100%);
@@ -48,6 +51,7 @@
 /* Sliding track */
 .track {
   display: flex;
+  align-items: flex-start;
   width: 200%;
   transition: transform 0.48s cubic-bezier(0.76, 0, 0.24, 1);
 }
@@ -61,10 +65,19 @@
   flex-shrink: 0;
 }
 
+/* O painel escondido some depois do deslize, para o modal ter a altura do painel ativo */
+.panelInactive {
+  max-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: max-height 0s 0.48s, visibility 0s 0.48s;
+}
+
 /* Decorations */
 .scanlines {
   position: absolute;
-  inset: 0;
+  /* Compensa o deslize de 4px da animação, para não criar barra de rolagem */
+  inset: -4px 0 4px 0;
   background: repeating-linear-gradient(
     to bottom,
     transparent 0px,
@@ -172,8 +185,14 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
-  padding: 2.5rem 2.5rem 2rem;
+  gap: 1.5rem;
+  padding: 3.25rem 3.25rem 3.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 }
 
 .content > * {
@@ -193,7 +212,7 @@
 /* Tags */
 .tag {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
+  font-size: 0.55rem;
   letter-spacing: 0.22em;
   color: var(--gold-dim);
   text-shadow: 0 0 8px var(--gold-glow);
@@ -201,7 +220,7 @@
 
 .tagAnti {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
+  font-size: 0.55rem;
   letter-spacing: 0.22em;
   color: var(--rift);
   text-shadow: 0 0 10px var(--rift-glow);
@@ -222,7 +241,7 @@
 
 .title {
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  font-size: clamp(2rem, 6vw, 2.75rem);
   font-weight: 700;
   color: var(--gold);
   text-shadow: 0 0 25px var(--gold-glow);
@@ -232,7 +251,7 @@
 
 .titleAnti {
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  font-size: clamp(2rem, 6vw, 2.75rem);
   font-weight: 700;
   color: var(--rift-bright);
   text-shadow: 0 0 25px var(--rift-glow);
@@ -241,32 +260,112 @@
 }
 
 .subtitle {
-  font-size: 0.92rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
   font-style: italic;
   line-height: 1.5;
-  margin-top: -0.2rem;
+  margin: 0;
 }
 
 /* Form */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
 }
 
 .input {
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(212, 228, 255, 0.12);
+  border: 1px solid rgba(212, 228, 255, 0.16);
   border-radius: var(--radius);
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.15rem;
   color: var(--text);
   font-family: 'Crimson Text', serif;
-  font-size: 1rem;
+  font-size: 1.15rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   width: 100%;
 }
+
+.inputWrap {
+  position: relative;
+}
+
+.inputWithToggle {
+  padding-right: 5.5rem;
+}
+
+.toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.6rem;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212, 228, 255, 0.14);
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  color: var(--gold-dim);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.toggle:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+.toggleAnti { color: var(--rift-bright); }
+.toggleAnti:hover { color: #c084fc; border-color: var(--rift); }
+
+.inputInvalid,
+.inputInvalid:focus {
+  border-color: #f87171;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.25);
+}
+
+.hint,
+.fieldError {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.hint { color: var(--text-muted); }
+.fieldError { color: #f87171; }
+
+.requirements {
+  list-style: none;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.95rem;
+}
+
+.reqPending { color: var(--text-muted); }
+.reqOk { color: #4ade80; }
 
 .input::placeholder { color: var(--text-muted); }
 
@@ -291,7 +390,7 @@
 
 .forgotLink {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.36rem;
+  font-size: 0.45rem;
   color: var(--gold-dim);
   background: none;
   border: none;
@@ -316,9 +415,9 @@
   color: #080d28;
   border: none;
   border-radius: var(--radius);
-  padding: 0.85rem 1.4rem;
+  padding: 1.15rem 1.4rem;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.48rem;
+  font-size: 0.6rem;
   cursor: pointer;
   box-shadow: 0 0 20px var(--gold-glow);
   transition: all 0.2s;
@@ -345,9 +444,9 @@
   color: #fff;
   border: none;
   border-radius: var(--radius);
-  padding: 0.85rem 1.4rem;
+  padding: 1.15rem 1.4rem;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.48rem;
+  font-size: 0.6rem;
   cursor: pointer;
   box-shadow: 0 0 20px var(--rift-glow);
   transition: all 0.2s;
@@ -372,10 +471,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding-top: 0.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
+  font-size: 0.5rem;
   color: var(--text-muted);
   letter-spacing: 0.05em;
 }
@@ -385,7 +484,7 @@
   border: none;
   cursor: pointer;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.5rem;
+  font-size: 0.62rem;
   letter-spacing: 0.06em;
   color: var(--gold);
   padding: 0;
@@ -410,7 +509,7 @@
 
 .formLink {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
+  font-size: 0.5rem;
   color: var(--text-muted);
   text-align: center;
   cursor: pointer;
@@ -426,11 +525,11 @@
 /* World label */
 .worldLabel {
   position: absolute;
-  bottom: 0.85rem;
+  bottom: 1.1rem;
   left: 50%;
   transform: translateX(-50%);
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.38rem;
+  font-size: 0.45rem;
   letter-spacing: 0.2em;
   color: var(--gold-dim);
   z-index: 3;
@@ -445,25 +544,37 @@
 }
 
 /* Feedback */
-.msgSuccess {
-  font-size: 0.75rem;
-  color: #4ade80;
+.msgSuccess,
+.msgError {
+  font-size: 1rem;
   text-align: center;
-  padding: 0.2rem 0;
+  padding: 0.7rem 1rem;
   margin: 0;
+  border-radius: var(--radius);
+}
+
+.msgSuccess {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.25);
 }
 
 .msgError {
-  font-size: 0.75rem;
   color: #f87171;
-  text-align: center;
-  padding: 0.2rem 0;
-  margin: 0;
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.25);
 }
 
 /* Responsive */
-@media (max-width: 500px) {
-  .content { padding: 2rem 1.5rem 1.75rem; gap: 0.75rem; }
+@media (max-width: 560px) {
+  .backdrop { align-items: flex-end; }
+  .modal {
+    width: 100vw;
+    max-height: 94dvh;
+    border-radius: 16px 16px 0 0;
+  }
+  .content { padding: 3rem 1.4rem 3.25rem; gap: 1.25rem; }
+  .requirements { grid-template-columns: 1fr; }
   .moon { width: 42px; height: 42px; }
   .voidGlow { width: 90px; height: 90px; }
 }
