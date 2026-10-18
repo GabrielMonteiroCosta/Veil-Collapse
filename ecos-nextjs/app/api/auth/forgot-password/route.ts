@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import { Resend } from 'resend'
 import db from '@/lib/db'
 import { rateLimit } from '@/lib/rateLimit'
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
   const user = rows[0]
   const token = jwt.sign(
     { email, purpose: 'reset' },
-    process.env.JWT_SECRET || 'fallback_secret',
+    jwtSecret(),
     { expiresIn: '15m' }
   )
 

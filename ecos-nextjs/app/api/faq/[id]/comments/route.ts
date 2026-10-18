@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import db from '@/lib/db'
 
 interface JwtPayload { id: number; username: string; email: string; is_admin: number }
@@ -8,7 +9,7 @@ function getUser(req: NextRequest): JwtPayload | null {
   try {
     const token = req.cookies.get('auth_token')?.value
     if (!token) return null
-    return jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as JwtPayload
+    return jwt.verify(token, jwtSecret()) as JwtPayload
   } catch { return null }
 }
 

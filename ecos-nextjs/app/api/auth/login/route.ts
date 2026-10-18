@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import db from '@/lib/db'
 import { rateLimit } from '@/lib/rateLimit'
 
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
 
   const token = jwt.sign(
     { id: user.id, username: user.username, email: user.email, is_admin: user.is_admin },
-    process.env.JWT_SECRET || 'fallback_secret',
+    jwtSecret(),
     { expiresIn: '7d' }
   )
 

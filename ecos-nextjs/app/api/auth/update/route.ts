@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import bcrypt from 'bcryptjs'
 import db from '@/lib/db'
 import { validateUsername, validateEmail, validatePassword } from '@/lib/validators'
@@ -10,7 +11,7 @@ export async function POST(req: NextRequest) {
 
   let payload: { id: number; username: string; email: string }
   try {
-    payload = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as typeof payload
+    payload = jwt.verify(token, jwtSecret()) as typeof payload
   } catch {
     return NextResponse.json({ error: 'Sessão inválida' }, { status: 401 })
   }
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     const newToken = jwt.sign(
       { id: payload.id, username, email: payload.email },
-      process.env.JWT_SECRET || 'fallback_secret',
+      jwtSecret(),
       { expiresIn: '7d' }
     )
 
@@ -71,7 +72,7 @@ export async function POST(req: NextRequest) {
 
     const newToken = jwt.sign(
       { id: payload.id, username: payload.username, email },
-      process.env.JWT_SECRET || 'fallback_secret',
+      jwtSecret(),
       { expiresIn: '7d' }
     )
 

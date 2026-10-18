@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '@/lib/jwtSecret'
 import db from '@/lib/db'
 
 const TIER_LABELS: Record<string, { pt: string; en: string }> = {
@@ -13,7 +14,7 @@ async function getAdmin(req: NextRequest) {
   const token = req.cookies.get('auth_token')?.value
   if (!token) return null
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as {
+    const payload = jwt.verify(token, jwtSecret()) as {
       id: number; is_admin: number
     }
     if (!payload.is_admin) return null
